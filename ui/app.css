@@ -11,7 +11,23 @@ body {
   padding: 0;
 }
 
+a {
+  text-decoration: none;
+  color: #000;
+}
+
 button {
+  padding: 0.8rem;
+  border: none;
+  outline: none;
+  background-color: var(--red);
+  color: #fff;
+  font-family: inherit;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn {
   padding: 0.8rem;
   border: none;
   outline: none;
