@@ -5,6 +5,10 @@
 }
 
 /* General Styles & Classes*/
+html, body{
+  height: 100%;
+}
+
 body {
   font-family: var(--nunito);
   margin: 0;
@@ -46,6 +50,10 @@ button {
   margin: 80px 60px;
 }
 
+.hide {
+  display: none;
+}
+
 /* Header and Navbar Styles*/
 header {
   padding: 30px;
@@ -55,7 +63,6 @@ header {
   background-repeat: no-repeat;
   background-color: rgba(0,0,0,.7);
   background-blend-mode: multiply;
-  height: 65vh;
   background-position:10% 65%;
 }
 
@@ -111,10 +118,17 @@ header {
   transition: all 0.5s; 
 }
 
+.mobile-menu{
+  display: none;
+  color: #fff;
+  margin-left: auto;
+  font-size: 2rem;
+} 
+
 /* Banner Styles */
 .banner {
   text-align: center;
-  padding: 100px 40px 0 40px;
+  padding: 80px 40px;
 }
 
 .banner__text {
@@ -151,12 +165,14 @@ header {
   border-radius: 4px;
   border: 1px solid #ccc;
   box-shadow: 0px 0px 3px rgba(0,0,0,.7);
+  margin-bottom: 50px;
 }
 
 .menu__label {
-  height: 300px;
+  display: flex;
+  text-align: center;
   color: #fff;
-  width: 20%;
+  width: 10%;
   background-color: var(--red);
   padding: 50px 0;
 }
@@ -168,29 +184,21 @@ header {
   margin: 0;
 }
 
-.menu__label span {
-  float: right;
-}
 
 .menu__food {
   display: flex;
   flex-wrap: wrap;
-  padding: 40px 20px; 
-  width: 75%;
+  justify-content: space-evenly;
+  padding: 40px 0; 
+  width: 90%;
 }
 
 .menu__food-item {
   border: 1px solid #ccc;
-  width: 22%;
-  height: 250px;
+  width: 20%;
   border-radius: 4px;
   box-shadow: 0px 0px 3px rgba(0,0,0,.3);
-  margin:10px;
-}
-
-.menu__food-item .btn {
-  position: relative;
-  bottom:20px;
+  margin:10px 0;
 }
 
 .menu__food-item__img {
@@ -204,8 +212,10 @@ header {
 }
 
 .menu__food-item__details {
-  padding: 10px 30px 0 30px;
-  display: inline-block;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 footer {
@@ -213,4 +223,65 @@ footer {
   color: #fff;
   text-align: center;
   padding: 10px 0;
+}
+
+/* Login & Signup Page */
+.form_wrapper {
+  height: 100%;
+}
+
+.form_page {
+  background-image: url('images/page-banner.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgba(0,0,0,.7);
+  background-blend-mode: multiply;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.page_form {
+
+}
+
+
+/* General Responsive Styles */
+@media only screen and (max-width: 900px) {
+  .page-section {
+      margin: 80px 20px;
+  }
+
+  .menu {
+    display: block;
+  }
+
+  .main-nav__list {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
+
+  .menu__label {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .menu__label h3{
+    font-size: 3rem;
+    writing-mode: unset;
+    transform: none;
+  }
+
+  .menu__food {
+    width: 100%;
+  }
+
+  .menu__food-item {
+    width: 50%;
+  }
 }
