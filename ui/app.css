@@ -244,9 +244,31 @@ footer {
 }
 
 .page_form {
-
+  background: #fff;
+  padding: 40px 60px 60px 60px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 3px rgba(0,0,0,.7);
+  width: 40%;
+  text-align: center;
 }
 
+.form-group {
+  width:100%; 
+}
+.form-field {
+  width:100%;
+  box-sizing: border-box;
+  padding: 15px;
+  margin: 5px;
+  outline: 0;
+  border: 1px solid var(--red);
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.page_form button[type="submit"] {
+  margin-top: 20px;
+}
 
 /* General Responsive Styles */
 @media only screen and (max-width: 900px) {
@@ -283,5 +305,9 @@ footer {
 
   .menu__food-item {
     width: 50%;
+  }
+
+  .page_form {
+    padding: 40px 40px 60px 40px;
   }
 }
