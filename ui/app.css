@@ -270,6 +270,15 @@ footer {
   margin-top: 20px;
 }
 
+/* Cart Page */
+.checkout_btn {
+  float: right;
+  padding: 1.2rem;
+}
+
+.tiny_btn {
+  padding: 0.2rem 0.4rem;
+}
 /* General Responsive Styles */
 @media only screen and (max-width: 900px) {
   .page-section {
