@@ -574,9 +574,19 @@ footer {
   .mobile-menu {
     display: block;
   }
+
+  .table-head__list-item:last-child,
+  .table-row__list-item:last-child {
+    margin-left: 20px;
+  }
+
+  .table-head__list-item,
+  .table-row__list-item {
+    margin: 5px 20px;
+  }
 }
 
-/* Mobile */
+/* Mobile - M & S*/
 @media only screen and (max-width: 380px) {
   .meal-info > * {
     font-size: 0.8rem;
@@ -587,3 +597,13 @@ footer {
   } 
 }
 
+/* Mobile - S */
+@media only screen and (max-width:320px) {
+  .table-head {
+    padding: 10px;
+  }
+
+  .table-row {
+    padding: 10px 30px;
+  }
+}
