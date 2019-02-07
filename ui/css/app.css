@@ -110,7 +110,6 @@ header {
 .main-nav__list-item ,
 .mobile-nav__list-item {
   font-size: 1.2rem;
-  margin: 10px 0;
 }
 
 .main-nav__list-item a, 
@@ -153,7 +152,7 @@ header {
 }
 
 /* Mobile Navbar */
-.mobile-menu{
+.mobile-menu {
   display: none;
   color: #fff;
   margin-left: auto;
@@ -422,6 +421,79 @@ footer {
   top: 30px;
   transform: rotate(-45deg);
 }
+
+/* Order Table */
+.table {
+  overflow-x: scroll;
+}
+
+.table-head, 
+.table-row  {
+  padding: 10px 30px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 3px rgba(0,0,0,.7);
+  margin-bottom: 40px;
+}
+
+.table-head {
+  border-left: 20px solid var(--red);
+}
+
+.table-row {
+  padding: 10px 30px 10px 50px;
+}
+
+.table-head__list, 
+.table-row__list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.table-head__list-item,
+.table-row__list-item {
+  display: inline-flex;
+  margin: 0 20px;
+  min-width: 100px;
+}
+
+.table-head__list-item:last-child,
+.table-row__list-item:last-child {
+  margin-left: auto;
+}
+
+.order-summary__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.order-summary__list-item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  width: 200px;
+}
+
+.order-summary__list-item:last-child {
+  margin-left: auto;
+}
+
+.dash {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: 30px;
+}
+
+.order-summary__list-item > p {
+  margin: 0;
+}
+
 
 /* General Responsive Styles */
 @media only screen and (max-width: 900px) {
