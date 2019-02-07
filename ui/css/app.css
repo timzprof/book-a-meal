@@ -59,7 +59,7 @@ button {
 header {
   padding: 30px;
   color: #fff;
-  background-image: url('images/banner.jpg');
+  background-image: url('../images/banner.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-color: rgba(0,0,0,.7);
@@ -251,7 +251,7 @@ footer {
 }
 
 .form_page {
-  background-image: url('images/page-banner.jpg');
+  background-image: url('../images/page-banner.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-color: rgba(0,0,0,.7);
@@ -301,7 +301,7 @@ footer {
 }
 
 /* Cart Page */
-.checkout_btn {
+.right_btn-lg {
   float: right;
   padding: 1.2rem;
 }
