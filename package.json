@@ -1,0 +1,31 @@
+{
+  "name": "meal-booking-app",
+  "version": "1.0.0",
+  "description": "Meal Booking Ecommerce App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timzprof/book-a-meal.git"
+  },
+  "author": "Timilehin Olumofin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/timzprof/book-a-meal/issues"
+  },
+  "homepage": "https://github.com/timzprof/book-a-meal#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "pg": "^7.8.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.42.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
