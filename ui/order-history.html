@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Book A Meal - Caterer Menu</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+  <link rel="stylesheet" href="css/iziToast.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+  <div class="overlay hide"></div>
+  <header>
+    <nav class="main-nav">
+      <div class="logo">
+        <a href="index.html">
+          <span class="red">B</span>ook <span class="red">A</span> Mea<span class="red">l</span>
+        </a>
+      </div>
+      <ul class="main-nav__list">
+        <li class="main-nav__list-item">
+          <a href="cart.html">Cart</a>
+        </li>
+        <li class="main-nav__list-item">
+          <a href="login.html">Login</a>
+        </li>
+        <li class="main-nav__list-item">
+          <a href="register.html">Register</a>
+        </li>
+      </ul>
+      <div class="mobile-menu">
+        &#9776;
+      </div>
+    </nav>
+    <nav class="mobile-nav hide">
+      <div class="logo">
+        <a href="index.html">
+          <span class="red">B</span>ook <span class="red">A</span> Mea<span class="red">l</span>
+        </a>
+      </div>
+      <ul class="mobile-nav__list">
+        <li class="mobile-nav__list-item">
+          <a href="cart.html">Cart</a>
+        </li>
+        <li class="mobile-nav__list-item">
+          <a href="login.html">Login</a>
+        </li>
+        <li class="mobile-nav__list-item">
+          <a href="register.html">Register</a>
+        </li>
+      </ul>
+    </nav>
+    <section class="banner">
+      <p class="banner__text">Your Order History</p>
+    </section>
+  </header>
+  <main>
+    <section class="page-section table">
+      <div class="table-head">
+        <ul class="table-head__list">
+          <li class="table-head__list-item">#ID</li>
+          <li class="table-head__list-item">Caterer</li>
+          <li class="table-head__list-item">Order Summary</li>
+          <li class="table-head__list-item">Order Date</li>
+          <li class="table-head__list-item">Order Total</li>
+        </ul>
+      </div>
+      <div class="table-body">
+        <div class="table-row">
+          <ul class="table-row__list">
+            <li class="table-row__list-item">1</li>
+            <li class="table-row__list-item">Jon Doe</li>
+            <li class="table-row__list-item">
+              <ul class="order-summary__list">
+                <li class="order-summary__list-item">
+                  <p>Bread and Beans</p>
+                  <span class="dash">-</span>
+                  <p>1</p>
+                </li>
+                <li class="order-summary__list-item">
+                  <p>Jollof Rice</p>
+                  <span class="dash">-</span>
+                  <p>2</p>
+                </li>
+              </ul>
+            </li>
+            <li class="table-row__list-item">24th Jan 2019</li>
+            <li class="table-row__list-item">$300.00</li>
+          </ul>
+        </div>
+        <div class="table-row">
+          <ul class="table-row__list">
+            <li class="table-row__list-item">2</li>
+            <li class="table-row__list-item">Jon Doe</li>
+            <li class="table-row__list-item">
+              <ul class="order-summary__list">
+                <li class="order-summary__list-item">
+                  <p>Bread and Beans</p>
+                  <span class="dash">-</span>
+                  <p>2</p>
+                </li>
+                <li class="order-summary__list-item">
+                  <p>Jollof Rice</p>
+                  <span class="dash">-</span>
+                  <p>1</p>
+                </li>
+                <li class="order-summary__list-item">
+                  <p>Bread and Beans</p>
+                  <span class="dash">-</span>
+                  <p>4</p>
+                </li>
+                <li class="order-summary__list-item">
+                  <p>Jollof Rice</p>
+                  <span class="dash">-</span>
+                  <p>2</p>
+                </li>
+              </ul>
+            </li>
+            <li class="table-row__list-item">24th Jan 2019</li>
+            <li class="table-row__list-item">$600.00</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2019 Copyright. <span class="red">Book A Meal</span>.</p>
+  </footer>
+  <script src="js/iziToast.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
