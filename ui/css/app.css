@@ -55,6 +55,14 @@ button {
   display: none;
 }
 
+.overlay {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,.6);
+  z-index: 4;
+}
+
 /* Header and Navbar Styles*/
 header {
   padding: 30px;
@@ -71,6 +79,10 @@ header {
   font-size: 2rem;
   font-weight: bold;
   letter-spacing: 1px;
+}
+
+.logo a {
+  color: #fff;
 }
 
 .main-nav {
@@ -205,6 +217,7 @@ header {
   align-content: baseline;
   height: fit-content;
   min-height: 200px;
+  position: relative;
 }
 
 .menu__food-item__img {
@@ -233,7 +246,7 @@ header {
   margin: 5px;
 }
 
-.order-btn {
+.card-btn {
   padding: 0.7rem;
   margin: 5px;
 }
@@ -310,6 +323,65 @@ footer {
   padding: 0.2rem 0.4rem;
 }
 
+.ribbon {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.ribbon::before,
+.ribbon::after {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  display: block;
+  border: 10px solid var(--red);
+}
+
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 266px;
+  padding: 5px 0;
+  background-color: var(--red);
+  box-shadow: 0 5px 10px rgba(0,0,0,.1);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1;
+  text-shadow: 0 1px 1px rgba(0,0,0,.2);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.ribbon-top-left {
+  top: -10px;
+  left: -10px;
+}
+
+.ribbon-top-left::before,
+.ribbon-top-left::after {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+
+.ribbon-top-left::before {
+  top: 0;
+  right: 49px;
+}
+
+.ribbon-top-left::after {
+  bottom: 49px;
+  left: 0;
+}
+
+.ribbon-top-left span {
+  right: -25px;
+  top: 30px;
+  transform: rotate(-45deg);
+}
+
 /* General Responsive Styles */
 @media only screen and (max-width: 900px) {
   .page-section {
@@ -383,7 +455,7 @@ footer {
   .menu__food-item {
     width: 30%;
   }
-  .order-btn {
+  .card-btn {
     padding: 0.8rem;
   }
 }

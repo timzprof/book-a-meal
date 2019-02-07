@@ -10,10 +10,13 @@
   <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
+  <div class="overlay hide"></div>
   <header>
     <nav class="main-nav">
       <div class="logo">
-        <span class="red">B</span>ook <span class="red">A</span> Mea<span class="red">l</span>
+        <a href="index.html">
+          <span class="red">B</span>ook <span class="red">A</span> Mea<span class="red">l</span>
+        </a>
       </div>
       <ul class="main-nav__list">
         <li class="main-nav__list-item">
@@ -48,7 +51,7 @@
               <p><button class="tiny_btn">-</button> 1 <button class="tiny_btn">+</button></p>
             </div>
             <div class="meal-btn">
-              <button class="order-btn">Delete</button>
+              <button class="card-btn">Delete</button>
             </div>
           </div>
         </article>
@@ -63,7 +66,7 @@
               <p><button class="tiny_btn">-</button> 1 <button class="tiny_btn">+</button></p>
             </div>
             <div class="meal-btn">
-              <button class="order-btn">Delete</button>
+              <button class="card-btn">Delete</button>
             </div>
           </div>
         </article>
@@ -78,7 +81,7 @@
               <p><button class="tiny_btn">-</button> 1 <button class="tiny_btn">+</button></p>
             </div>
             <div class="meal-btn">
-              <button class="order-btn">Delete</button>
+              <button class="card-btn">Delete</button>
             </div>
           </div>
         </article>
@@ -93,12 +96,12 @@
               <p><button class="tiny_btn">-</button> 1 <button class="tiny_btn">+</button></p>
             </div>
             <div class="meal-btn">
-              <button class="order-btn">Delete</button>
+              <button class="card-btn">Delete</button>
             </div>
           </div>
         </article>
       </div>
-      <button class="right_btn-lg">Make Order</button>
+      <button class="right_btn-lg" id="makeOrder">Make Order</button>
     </section>
   </main>
   <footer>
