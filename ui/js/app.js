@@ -1,14 +1,33 @@
 let overlay = document.querySelector('.overlay');
-let orderBtns = document.querySelectorAll('.order-btn');
+let mobileMenu = document.querySelector('.mobile-menu');
 
 let redirect = (location) => {
   window.location.href = location + '.html';
+}
+
+let toggleMobileNav = () => {
+  let mobileNav = document.querySelector('.mobile-nav');
+  if (mobileNav.classList.contains('hide')) {
+    overlay.classList.remove('hide');
+    mobileMenu.innerHTML = '&#9747;';
+  } else {
+    overlay.classList.add('hide');
+    mobileMenu.innerHTML = '&#9776;';
+  }
+  mobileNav.classList.toggle('hide');
 }
 
 iziToast.settings({
   timeout: 1500,
   resetOnHover: true,
 });
+
+overlay.addEventListener('click', toggleMobileNav);
+
+mobileMenu.addEventListener('click', toggleMobileNav);
+
+
+let orderBtns = document.querySelectorAll('.order-btn');
 
 if(orderBtns !== null) {
   orderBtns.forEach(orderBtn => {
@@ -20,6 +39,26 @@ if(orderBtns !== null) {
         title: 'Success',
         message: 'Adding to Cart..',
         position: 'center', 
+        onClosing: () => {
+          redirect('cart');
+        }
+      });
+    });
+  });
+}
+
+let deleteBtns = document.querySelectorAll('.delete-btn');
+
+if (deleteBtns !== null) {
+  deleteBtns.forEach(deleteBtn => {
+    deleteBtn.addEventListener('click', () => {
+      overlay.classList.remove('hide');
+      iziToast.show({
+        color: 'green',
+        icon: 'ico-success',
+        title: 'Success',
+        message: 'Item Deleted..',
+        position: 'center',
         onClosing: () => {
           redirect('cart');
         }

@@ -92,6 +92,10 @@ header {
 
 .main-nav__list {
   margin-left: auto;
+}
+
+.main-nav__list , 
+.mobile-nav__list {
   list-style: none;
   margin-top: 0;
   margin-bottom: 0;
@@ -101,28 +105,45 @@ header {
 .main-nav__list-item {
   display: inline-flex;
   margin: 10px 30px;
-  font-size: 1.2rem;
 }
 
-.main-nav__list-item a {
+.main-nav__list-item ,
+.mobile-nav__list-item {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.main-nav__list-item a, 
+.mobile-nav__list-item a {
   text-decoration: none;
   color: inherit;
   transition: all 0.5s; 
 }
 
+.mobile-nav__list-item a {
+  color: #fff;
+}
+
 .main-nav__list-item a:hover, 
 .main-nav__list-item a:focus,
-.main-nav__list-item a:active {
+.main-nav__list-item a:active,
+.mobile-nav__list-item a:hover, 
+.mobile-nav__list-item a:focus,
+.mobile-nav__list-item a:active {
   color: var(--red);
 }
 
 .main-nav__list-item a:hover::after,
 .main-nav__list-item a:focus::after,
-.main-nav__list-item a:active::after {
+.main-nav__list-item a:active::after,
+.mobile-nav__list-item a:hover::after,
+.mobile-nav__list-item a:focus::after,
+.mobile-nav__list-item a:active::after {
   width: 100%;
 }
 
-.main-nav__list-item a::after {
+.main-nav__list-item a::after, 
+.mobile-nav__list-item a::after {
   content: "";
   display: block;
   margin-top: 3px;
@@ -131,12 +152,32 @@ header {
   transition: all 0.5s; 
 }
 
+/* Mobile Navbar */
 .mobile-menu{
   display: none;
   color: #fff;
   margin-left: auto;
   font-size: 2rem;
-} 
+  transition: all 0.5s;
+  z-index: 5;
+}
+
+.mobile-nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 30vw;
+  height: 100vh;
+  background-color: #000;
+  padding: 50px;
+  z-index: 10;
+  transition: all 0.5s;
+}
+
+.mobile-nav .logo {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+}
 
 /* Banner Styles */
 .banner {
@@ -392,14 +433,6 @@ footer {
     display: block;
   }
 
-  .main-nav__list {
-    display: none;
-  }
-
-  .mobile-menu {
-    display: block;
-  }
-
   .menu__label {
     width: 100%;
     justify-content: center;
@@ -457,6 +490,17 @@ footer {
   }
   .card-btn {
     padding: 0.8rem;
+  }
+}
+
+/* Mobile - L*/
+@media only screen and (max-width: 500px) {
+  .main-nav__list {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: block;
   }
 }
 
