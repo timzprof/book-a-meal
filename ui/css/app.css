@@ -305,6 +305,7 @@ footer {
 /* Login & Signup Page */
 .form_wrapper {
   height: 100%;
+  overflow: auto;
 }
 
 .form_page {
