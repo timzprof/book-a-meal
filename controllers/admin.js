@@ -1,4 +1,5 @@
 import Meal from '../models/meals';
+import Menu from '../models/menu';
 
 exports.addMealOption = (req, res) => {
   const { name, price, imageUrl } = req.body;
@@ -47,6 +48,30 @@ exports.deleteMealOption = async (req, res) => {
       body: {
         status: 'error',
         message: 'Failed to delete Mel Option'
+      }
+    };
+  }
+  return res.status(response.code).json(response.body);
+};
+
+exports.addMealToMenu = (req, res) => {
+  let response;
+  const { mealId } = req.params;
+  const menu = new Menu();
+  if (menu.add(mealId)) {
+    response = {
+      code: 200,
+      body: {
+        status: 'success',
+        message: 'Meal Added to Menu'
+      }
+    };
+  } else {
+    response = {
+      code: 500,
+      body: {
+        status: 'error',
+        message: 'Failed to Add Meal to Menu'
       }
     };
   }
