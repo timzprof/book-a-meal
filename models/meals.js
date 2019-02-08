@@ -45,6 +45,11 @@ class Meal {
         throw new Error(err.message);
       });
   }
+
+  static async fetchAll() {
+    const meals = await getMealsFromFile();
+    return meals;
+  }
 }
 
 export default Meal;
