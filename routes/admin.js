@@ -1,6 +1,5 @@
-const express = require('express');
-
-const adminController = require('../controllers/admin');
+import express from 'express';
+import adminController from '../controllers/admin';
 
 const router = express.Router();
 
