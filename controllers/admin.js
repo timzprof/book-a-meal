@@ -29,3 +29,26 @@ exports.updateMealOption = (req, res) => {
     message: 'Meal Option Updated'
   });
 };
+
+exports.deleteMealOption = async (req, res) => {
+  const { id } = req.params;
+  let response;
+  if (Meal.deleteById(id)) {
+    response = {
+      code: 200,
+      body: {
+        status: 'success',
+        message: 'Meal Option Deleted'
+      }
+    };
+  } else {
+    response = {
+      code: 500,
+      body: {
+        status: 'error',
+        message: 'Failed to delete Mel Option'
+      }
+    };
+  }
+  return res.status(response.code).json(response.body);
+};
