@@ -4,7 +4,7 @@ import Meal from './meals';
 
 const p = path.join(path.dirname(process.mainModule.filename), 'data', 'menu.json');
 
-const getMenuFromFile = () => {
+const getMenusFromFile = () => {
   return new Promise(resolve => {
     fs.readFile(p, (err, fileContent) => {
       if (err) {
@@ -25,7 +25,7 @@ class Menu {
 
   async add(id) {
     const meal = await Meal.fetch(id);
-    getMenuFromFile()
+    getMenusFromFile()
       .then(menus => {
         const date = new Date();
         this.date = date.toLocaleString('en-us', {
@@ -53,6 +53,11 @@ class Menu {
       .catch(err => {
         throw new Error(err.message);
       });
+  }
+
+  static async fetchAll() {
+    const menus = await getMenusFromFile();
+    return menus;
   }
 }
 
