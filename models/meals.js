@@ -59,6 +59,12 @@ class Meal {
     return meals;
   }
 
+  static async fetch(id) {
+    const meals = await getMealsFromFile();
+    const index = meals.findIndex(meal => Number(meal.id) === Number(id));
+    return meals[index];
+  }
+
   static async deleteById(id) {
     const meals = await getMealsFromFile();
     const existingMealIndex = meals.findIndex(meal => Number(meal.id) === Number(id));
