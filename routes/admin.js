@@ -9,4 +9,6 @@ router.post('/meals/', adminController.addMealOption);
 
 router.put('/meals/:id', adminController.updateMealOption);
 
+router.delete('/meals/:id', adminController.deleteMealOption);
+
 module.exports = router;

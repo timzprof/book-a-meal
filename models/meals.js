@@ -58,6 +58,16 @@ class Meal {
     const meals = await getMealsFromFile();
     return meals;
   }
+
+  static async deleteById(id) {
+    const meals = await getMealsFromFile();
+    const existingMealIndex = meals.findIndex(meal => Number(meal.id) === Number(id));
+    meals.splice(existingMealIndex, 1);
+    fs.writeFile(p, JSON.stringify(meals), err => {
+      if (err) console.log(err);
+    });
+    return true;
+  }
 }
 
 export default Meal;
