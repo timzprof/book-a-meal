@@ -7,4 +7,6 @@ router.get('/meals/', adminController.getMealOptions);
 
 router.post('/meals/', adminController.addMealOption);
 
+router.put('/meals/:id', adminController.updateMealOption);
+
 module.exports = router;
