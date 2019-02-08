@@ -23,27 +23,35 @@ class Meal {
     this.imageUrl = imageUrl;
   }
 
-  save() {
+  add() {
     getMealsFromFile()
       .then(meals => {
-        if (this.id) {
-          const existingMealIndex = meals.findIndex(meal => meal.id === this.id);
-          const updatedMeals = [...meals];
-          updatedMeals[existingMealIndex] = this;
-          fs.writeFile(p, JSON.stringify(updatedMeals), err => {
-            console.log(err);
-          });
-        } else {
-          this.id = meals.length + 1;
-          meals.push(this);
-          fs.writeFile(p, JSON.stringify(meals), err => {
-            console.log(err);
-          });
-        }
+        this.id = meals.length + 1;
+        meals.push(this);
+        fs.writeFile(p, JSON.stringify(meals), err => {
+          if (err) console.log(err);
+        });
       })
       .catch(err => {
         throw new Error(err.message);
       });
+  }
+
+  update() {
+    getMealsFromFile().then(meals => {
+      const existingMealIndex = meals.findIndex(meal => Number(meal.id) === Number(this.id));
+      const updatedMeals = [...meals];
+      const mealArray = Object.entries(this);
+      mealArray.forEach(mealProp => {
+        const [property, value] = mealProp;
+        if (value !== undefined) {
+          updatedMeals[existingMealIndex][property] = value;
+        }
+      });
+      fs.writeFile(p, JSON.stringify(updatedMeals), err => {
+        if (err) console.log(err);
+      });
+    });
   }
 
   static async fetchAll() {
