@@ -1,20 +1,20 @@
-let overlay = document.querySelector(".overlay");
-let mobileMenu = document.querySelector(".mobile-menu");
+const overlay = document.querySelector('.overlay');
+const mobileMenu = document.querySelector('.mobile-menu');
 
-let redirect = location => {
-  window.location.href = location + ".html";
+const redirect = location => {
+  window.location.href = `${location}.html`;
 };
 
-let toggleMobileNav = () => {
-  let mobileNav = document.querySelector(".mobile-nav");
-  if (mobileNav.classList.contains("hide")) {
-    overlay.classList.remove("hide");
-    mobileMenu.innerHTML = "&#9747;";
+const toggleMobileNav = () => {
+  const mobileNav = document.querySelector('.mobile-nav');
+  if (mobileNav.classList.contains('hide')) {
+    overlay.classList.remove('hide');
+    mobileMenu.innerHTML = '&#9747;';
   } else {
     overlay.classList.add("hide");
     mobileMenu.innerHTML = "&#9776;";
   }
-  mobileNav.classList.toggle("hide");
+  mobileNav.classList.toggle('hide');
 };
 
 iziToast.settings({
@@ -26,7 +26,7 @@ overlay.addEventListener("click", toggleMobileNav);
 
 mobileMenu.addEventListener("click", toggleMobileNav);
 
-let orderBtns = document.querySelectorAll(".order-btn");
+const orderBtns = document.querySelectorAll('.order-btn');
 
 if (orderBtns !== null) {
   orderBtns.forEach(orderBtn => {
@@ -46,7 +46,7 @@ if (orderBtns !== null) {
   });
 }
 
-let deleteBtns = document.querySelectorAll(".delete-btn");
+const deleteBtns = document.querySelectorAll('.delete-btn');
 
 if (deleteBtns !== null) {
   deleteBtns.forEach(deleteBtn => {
@@ -66,10 +66,10 @@ if (deleteBtns !== null) {
   });
 }
 
-let loginForm = document.getElementById("loginForm");
+const loginForm = document.getElementById('loginForm');
 
 if (loginForm !== null) {
-  loginForm.addEventListener("submit", e => {
+  loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     overlay.classList.remove("hide");
     iziToast.show({
@@ -85,7 +85,7 @@ if (loginForm !== null) {
   });
 }
 
-let registerForm = document.getElementById("registerForm");
+const registerForm = document.getElementById('registerForm');
 
 if (registerForm !== null) {
   registerForm.addEventListener("submit", e => {
@@ -104,7 +104,7 @@ if (registerForm !== null) {
   });
 }
 
-let makeOrderBtn = document.getElementById("makeOrder");
+const makeOrderBtn = document.getElementById('makeOrder');
 
 if (makeOrderBtn !== null) {
   makeOrderBtn.addEventListener("click", () => {
