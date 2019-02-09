@@ -16,29 +16,30 @@ const getMealsFromFile = () => {
 };
 
 class Meal {
-  constructor(id, name, price, imageUrl) {
+  constructor(id, name, price, imageUrl, catererId = 1) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.imageUrl = imageUrl;
+    this.catererId = catererId;
   }
 
-  add() {
-    getMealsFromFile()
-      .then(meals => {
-        this.id = meals.length + 1;
-        meals.push(this);
-        fs.writeFile(p, JSON.stringify(meals), err => {
-          if (err) console.log(err);
-        });
-      })
-      .catch(err => {
-        throw new Error(err.message);
+  async add() {
+    try {
+      const meals = await getMealsFromFile();
+      this.id = meals.length + 1;
+      meals.push(this);
+      fs.writeFile(p, JSON.stringify(meals), err => {
+        if (err) console.log(err);
       });
+    } catch(err) {
+      throw new Error(err.message);
+    }
   }
 
-  update() {
-    getMealsFromFile().then(meals => {
+  async update() {
+    try {
+      const meals = await getMealsFromFile();
       const existingMealIndex = meals.findIndex(meal => Number(meal.id) === Number(this.id));
       const updatedMeals = [...meals];
       const mealArray = Object.entries(this);
@@ -51,28 +52,42 @@ class Meal {
       fs.writeFile(p, JSON.stringify(updatedMeals), err => {
         if (err) console.log(err);
       });
-    });
+    } catch (err) {
+      throw new Error(err.message);
+    }
   }
 
   static async fetchAll() {
-    const meals = await getMealsFromFile();
-    return meals;
+    try {
+      const meals = await getMealsFromFile();
+      return meals;
+    } catch (err) {
+      throw new Error(err.message); 
+    }
   }
 
   static async fetch(id) {
-    const meals = await getMealsFromFile();
-    const index = meals.findIndex(meal => Number(meal.id) === Number(id));
-    return meals[index];
+    try {
+      const meals = await getMealsFromFile();
+      const index = meals.findIndex(meal => Number(meal.id) === Number(id));
+      return meals[index];
+    } catch (err) {
+      throw new Error(err.message); 
+    }
   }
 
   static async deleteById(id) {
-    const meals = await getMealsFromFile();
-    const existingMealIndex = meals.findIndex(meal => Number(meal.id) === Number(id));
-    meals.splice(existingMealIndex, 1);
-    fs.writeFile(p, JSON.stringify(meals), err => {
-      if (err) console.log(err);
-    });
-    return true;
+    try {
+      const meals = await getMealsFromFile();
+      const existingMealIndex = meals.findIndex(meal => Number(meal.id) === Number(id));
+      meals.splice(existingMealIndex, 1);
+      fs.writeFile(p, JSON.stringify(meals), err => {
+        if (err) console.log(err);
+      });
+      return true;
+    } catch (err) {
+      throw new Error(err.message);
+    }
   }
 }
 

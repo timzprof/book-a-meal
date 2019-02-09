@@ -1,4 +1,5 @@
 import Menu from '../models/menu';
+import Order from '../models/orders';
 
 exports.getMenus = async (req, res) => {
   let response;
@@ -22,4 +23,14 @@ exports.getMenus = async (req, res) => {
     }
   }
   return res.status(response.code).json(response.body);
+};
+
+exports.orderMeal = (req, res) => {
+  const { customerId, mealId } = req.body;
+  const order = new Order(null, customerId, mealId, 1);
+  order.addOrder();
+  return res.status(201).json({
+    status: 'success',
+    message: 'Order Made'
+  });
 };
