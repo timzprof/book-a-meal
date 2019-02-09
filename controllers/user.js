@@ -12,15 +12,15 @@ exports.getMenus = async (req, res) => {
         message: 'Menus Retrieved',
         data: menus
       }
-    }
-  }else {
+    };
+  } else {
     response = {
       code: 500,
       body: {
         status: 'error',
         message: 'Menus Empty'
       }
-    }
+    };
   }
   return res.status(response.code).json(response.body);
 };

@@ -32,7 +32,7 @@ class Meal {
       fs.writeFile(p, JSON.stringify(meals), err => {
         if (err) console.log(err);
       });
-    } catch(err) {
+    } catch (err) {
       throw new Error(err.message);
     }
   }
@@ -62,7 +62,7 @@ class Meal {
       const meals = await getMealsFromFile();
       return meals;
     } catch (err) {
-      throw new Error(err.message); 
+      throw new Error(err.message);
     }
   }
 
@@ -72,7 +72,7 @@ class Meal {
       const index = meals.findIndex(meal => Number(meal.id) === Number(id));
       return meals[index];
     } catch (err) {
-      throw new Error(err.message); 
+      throw new Error(err.message);
     }
   }
 

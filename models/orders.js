@@ -4,7 +4,7 @@ import Meal from './meals';
 
 const p = path.join(path.dirname(process.mainModule.filename), 'data', 'orders.json');
 
-const getOrdersFromFile = cb => {
+const getOrdersFromFile = () => {
   return new Promise(resolve => {
     fs.readFile(p, (err, fileContent) => {
       if (err) {
@@ -21,7 +21,7 @@ class Order {
     this.id = id;
     this.customerId = customerId;
     this.mealId = mealId;
-    this.order;
+    this.order = {};
     this.quantity = quantity;
     this.total = 0;
     this.delivery_status = false;
@@ -30,15 +30,35 @@ class Order {
   async addOrder() {
     try {
       const orders = await getOrdersFromFile();
-      this.id = orders.length + 1;
-      const meal = await Meal.fetch(this.mealId);
-      this.total = this.quantity * Number(meal.price);
-      console.log(this.total);
-      this.order = {...meal};
-      orders.push(this);
+      if (orders.length > 0) {
+        orders.forEach((order, index) => {
+          const updatedOrder = { ...order };
+          if (updatedOrder.mealId === this.mealId) {
+            updatedOrder.quantity += this.quantity;
+            updatedOrder.total = updatedOrder.quantity * updatedOrder.order.price;
+            orders[index] = updatedOrder;
+          }
+        });
+      } else {
+        this.id = orders.length + 1;
+        const meal = await Meal.fetch(this.mealId);
+        this.total = this.quantity * Number(meal.price);
+        this.order = { ...meal };
+        orders.push(this);
+      }
       fs.writeFile(p, JSON.stringify(orders), err => {
         if (err) console.log(err);
       });
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  static async fetch(id) {
+    try {
+      const orders = await getOrdersFromFile();
+      const index = orders.findIndex(order => Number(order.id) === Number(id));
+      return orders[index];
     } catch (err) {
       throw new Error(err.message);
     }
