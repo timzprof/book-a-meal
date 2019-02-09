@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Book A Meal - Caterer Menu</title>
+  <title>Book A Meal - Caterer Meal Options</title>
   <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
   <link rel="stylesheet" href="../css/iziToast.min.css">
   <link rel="stylesheet" href="../css/app.css">
@@ -64,11 +64,12 @@
       </ul>
     </nav>
     <section class="banner">
-      <p class="banner__text">Select Menu From Below Food Options</p>
+      <p class="banner__text">Your Meal Options</p>
     </section>
   </header>
   <main>
     <section class="page-section">
+      <button class="btn right_btn-lg" id="save-menu">Add Meal Option</button>
       <div class="menu__food">
         <article class="menu__food-item">
           <div class="menu__food-item__img">
@@ -80,7 +81,10 @@
               <p>$500.00</p>
             </div>
             <div class="meal-btn">
-              <button class="card-btn">Add</button>
+              <button class="card-btn">Edit</button>
+            </div>
+            <div class="meal-btn">
+              <button class="card-btn">Delete</button>
             </div>
           </div>
         </article>
@@ -94,41 +98,14 @@
               <p>$500.00</p>
             </div>
             <div class="meal-btn">
-              <button class="card-btn">Add</button>
-            </div>
-          </div>
-        </article>
-        <article class="menu__food-item">
-          <div class="ribbon ribbon-top-left"><span>Selected</span></div>
-          <div class="menu__food-item__img">
-            <img src="../images/meal1.jpg" alt="Meal">
-          </div>
-          <div class="menu__food-item__details">
-            <div class="meal-info">
-              <p>Bread and Beans</p>
-              <p>$500.00</p>
+              <button class="card-btn">Edit</button>
             </div>
             <div class="meal-btn">
-              <button class="card-btn">Remove</button>
-            </div>
-          </div>
-        </article>
-        <article class="menu__food-item">
-          <div class="menu__food-item__img">
-            <img src="../images/meal3.jpg" alt="Meal">
-          </div>
-          <div class="menu__food-item__details">
-            <div class="meal-info">
-              <p>Jollof Rice</p>
-              <p>$500.00</p>
-            </div>
-            <div class="meal-btn">
-              <button class="card-btn">Add</button>
+              <button class="card-btn">Delete</button>
             </div>
           </div>
         </article>
       </div>
-      <button class="btn right_btn-lg" id="save-menu">Save</button>
     </section>
   </main>
   <footer>
