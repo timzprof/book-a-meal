@@ -57,7 +57,7 @@ class Menu {
 
   static async fetchAll() {
     const menus = await getMenusFromFile();
-    return menus;
+    return (menus.length > 0) ? menus : false;
   }
 }
 
