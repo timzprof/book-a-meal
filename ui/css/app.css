@@ -536,7 +536,6 @@ footer {
   }
 
   .menu__food-item {
-    width: 40%;
     height: auto;
   }
 
@@ -582,12 +581,20 @@ footer {
 
 /* Mobile - L*/
 @media only screen and (max-width: 500px) {
+  .page_form {
+    width: 60%;
+  }
+
   .main-nav__list {
     display: none;
   }
 
   .mobile-menu {
     display: block;
+  }
+
+  .menu__food-item {
+    width: 40%;
   }
 
   .table-head__list-item:last-child,
@@ -603,6 +610,14 @@ footer {
 
 /* Mobile - M & S*/
 @media only screen and (max-width: 380px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+  
+  .menu__food-item {
+    width: 50%;
+  }
+
   .meal-info > * {
     font-size: 0.8rem;
   }
