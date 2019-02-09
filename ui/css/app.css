@@ -305,7 +305,7 @@ footer {
 /* Login & Signup Page */
 .form_wrapper {
   height: 100%;
-  overflow: auto;
+  overflow: scroll;
 }
 
 .form_page {
@@ -351,6 +351,9 @@ footer {
 
 .page_link {
   font-size: 0.8rem;
+}
+
+.page_link a {
   color: var(--red);
 }
 
