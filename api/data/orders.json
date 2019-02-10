@@ -3,8 +3,8 @@
     "id": 1,
     "customerId": 1,
     "mealId": 1,
-    "quantity": 2,
-    "total": 2000,
+    "quantity": 4,
+    "total": 4000,
     "delivery_status": false,
     "order": {
       "id": 1,
@@ -13,5 +13,20 @@
       "imageUrl": "https://whereismyspoon.co/wp-content/uploads/2018/07/jollof-rice-3.jpg",
       "catererId": 1
     }
+  },
+  {
+    "id": 2,
+    "customerId": 2,
+    "mealId": 1,
+    "order": {
+      "id": 1,
+      "name": "Jollof Rice",
+      "price": 1000,
+      "imageUrl": "https://whereismyspoon.co/wp-content/uploads/2018/07/jollof-rice-3.jpg",
+      "catererId": 1
+    },
+    "quantity": 4,
+    "total": 4000,
+    "delivery_status": false
   }
 ]
