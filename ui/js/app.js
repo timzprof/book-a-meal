@@ -22,7 +22,12 @@ iziToast.settings({
   resetOnHover: true
 });
 
-overlay.addEventListener("click", toggleMobileNav);
+overlay.addEventListener("click", () => {
+  const mobileNav = document.querySelector('.mobile-nav');
+  if (!mobileNav.classList.contains("hide")) {
+    toggleMobileNav();
+  }
+});
 
 mobileMenu.addEventListener("click", toggleMobileNav);
 
@@ -117,6 +122,46 @@ if (makeOrderBtn !== null) {
       position: "center",
       onClosing: () => {
         redirect("index");
+      }
+    });
+  });
+}
+
+const toggleModal = modal => {
+  overlay.classList.toggle('hide');
+  modal.classList.toggle("hidden");
+};
+
+const modalToggles = document.querySelectorAll('[data-toggle="modal"]');
+
+if (modalToggles !== null) {
+  modalToggles.forEach(modalToggle => {
+    let modal = document.querySelector(modalToggle.dataset.target);
+    modalToggle.addEventListener('click', () => toggleModal(modal));
+
+    let dismissModalBtns = document.querySelectorAll('[data-dismiss="modal"]');
+
+    dismissModalBtns.forEach(dismissBtn => {
+      dismissBtn.addEventListener('click', () => toggleModal(modal));
+    });
+  });
+}
+
+const mealOptionForm = document.getElementById('addMealOption');
+
+if (mealOptionForm !== null) {
+  mealOptionForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    toggleModal(mealOptionForm.parentElement.parentElement.parentElement);
+    overlay.classList.remove("hide");
+    iziToast.show({
+      color: "green",
+      icon: "ico-success",
+      title: "Success",
+      message: "Meal Option Added",
+      position: "center",
+      onClosing: () => {
+        redirect("meal-options");
       }
     });
   });

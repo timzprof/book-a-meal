@@ -254,7 +254,7 @@ header {
   display: flex;
   flex-wrap: wrap;
   border: 1px solid #ccc;
-  width: 20%;
+  width: 25%;
   border-radius: 4px;
   box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
   margin: 10px 0;
@@ -511,6 +511,62 @@ footer {
   margin: 0;
 }
 
+/* Modal */
+.modal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  text-align: center;
+  transition: all 0.5s ease-out;
+  z-index: 10;
+}
+
+.modal-header {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.modal-title {
+  margin: 0;
+}
+
+.modal-header .close {
+  margin: -5px 0 0 auto;
+  height: fit-content;
+  font-size: 1rem;
+  padding: 10px;
+}
+
+.modal-body {
+  border-bottom: 1px solid #ccc;
+  padding: 30px 0;
+}
+
+.modal-content {
+  display: inline-block;
+  background-color: #fff;
+  width: 60vw;
+  padding: 30px;
+  text-align: left;
+  margin-top: 60px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.modal-footer {
+  float: right;
+  padding: 10px 0;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
 /* General Responsive Styles */
 @media only screen and (max-width: 900px) {
   .page-section {
@@ -572,9 +628,6 @@ footer {
 
 /* Tablet */
 @media only screen and (min-width: 768px) and (max-width: 1000px) {
-  .menu__food-item {
-    width: 30%;
-  }
   .card-btn {
     padding: 0.8rem;
   }
@@ -626,6 +679,14 @@ footer {
   .cart-container .meal-btn {
     width: 100%;
   }
+
+  .modal-title {
+    font-size: 1rem;
+  }
+
+  .modal-header .close {
+    font-size: 0.8rem;
+  }
 }
 
 /* Mobile - S */
@@ -636,5 +697,12 @@ footer {
 
   .table-row {
     padding: 10px 30px;
+  }
+  .modal-title {
+    font-size: 0.9rem;
+  }
+
+  .modal-header .close {
+    font-size: 0.7rem;
   }
 }

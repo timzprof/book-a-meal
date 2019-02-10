@@ -69,7 +69,10 @@
   </header>
   <main>
     <section class="page-section">
-      <button class="btn right_btn-lg" id="add-meal-option">Add Meal Option</button>
+      <button class="btn right_btn-lg" 
+      id="add-meal-option" 
+      data-toggle="modal" 
+      data-target="#mealOptionModal">Add Meal Option</button>
       <div class="menu__food">
         <article class="menu__food-item">
           <div class="menu__food-item__img">
@@ -111,6 +114,35 @@
   <footer>
     <p>&copy; 2019 Copyright. <span class="red">Book A Meal</span>.</p>
   </footer>
+  <div class="modal hidden" id="mealOptionModal" role="dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <span class="red">B</span>ook
+          <span class="red">A</span>
+          Mea<span class="red">l</span> Add Meal
+        </h3>
+        <button type="button" class="btn close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post" id="addMealOption">
+          <div class="form-group">
+            <input type="text" class="form-field" placeholder="Meal Name" required>
+          </div>
+          <div class="form-group">
+            <input type="number" class="form-field" placeholder="Meal Price" required>
+          </div>
+          <div class="form-group">
+            <input type="file" class="form-field" placeholder="Meal Image" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal">Close</button>
+          <button type="submit">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
   <script src="../js/iziToast.min.js"></script>
   <script src="../js/app.js"></script>
 </body>
