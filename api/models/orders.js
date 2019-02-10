@@ -29,26 +29,33 @@ class Order {
 
   async addOrder() {
     try {
+      let orderAlreadyExists = false;
       const orders = await getOrdersFromFile();
       if (orders.length > 0) {
         orders.forEach((order, index) => {
           const updatedOrder = { ...order };
-          if (updatedOrder.mealId === this.mealId) {
+          if (updatedOrder.mealId === this.mealId && updatedOrder.customerId === this.customerId) {
+            orderAlreadyExists = true;
             updatedOrder.quantity += this.quantity;
             updatedOrder.total = updatedOrder.quantity * updatedOrder.order.price;
             orders[index] = updatedOrder;
+            fs.writeFile(p, JSON.stringify(orders), err => {
+              if (err) console.log(err);
+            });
+            return;
           }
         });
-      } else {
+      }
+      if (!orderAlreadyExists) {
         this.id = orders.length + 1;
         const meal = await Meal.fetch(this.mealId);
         this.total = this.quantity * Number(meal.price);
         this.order = { ...meal };
         orders.push(this);
+        fs.writeFile(p, JSON.stringify(orders), err => {
+          if (err) console.log(err);
+        });
       }
-      fs.writeFile(p, JSON.stringify(orders), err => {
-        if (err) console.log(err);
-      });
     } catch (err) {
       throw new Error(err.message);
     }
@@ -59,6 +66,16 @@ class Order {
       const orders = await getOrdersFromFile();
       const index = orders.findIndex(order => Number(order.id) === Number(id));
       return orders[index];
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  static async fetchUserOrders() {
+    try {
+      const orders = await getOrdersFromFile();
+      const userOrders = orders.filter(order => Number(order.customerId) === 1);
+      return userOrders;
     } catch (err) {
       throw new Error(err.message);
     }

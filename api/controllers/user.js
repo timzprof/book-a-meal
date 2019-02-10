@@ -3,8 +3,8 @@ import Order from '../models/orders';
 
 exports.getMenus = async (req, res) => {
   let response;
-  const menus = await Menu.fetchAll();
-  if (menus) {
+  try {
+    const menus = await Menu.fetchAll();
     response = {
       code: 200,
       body: {
@@ -13,12 +13,13 @@ exports.getMenus = async (req, res) => {
         data: menus
       }
     };
-  } else {
+  } catch (err) {
     response = {
       code: 500,
       body: {
         status: 'error',
-        message: 'Menus Empty'
+        message: 'Failed to Retrieve Menu',
+        error: err.message
       }
     };
   }
@@ -33,4 +34,29 @@ exports.orderMeal = (req, res) => {
     status: 'success',
     message: 'Order Made'
   });
+};
+
+exports.getOrders = async (req, res) => {
+  let response;
+  try {
+    const orders = await Order.fetchUserOrders();
+    response = {
+      code: 200,
+      body: {
+        status: 'success',
+        message: 'Orders Retrieved',
+        data: orders
+      }
+    };
+  } catch (err) {
+    response = {
+      code: 500,
+      body: {
+        status: 'error',
+        message: 'Failed to Retrive Orders',
+        error: err.message
+      }
+    };
+  }
+  return res.status(response.code).json(response.body);
 };
