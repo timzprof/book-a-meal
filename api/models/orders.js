@@ -42,7 +42,6 @@ class Order {
             fs.writeFile(p, JSON.stringify(orders), err => {
               if (err) console.log(err);
             });
-            return;
           }
         });
       }

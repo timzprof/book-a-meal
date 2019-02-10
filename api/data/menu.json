@@ -1,1 +1,22 @@
-[{"date":"February 09, 2019","caterer":1,"meals":[{"id":1,"name":"Jollof Rice","price":1000,"imageUrl":"https://whereismyspoon.co/wp-content/uploads/2018/07/jollof-rice-3.jpg","catererId":1},{"id":2,"name":"Fried Rice","price":1200,"imageUrl":"https://whereismyspoon.co/wp-content/uploads/2018/07/jollof-rice-3.jpg","catererId":1}]}]
+[
+  {
+    "date": "February 10, 2019",
+    "caterer": 1,
+    "meals": [
+      {
+        "id": "1",
+        "name": "Jollof Rice",
+        "price": 1000,
+        "imageUrl": "https://whereismyspoon.co/wp-content/uploads/2018/07/jollof-rice-3.jpg",
+        "catererId": 1
+      },
+      {
+        "id": 2,
+        "name": "Fried Rice",
+        "price": 1200,
+        "imageUrl": "https://whereismyspoon.co/wp-content/uploads/2018/07/jollof-rice-3.jpg",
+        "catererId": 1
+      }
+    ]
+  }
+]
