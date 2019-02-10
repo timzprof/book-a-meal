@@ -14,7 +14,7 @@ class OrderController {
   static async getOrders(req, res) {
     let response;
     try {
-      const orders = await Order.fetchUserOrders();
+      const orders = await Order.fetchUserOrders(1);
       response = {
         code: 200,
         body: {
@@ -34,6 +34,17 @@ class OrderController {
       };
     }
     return res.status(response.code).json(response.body);
+  }
+
+  static async modifyOrder(req, res) {
+    const { orderId } = req.params;
+    const increase = req.body.increase ? req.body.increase : false;
+    const decrease = req.body.decrease ? req.body.decrease : false;
+    await Order.modifyOrderQuantity(orderId, increase, decrease);
+    return res.status(200).json({
+      status: 'success',
+      message: 'Order Updated'
+    });
   }
 }
 
