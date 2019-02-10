@@ -70,11 +70,34 @@ class Order {
     }
   }
 
-  static async fetchUserOrders() {
+  static async fetchUserOrders(userId) {
     try {
       const orders = await getOrdersFromFile();
-      const userOrders = orders.filter(order => Number(order.customerId) === 1);
+      const userOrders = orders.filter(order => Number(order.customerId) === Number(userId));
       return userOrders;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  static async modifyOrderQuantity(orderId, increase, decrease) {
+    try {
+      const orders = await getOrdersFromFile();
+      const index = orders.findIndex(order => Number(order.id) === Number(orderId));
+      const updatedOrder = { ...orders[index] };
+      if (increase) {
+        updatedOrder.quantity += 1;
+      } else if (decrease) {
+        updatedOrder.quantity -= 1;
+      }
+      updatedOrder.total = updatedOrder.quantity * updatedOrder.order.price;
+      orders[index] = updatedOrder;
+      if (updatedOrder.quantity === 0) {
+        orders.splice(index, 1);
+      }
+      fs.writeFile(p, JSON.stringify(orders), err => {
+        if (err) console.log(err);
+      });
     } catch (err) {
       throw new Error(err.message);
     }
