@@ -1,8 +1,7 @@
 import fs from 'fs';
-import path from 'path';
 import Meal from './meals';
 
-const p = path.join(path.dirname(process.mainModule.filename), 'data', 'orders.json');
+const p = './data/orders.json';
 
 const getOrdersFromFile = () => {
   return new Promise(resolve => {
@@ -46,7 +45,7 @@ class Order {
         });
       }
       if (!orderAlreadyExists) {
-        this.id = orders.length + 1;
+        this.id = Number(orders.length + 1);
         const meal = await Meal.fetch(this.mealId);
         this.total = this.quantity * Number(meal.price);
         this.order = { ...meal };
@@ -70,11 +69,19 @@ class Order {
     }
   }
 
+  static async fetchAll() {
+    try {
+      const orders = await getOrdersFromFile();
+      return orders;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
   static async fetchUserOrders(userId) {
     try {
       const orders = await getOrdersFromFile();
-      const userOrders = orders.filter(order => Number(order.customerId) === Number(userId));
-      return userOrders;
+      return orders.filter(order => Number(order.customerId) === Number(userId));
     } catch (err) {
       throw new Error(err.message);
     }
@@ -95,6 +102,19 @@ class Order {
       if (updatedOrder.quantity === 0) {
         orders.splice(index, 1);
       }
+      fs.writeFile(p, JSON.stringify(orders), err => {
+        if (err) console.log(err);
+      });
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  static async deleteById(id) {
+    try {
+      const orders = await getOrdersFromFile();
+      const existingOrderIndex = orders.findIndex(order => Number(order.id) === Number(id));
+      orders.splice(existingOrderIndex, 1);
       fs.writeFile(p, JSON.stringify(orders), err => {
         if (err) console.log(err);
       });

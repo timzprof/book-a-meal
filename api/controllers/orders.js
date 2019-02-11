@@ -5,7 +5,7 @@ class OrderController {
     const { customerId, mealId } = req.body;
     const order = new Order(null, customerId, mealId, 1);
     order.addOrder();
-    return res.status(201).json({
+    return res.status(200).json({
       status: 'success',
       message: 'Order Made'
     });
@@ -14,7 +14,7 @@ class OrderController {
   static async getOrders(req, res) {
     let response;
     try {
-      const orders = await Order.fetchUserOrders(1);
+      const orders = await Order.fetchAll();
       response = {
         code: 200,
         body: {
