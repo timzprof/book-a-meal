@@ -1,5 +1,6 @@
 # Book A Meal
 Book A Meal is an Ecommerce web app , specifically targetted towards bringing caterers and users together
+[![Coverage Status](https://coveralls.io/repos/github/timzprof/book-a-meal/badge.svg?branch=develop)](https://coveralls.io/github/timzprof/book-a-meal?branch=develop)
 ## Getting Started
 Clone the Repo.
 -------------
