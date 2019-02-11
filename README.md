@@ -28,9 +28,6 @@ Npm v6.4 or above
 - Access endpoints on **localhost:4000**
 ## Running the tests
 Run `npm test` in the terminal for the cloned folder.
-### Break down into end to end tests
-- It tests the API end-points.
-- It tests the REST API functionality
 ## Built With
 * [Node.js](http://www.nodejs.org/) - Runtime-Enviroment
 ## Authors
