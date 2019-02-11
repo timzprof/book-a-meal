@@ -4,13 +4,12 @@ Book A Meal is an Ecommerce web app , specifically targetted towards bringing ca
 Clone the Repo.
 -------------
 `git clone https://github.com/timzprof/book-a-meal.git`
-### Prerequisites
+## Prerequisites
 The following tools will be needed to run this application successfully:
-Node v10.15.0 or above
+* Node v10.15.0 or above
+* Npm v6.4 or above
 ---
-Npm v6.4 or above
----
-### ENDPOINTS
+## Endpoints
 - GET **api/v1/meals/** Caterers can get all meals options they uploaded
 - POST **api/v1/meals/** Catereres can add meal options linked to their account
 - PUT **api/vi/meals/:mealId** Caterers can update their meal options
@@ -20,7 +19,8 @@ Npm v6.4 or above
 - GET **api/v1/orders** Get All Orders
 - POST **api/v1/orders** Users can make orders
 - PUT **api/v1/orders/:orderId** Users can modify their orders
-### Installation
+---
+## Installation
 **On your Local Machine**
 - Pull the [develop](https://github.com/timzprof/book-a-meal) branch off this repository
 - Run `npm install` to install all dependencies
