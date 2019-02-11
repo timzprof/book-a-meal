@@ -1,8 +1,7 @@
 import fs from 'fs';
-import path from 'path';
 import Meal from './meals';
 
-const p = path.join(path.dirname(process.mainModule.filename), 'data', 'orders.json');
+const p = './data/orders.json';
 
 const getOrdersFromFile = () => {
   return new Promise(resolve => {

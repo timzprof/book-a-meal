@@ -1,11 +1,12 @@
 import Menu from '../models/menu';
 
 class MenuController {
-  static addMealToMenu(req, res) {
+  static async addMealToMenu(req, res) {
     let response;
-    const { mealId } = req.params;
+    const { mealId, quantity } = req.body;
     const menu = new Menu();
-    if (menu.add(mealId)) {
+    try {
+      await menu.add(mealId, quantity);
       response = {
         code: 200,
         body: {
@@ -13,7 +14,7 @@ class MenuController {
           message: 'Meal Added to Menu'
         }
       };
-    } else {
+    } catch (err) {
       response = {
         code: 500,
         body: {

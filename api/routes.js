@@ -13,7 +13,7 @@ router.put('/meals/:id', MealController.updateMealOption);
 
 router.delete('/meals/:id', MealController.deleteMealOption);
 
-router.post('/menu/:mealId', MenuController.addMealToMenu);
+router.post('/menu/', MenuController.addMealToMenu);
 
 router.get('/menu/', MenuController.getMenus);
 
