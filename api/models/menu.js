@@ -1,7 +1,7 @@
 import fs from 'fs';
 import Meal from './meals';
 
-const p = './data/menu.json';
+const p = './api/data/menu.json';
 
 const getMenusFromFile = () => {
   return new Promise(resolve => {

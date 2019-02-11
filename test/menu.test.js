@@ -1,8 +1,8 @@
 import fs from 'fs';
 import chai from 'chai';
 import chaiHTTP from 'chai-http';
-import app from '../index';
-import Menu from '../models/menu';
+import app from '../api/index';
+import Menu from '../api/models/menu';
 
 const { assert, expect, use } = chai;
 
@@ -10,7 +10,7 @@ use(chaiHTTP);
 
 const API_PREFIX = '/api/v1';
 
-const p = './data/menu.json';
+const p = './api/data/menu.json';
 
 const getMenusFromFile = () => {
   return new Promise(resolve => {

@@ -1,8 +1,8 @@
 import fs from 'fs';
 import chai from 'chai';
 import chaiHTTP from 'chai-http';
-import app from '../index';
-import Order from '../models/orders';
+import app from '../api/index';
+import Order from '../api/models/orders';
 
 const { assert, expect, use } = chai;
 
@@ -10,7 +10,7 @@ use(chaiHTTP);
 
 const API_PREFIX = '/api/v1';
 
-const p = './data/orders.json';
+const p = './api/data/orders.json';
 
 const getOrdersFromFile = () => {
   return new Promise(resolve => {

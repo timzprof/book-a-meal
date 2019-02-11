@@ -2,10 +2,10 @@
   "name": "meal-booking-app",
   "version": "1.0.0",
   "description": "Meal Booking Ecommerce App",
-  "main": "index.js",
+  "main": "api/index.js",
   "scripts": {
     "test": "mocha -r esm",
-    "start": "nodemon --exec babel-node index.js"
+    "start": "nodemon --exec babel-node api/index.js"
   },
   "repository": {
     "type": "git",

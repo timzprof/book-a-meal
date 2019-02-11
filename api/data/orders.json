@@ -1,1 +1,1 @@
-[{"id":1,"customerId":1,"mealId":2,"order":{"id":"2","name":"Fried Rice","price":10000,"imageUrl":"https://whereismyspoon.co/wp-content/uploads/2018/07/jollof-rice-3.jpg","catererId":1},"quantity":3,"total":30000,"delivery_status":false}]
+[{"id":1,"customerId":1,"mealId":2,"order":{"id":"2","name":"Fried Rice","price":10000,"imageUrl":"https://whereismyspoon.co/wp-content/uploads/2018/07/jollof-rice-3.jpg","catererId":1},"quantity":1,"total":10000,"delivery_status":false}]

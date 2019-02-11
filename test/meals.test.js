@@ -1,8 +1,8 @@
 import fs from 'fs';
 import chai from 'chai';
 import chaiHTTP from 'chai-http';
-import app from '../index';
-import Meal from '../models/meals';
+import app from '../api/index';
+import Meal from '../api/models/meals';
 
 const { assert, expect, use } = chai;
 
@@ -10,7 +10,7 @@ use(chaiHTTP);
 
 const API_PREFIX = '/api/v1';
 
-const p = './data/meals.json';
+const p = './api/data/meals.json';
 
 const getMealsFromFile = () => {
   return new Promise(resolve => {
@@ -59,7 +59,7 @@ describe('Meal Endpoints', () => {
       .catch(err => console.log('POST /meals/', err.message));
   });
   it(`PUT ${API_PREFIX}/meals/:mealId`, async () => {
-    const mealsFromFile = await getMealsFromFile();
+    let mealsFromFile = await getMealsFromFile();
     chai
       .request(app)
       .put(`${API_PREFIX}/meals/${mealsFromFile.length}`)
@@ -68,8 +68,9 @@ describe('Meal Endpoints', () => {
       })
       .then(async res => {
         expect(res).to.have.status(200);
-        const mealFromFile = await Meal.fetch(mealsFromFile.length);
-        assert.equal(mealFromFile.price, 10000);
+        mealsFromFile = await getMealsFromFile();
+        const lastMeal = mealsFromFile[mealsFromFile.length - 1];
+        assert.equal(lastMeal.price, 10000);
       })
       .catch(err => console.log('PUT /meals/:mealId', err.message));
   });

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import Meal from './meals';
 
-const p = './data/orders.json';
+const p = './api/data/orders.json';
 
 const getOrdersFromFile = () => {
   return new Promise(resolve => {
