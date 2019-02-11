@@ -109,6 +109,19 @@ class Order {
       throw new Error(err.message);
     }
   }
+
+  static async deleteById(id) {
+    try {
+      const orders = await getOrdersFromFile();
+      const existingOrderIndex = orders.findIndex(order => Number(order.id) === Number(id));
+      orders.splice(existingOrderIndex, 1);
+      fs.writeFile(p, JSON.stringify(orders), err => {
+        if (err) console.log(err);
+      });
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
 }
 
 export default Order;

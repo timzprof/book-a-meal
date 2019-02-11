@@ -29,6 +29,11 @@ const payload = {
   mealId: 2
 };
 
+const modifyPayload = {
+  increase: true,
+  decrease: false
+};
+
 describe('Order Endpoints', () => {
   it(`GET ${API_PREFIX}/orders - Fetch All Orders`, () => {
     chai
@@ -50,8 +55,24 @@ describe('Order Endpoints', () => {
         expect(res).to.have.status(200);
         assert.equal(res.body.status, 'success');
         const userOrders = await Order.fetchUserOrders(1);
-        expect(userOrders[userOrders.length - 1].order.id).to.equal(2);
+        expect(userOrders[userOrders.length - 1].mealId).to.equal(2);
       })
       .catch(err => console.log('POST /orders', err.message));
+  });
+  it(`PUT ${API_PREFIX}/orders/:orderId - Modify an order`, async () => {
+    const orders = await getOrdersFromFile();
+    const id = orders.length;
+    chai
+      .request(app)
+      .put(`${API_PREFIX}/orders/${id}`)
+      .send(modifyPayload)
+      .then(async res => {
+        expect(res).to.have.status(200);
+        assert.equal(res.body.status, 'success');
+        const userOrder = await Order.fetch(id);
+        expect(userOrder.quantity).to.equal(2);
+        await Order.deleteById(id);
+      })
+      .catch(err => console.log('PUT /orders/:orderId', err.message));
   });
 });
