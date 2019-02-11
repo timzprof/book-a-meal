@@ -30,7 +30,7 @@ const payload = {
 };
 
 describe('Menu Endpoints', () => {
-  it(`GET ${API_PREFIX}/menu/ - Fetch All Menus`, () => {
+  it(`GET ${API_PREFIX}/menu/ - Fetch All Menus`, done => {
     chai
       .request(app)
       .get(`${API_PREFIX}/menu/`)
@@ -38,10 +38,11 @@ describe('Menu Endpoints', () => {
         expect(res).to.have.status(200);
         const menusFromFile = await getMenusFromFile();
         expect(menusFromFile).to.eql(res.body.data);
+        done();
       })
       .catch(err => console.log('GET /menu/', err.message));
   });
-  it(`POST ${API_PREFIX}/menu/ - Add Meal to Menu`, () => {
+  it(`POST ${API_PREFIX}/menu/ - Add Meal to Menu`, done => {
     chai
       .request(app)
       .post(`${API_PREFIX}/menu/`)
@@ -53,6 +54,7 @@ describe('Menu Endpoints', () => {
         const menuMeals = menuFromFile.meals;
         expect(Number(menuMeals[menuMeals.length - 1].id)).to.equal(1);
         expect(menuMeals[menuMeals.length - 1].quantity).to.equal(10);
+        done();
       })
       .catch(err => console.log('POST /menu/', err.message));
   });

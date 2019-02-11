@@ -39,7 +39,8 @@ class Meal {
   async update() {
     try {
       const meals = await getMealsFromFile();
-      const existingMealIndex = meals.findIndex(meal => Number(meal.id) === Number(this.id));
+      this.id = Number(this.id);
+      const existingMealIndex = meals.findIndex(meal => meal.id === this.id);
       const updatedMeals = [...meals];
       const mealArray = Object.entries(this);
       mealArray.forEach(mealProp => {
