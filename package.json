@@ -4,7 +4,7 @@
   "description": "Meal Booking Ecommerce App",
   "main": "api/index.js",
   "scripts": {
-    "test": "mocha -r esm --timeout 500",
+    "test": "mocha -r esm --exit",
     "start": "nodemon --exec babel-node api/index.js",
     "coveralls": "coveralls < lcov.info"
   },
