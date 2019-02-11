@@ -23,4 +23,4 @@ router.post('/orders', OrderController.orderMeal);
 
 router.put('/orders/:orderId', OrderController.modifyOrder);
 
-module.exports = router;
+export default router;

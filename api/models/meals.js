@@ -1,7 +1,6 @@
 import fs from 'fs';
-import path from 'path';
 
-const p = path.join(path.dirname(process.mainModule.filename), 'data', 'meals.json');
+const p = './data/meals.json';
 
 const getMealsFromFile = () => {
   return new Promise(resolve => {
@@ -84,7 +83,6 @@ class Meal {
       fs.writeFile(p, JSON.stringify(meals), err => {
         if (err) console.log(err);
       });
-      return true;
     } catch (err) {
       throw new Error(err.message);
     }
