@@ -40,7 +40,7 @@ describe('Meal Endpoints', () => {
         const mealsFromFile = await getMealsFromFile();
         expect(mealsFromFile).to.eql(res.body.data);
       })
-      .catch(err => console.log(err.message));
+      .catch(err => console.log('GET /meals/', err.message));
   });
   it(`POST ${API_PREFIX}/meals/ - Add A Meal Option`, () => {
     chai
@@ -56,7 +56,7 @@ describe('Meal Endpoints', () => {
         expect(lastMeal.price).to.equal(400);
         expect(lastMeal.imageUrl).to.equal('img.png');
       })
-      .catch(err => console.log(err.message));
+      .catch(err => console.log('POST /meals/', err.message));
   });
   it(`PUT ${API_PREFIX}/meals/:mealId`, async () => {
     const mealsFromFile = await getMealsFromFile();
@@ -71,7 +71,7 @@ describe('Meal Endpoints', () => {
         const mealFromFile = await Meal.fetch(mealsFromFile.length);
         assert.equal(mealFromFile.price, 10000);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log('PUT /meals/:mealId', err.message));
   });
   it(`DELETE ${API_PREFIX}/meals/:mealId`, async () => {
     let mealsFromFile = await getMealsFromFile();
@@ -85,6 +85,6 @@ describe('Meal Endpoints', () => {
         expect(lastMeal.name).to.not.equal('Test Meal');
         expect(lastMeal.imageUrl).to.not.equal('img.png');
       })
-      .catch(err => console.log(err.message));
+      .catch(err => console.log('DELETE /meals/:mealId', err.message));
   });
 });

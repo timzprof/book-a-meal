@@ -45,7 +45,7 @@ class Order {
         });
       }
       if (!orderAlreadyExists) {
-        this.id = orders.length + 1;
+        this.id = Number(orders.length + 1);
         const meal = await Meal.fetch(this.mealId);
         this.total = this.quantity * Number(meal.price);
         this.order = { ...meal };
@@ -69,11 +69,19 @@ class Order {
     }
   }
 
+  static async fetchAll() {
+    try {
+      const orders = await getOrdersFromFile();
+      return orders;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
   static async fetchUserOrders(userId) {
     try {
       const orders = await getOrdersFromFile();
-      const userOrders = orders.filter(order => Number(order.customerId) === Number(userId));
-      return userOrders;
+      return orders.filter(order => Number(order.customerId) === Number(userId));
     } catch (err) {
       throw new Error(err.message);
     }

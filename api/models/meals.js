@@ -26,7 +26,7 @@ class Meal {
   async add() {
     try {
       const meals = await getMealsFromFile();
-      this.id = meals.length + 1;
+      this.id = Number(meals.length + 1);
       meals.push(this);
       fs.writeFile(p, JSON.stringify(meals), err => {
         if (err) console.log(err);

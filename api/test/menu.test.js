@@ -39,7 +39,7 @@ describe('Menu Endpoints', () => {
         const menusFromFile = await getMenusFromFile();
         expect(menusFromFile).to.eql(res.body.data);
       })
-      .catch(err => console.log(err.message));
+      .catch(err => console.log('GET /menu/', err.message));
   });
   it(`POST ${API_PREFIX}/menu/ - Add Meal to Menu`, () => {
     chai
@@ -51,9 +51,9 @@ describe('Menu Endpoints', () => {
         assert.equal(res.body.status, 'success');
         const menuFromFile = await Menu.fetchOneMenu();
         const menuMeals = menuFromFile.meals;
-        expect(menuFromFile.mealId).to.equal(1);
+        expect(Number(menuMeals[menuMeals.length - 1].id)).to.equal(1);
         expect(menuMeals[menuMeals.length - 1].quantity).to.equal(10);
       })
-      .catch(err => console.log(err.message));
+      .catch(err => console.log('POST /menu/', err.message));
   });
 });
