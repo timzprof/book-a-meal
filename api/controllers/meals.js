@@ -21,14 +21,29 @@ class MealController {
   }
 
   static async updateMealOption(req, res) {
-    const { id } = req.params;
-    const { name, price, imageUrl } = req.body;
-    const meal = new Meal(id, name, price, imageUrl);
-    await meal.update();
-    return res.status(200).json({
-      status: 'success',
-      message: 'Meal Option Updated'
-    });
+    let response;
+    try {
+      const { id } = req.params;
+      const { name, price, imageUrl } = req.body;
+      const meal = new Meal(id, name, price, imageUrl);
+      await meal.update();
+      response = {
+        code: 200,
+        body: {
+          status: 'success',
+          message: 'Meal Option Updated'
+        }
+      };
+    } catch (err) {
+      response = {
+        code: 500,
+        body: {
+          status: 'error',
+          message: 'Falied to Updated Meal'
+        }
+      };
+    }
+    return res.status(response.code).json(response.body);
   }
 
   static async deleteMealOption(req, res) {
