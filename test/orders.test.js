@@ -26,7 +26,7 @@ const getOrdersFromFile = () => {
 
 const payload = {
   customerId: 1,
-  mealId: 2
+  mealId: 1
 };
 
 const modifyPayload = {
@@ -58,10 +58,10 @@ describe('Order Endpoints', () => {
       .send(payload)
       .then(async res => {
         try {
-          expect(res).to.have.status(200);
+          expect(res).to.have.status(201);
           assert.equal(res.body.status, 'success');
           const userOrders = await Order.fetchUserOrders(1);
-          expect(userOrders[userOrders.length - 1].mealId).to.equal(2);
+          expect(userOrders[userOrders.length - 1].mealId).to.equal(1);
           done();
         } catch (err) {
           console.log(err.message);
@@ -81,6 +81,7 @@ describe('Order Endpoints', () => {
             assert.equal(res.body.status, 'success');
             const userOrder = await Order.fetch(ordersFromFile.length);
             expect(userOrder.quantity).to.equal(2);
+            await Order.deleteById(userOrder.id);
             done();
           } catch (err) {
             console.log(err.message);
