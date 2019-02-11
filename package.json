@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha -r esm",
     "start": "nodemon --exec babel-node api/index.js",
-    "coveralls-coverage": "coveralls < lcov.info"
+    "coveralls": "coveralls < lcov.info"
   },
   "repository": {
     "type": "git",
