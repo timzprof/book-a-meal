@@ -2,5 +2,4 @@ language: node_js
 node_js:
  - "node"
 after_success:
-  - npm run coveralls-coverage
-  - npm run codeclimate-coverage
+  - npm run coverage
