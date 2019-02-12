@@ -4,6 +4,8 @@ Book A Meal is an Ecommerce web app , specifically targetted towards bringing ca
 
 [![Build Status](https://travis-ci.org/timzprof/book-a-meal.svg?branch=develop)](https://travis-ci.org/timzprof/book-a-meal)
 [![Coverage Status](https://coveralls.io/repos/github/timzprof/book-a-meal/badge.svg?branch=develop)](https://coveralls.io/github/timzprof/book-a-meal?branch=develop)
+[![Maintainability](https://api.codeclimate.com/v1/badges/dac50eed34c957c675fd/maintainability)](https://codeclimate.com/github/timzprof/book-a-meal/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/dac50eed34c957c675fd/test_coverage)](https://codeclimate.com/github/timzprof/book-a-meal/test_coverage)
 
 ## Getting Started
 Clone the Repo.

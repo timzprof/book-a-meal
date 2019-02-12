@@ -6,8 +6,8 @@
   "scripts": {
     "test": "mocha -r esm --exit",
     "start": "nodemon --exec babel-node api/index.js",
-    "coveralls-coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
-
+    "coveralls-coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "codeclimate-coverage": "nyc npm test && nyc report --reporter=text-lcov | codeclimate-test-reporter"
   },
   "repository": {
     "type": "git",
