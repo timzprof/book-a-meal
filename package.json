@@ -5,9 +5,9 @@
   "main": "api/index.js",
   "scripts": {
     "start": "nodemon --exec babel-node api/index.js",
-    "test": "mocha -r esm --exit",
-    "coveralls-coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "codeclimate-coverage": "nyc npm test && nyc report --reporter=text-lcov | codeclimate-test-reporter",
+    "test": "nyc mocha -r esm --exit",
+    "coveralls-coverage": "nyc report --reporter=text-lcov | coveralls",
+    "codeclimate-coverage": "codeclimate-test-reporter < ./coverage/lcov.info",
     "coverage": "nyc npm run coveralls-coverage && npm run codeclimate-coverage"
   },
   "repository": {
