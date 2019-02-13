@@ -32,4 +32,4 @@ const Meal = sequelize.define('meal', {
   updatedAt: Sequelize.DATE
 });
 
-module.exports = Meal;
+export default Meal;

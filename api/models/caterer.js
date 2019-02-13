@@ -29,4 +29,4 @@ const Caterer = sequelize.define('caterer', {
   updatedAt: Sequelize.DATE
 });
 
-module.exports = Caterer;
+export default Caterer;

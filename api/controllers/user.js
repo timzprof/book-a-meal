@@ -27,7 +27,7 @@ class UserController {
     } catch (err) {
       return res.status(500).json({
         status: 'error',
-        message: 'Failed to Register User'
+        message: 'Email Already used'
       });
     }
   }

@@ -30,7 +30,9 @@ sequelize
   .sync()
   .then(() => {
     console.log('DB Connection has been established');
-    app.listen(PORT);
+    app.listen(PORT, null, null, () => {
+      app.emit('dbConnected');
+    });
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);

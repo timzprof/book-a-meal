@@ -20,4 +20,4 @@ const Menu = sequelize.define('menu', {
   updatedAt: Sequelize.DATE
 });
 
-module.exports = Menu;
+export default Menu;

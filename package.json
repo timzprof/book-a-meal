@@ -5,7 +5,7 @@
   "main": "api/index.js",
   "scripts": {
     "start": "nodemon --exec babel-node api/index.js",
-    "test": "nyc mocha -r esm --exit",
+    "test": "nyc mocha -r esm -t 0 --exit",
     "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
     "coveralls-coverage": "coveralls < lcov.info",
     "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",

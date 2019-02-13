@@ -29,4 +29,4 @@ const User = sequelize.define('user', {
   updatedAt: Sequelize.DATE
 });
 
-module.exports = User;
+export default User;

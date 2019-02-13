@@ -33,4 +33,4 @@ const Order = sequelize.define('order', {
   updatedAt: Sequelize.DATE
 });
 
-module.exports = Order;
+export default Order;
