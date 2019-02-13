@@ -72,6 +72,22 @@ class Menu {
       throw new Error(err.message);
     }
   }
+
+  static async deleteMealFromMenu(mealId, catererId = 1) {
+    try {
+      const menus = await getMenusFromFile();
+      const menuIndex = menus.findIndex(menu => Number(menu.caterer) === Number(catererId));
+      const { meals } = menus[menuIndex];
+      const mealIndex = meals.findIndex(meal => meal.id === mealId);
+      meals.splice(mealIndex, 1);
+      menus[menuIndex].meals = meals;
+      fs.writeFile(p, JSON.stringify(menus), err => {
+        if (err) console.log(err);
+      });
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
 }
 
 export default Menu;
