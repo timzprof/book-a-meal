@@ -1,1 +1,16 @@
-[{"date":"February 13, 2019","caterer":1,"meals":[{"id":2,"name":"Jollof Rice","price":10000,"imageUrl":"https://whereismyspoon.co/wp-content/uploads/2018/07/jollof-rice-3.jpg","catererId":1,"quantity":10}]}]
+[
+  {
+    "date": "February 13, 2019",
+    "caterer": 1,
+    "meals": [
+      {
+        "id": 2,
+        "name": "Jollof Rice",
+        "price": 10000,
+        "imageUrl": "https://whereismyspoon.co/wp-content/uploads/2018/07/jollof-rice-3.jpg",
+        "catererId": 1,
+        "quantity": 10
+      }
+    ]
+  }
+]
