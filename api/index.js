@@ -1,4 +1,6 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import { config } from 'dotenv';
 import Routes from './routes';
 import sequelize from './util/db';
@@ -14,8 +16,9 @@ const app = express();
 
 const PORT = process.env.PORT || 4000;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/v1', Routes);
 
 User.hasMany(Order, { constraints: true, onDelete: 'CASCADE' });

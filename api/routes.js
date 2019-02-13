@@ -1,9 +1,20 @@
 import express from 'express';
+import AuthController from './controllers/auth';
 import MealController from './controllers/meals';
 import MenuController from './controllers/menu';
 import OrderController from './controllers/orders';
+import UserController from './controllers/user';
 
 const router = express.Router();
+
+router.post('/auth/signup', UserController.registerUser);
+
+router.get('/test', AuthController.verifyUserToken, (req, res) => {
+  return res.status(200).json({
+    msg: 'User Authenticated',
+    user: req.user
+  });
+});
 
 router.get('/meals/', MealController.getMealOptions);
 
