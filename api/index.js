@@ -1,4 +1,6 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import { config } from 'dotenv';
 import Routes from './routes';
 import sequelize from './util/db';
@@ -14,8 +16,9 @@ const app = express();
 
 const PORT = process.env.PORT || 4000;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 app.use('/api/v1', Routes);
 
 User.hasMany(Order, { constraints: true, onDelete: 'CASCADE' });
@@ -27,7 +30,9 @@ sequelize
   .sync()
   .then(() => {
     console.log('DB Connection has been established');
-    app.listen(PORT);
+    app.listen(PORT, null, null, () => {
+      app.emit('dbConnected');
+    });
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);

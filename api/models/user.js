@@ -17,6 +17,10 @@ const User = sequelize.define('user', {
     allowNull: false,
     unique: true
   },
+  phone: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   password: {
     type: Sequelize.STRING,
     allowNull: false
@@ -25,4 +29,4 @@ const User = sequelize.define('user', {
   updatedAt: Sequelize.DATE
 });
 
-module.exports = User;
+export default User;

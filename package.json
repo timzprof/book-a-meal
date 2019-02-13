@@ -5,7 +5,7 @@
   "main": "api/index.js",
   "scripts": {
     "start": "nodemon --exec babel-node api/index.js",
-    "test": "nyc mocha -r esm --exit",
+    "test": "nyc mocha -r esm -t 0 --exit",
     "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
     "coveralls-coverage": "coveralls < lcov.info",
     "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
@@ -22,14 +22,18 @@
   },
   "homepage": "https://github.com/timzprof/book-a-meal#readme",
   "dependencies": {
+    "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "esm": "^3.2.4",
     "express": "^4.16.4",
+    "joi": "^14.3.1",
     "jsonwebtoken": "^8.4.0",
     "pg": "^7.8.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.42.0"
+    "sequelize": "^4.42.0",
+    "trim-request": "^1.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

@@ -17,6 +17,10 @@ const Caterer = sequelize.define('caterer', {
     allowNull: false,
     unique: true
   },
+  phone: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
   password: {
     type: Sequelize.STRING,
     allowNull: false
@@ -25,4 +29,4 @@ const Caterer = sequelize.define('caterer', {
   updatedAt: Sequelize.DATE
 });
 
-module.exports = Caterer;
+export default Caterer;
