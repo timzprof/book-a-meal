@@ -2,9 +2,9 @@ import Order from '../models/orders';
 
 class OrderController {
   static async orderMeal(req, res) {
-    const { customerId, mealId } = req.body;
-    const order = new Order(null, customerId, mealId, 1);
-    await order.addOrder();
+    const { mealId, quantity, customerId } = req.body;
+    const order = new Order(null, customerId);
+    await order.addOrder(mealId, quantity);
     return res.status(201).json({
       status: 'success',
       message: 'Order Made'
