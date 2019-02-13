@@ -1,23 +1,28 @@
 import Sequelize from 'sequelize';
 import sequelize from '../util/db';
 
-const Menu = sequelize.define('menu', {
+const User = sequelize.define('user', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
-  meals: {
-    type: Sequelize.JSON,
+  name: {
+    type: Sequelize.STRING,
     allowNull: false
   },
-  catererId: {
-    type: Sequelize.INTEGER,
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true
+  },
+  password: {
+    type: Sequelize.STRING,
     allowNull: false
   },
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE
 });
 
-module.exports = Menu;
+module.exports = User;
