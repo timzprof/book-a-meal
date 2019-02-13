@@ -5,10 +5,11 @@
   "main": "api/index.js",
   "scripts": {
     "start": "nodemon --exec babel-node api/index.js",
-    "test": "nyc mocha -r esm --exit",
-    "coveralls-coverage": "nyc report --reporter=text-lcov | coveralls",
-    "codeclimate-coverage": "codeclimate-test-reporter < ./coverage/lcov.info",
-    "coverage": "nyc npm run coveralls-coverage && npm run codeclimate-coverage"
+    "test": "mocha -r esm --exit",
+    "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
+    "coveralls-coverage": "coveralls < lcov.info",
+    "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
+    "coverage": "nyc npm test && npm run generate-lcov && npm run coveralls-coverage && npm run codeclimate-coverage"
   },
   "repository": {
     "type": "git",

@@ -4,13 +4,4 @@ node_js:
 env: 
   - CODECLIMATE_REPO_TOKEN=096eba8d4801fa3d74634b4f237045a7c15239d0e6c454d992689cab00ab7593
 after_success:
-  - npm run coveralls-coverage
-  - npm run codeclimate-coverage
-deploy:
-  provider: heroku
-  api_key:
-    secure: 7c10cc84-93e3-45ac-9b01-bb569c8635d4
-  app: book-a-meal-rest-api
-  on:
-    repo: timzprof/book-a-meal
-    branch: develop
+  - npm run coverage
