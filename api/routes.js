@@ -9,13 +9,6 @@ const router = express.Router();
 
 router.post('/auth/signup', UserController.registerUser);
 
-router.get('/test', AuthController.verifyUserToken, (req, res) => {
-  return res.status(200).json({
-    msg: 'User Authenticated',
-    user: req.user
-  });
-});
-
 router.get('/meals/', MealController.getMealOptions);
 
 router.post('/meals/', MealController.addMealOption);
