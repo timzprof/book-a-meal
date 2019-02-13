@@ -100,24 +100,34 @@ class Order {
     }
   }
 
-  static async modifyOrderQuantity(orderId, increase, decrease) {
+  static async modifyOrderMeals(orderId, mealId, action) {
     try {
       const orders = await getOrdersFromFile();
       const index = orders.findIndex(order => Number(order.id) === Number(orderId));
       const updatedOrder = { ...orders[index] };
-      if (increase) {
-        updatedOrder.quantity += 1;
-      } else if (decrease) {
-        updatedOrder.quantity -= 1;
+      const mealOrders = updatedOrder.order;
+      const mealIndex = mealOrders.findIndex(mealOrder => mealOrder.id === mealId);
+      const meal = mealOrders[mealIndex];
+      const params = { orders, index, updatedOrder, mealOrders };
+      if (action === 'increase') {
+        meal.quantity += 1;
+        meal.total += meal.price;
+        await Order.modifyMealQuantity(params);
+      } else if (action === 'decrease') {
+        if (meal.quantity === 1) {
+          params.orderId = orderId;
+          params.mealIndex = mealIndex;
+          await Order.deleteMealFromOrder(params);
+        } else {
+          meal.quantity -= 1;
+          meal.total -= meal.price;
+          await Order.modifyMealQuantity(params);
+        }
+      } else if (action === 'delete') {
+        params.orderId = orderId;
+        params.mealIndex = mealIndex;
+        await Order.deleteMealFromOrder(params);
       }
-      updatedOrder.total = updatedOrder.quantity * updatedOrder.order.price;
-      orders[index] = updatedOrder;
-      if (updatedOrder.quantity === 0) {
-        orders.splice(index, 1);
-      }
-      fs.writeFile(p, JSON.stringify(orders), err => {
-        if (err) console.log(err);
-      });
     } catch (err) {
       throw new Error(err.message);
     }
@@ -195,6 +205,43 @@ class Order {
         if (err) console.log(err);
       });
       return true;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  static async deleteMealFromOrder(params) {
+    try {
+      const { orderId, orders, index, updatedOrder, mealOrders, mealIndex } = params;
+      const newUpdatedOrder = { ...updatedOrder };
+      newUpdatedOrder.total -= mealOrders[mealIndex].total;
+      mealOrders.splice(mealIndex, 1);
+      newUpdatedOrder.order = mealOrders;
+      if (mealOrders.length !== 0) {
+        orders[index] = newUpdatedOrder;
+        fs.writeFile(p, JSON.stringify(orders), err => {
+          if (err) console.log(err);
+        });
+      } else {
+        await Order.deleteById(orderId);
+      }
+      return true;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  static async modifyMealQuantity(params) {
+    try {
+      const { orders, index, updatedOrder, mealOrders } = params;
+      updatedOrder.total = 0;
+      mealOrders.forEach(mealOrder => {
+        updatedOrder.total += mealOrder.total;
+      });
+      orders[index] = updatedOrder;
+      fs.writeFile(p, JSON.stringify(orders), err => {
+        if (err) console.log(err);
+      });
     } catch (err) {
       throw new Error(err.message);
     }

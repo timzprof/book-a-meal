@@ -24,11 +24,6 @@ const getOrdersFromFile = () => {
   });
 };
 
-const modifyPayload = {
-  increase: true,
-  decrease: false
-};
-
 describe('Order Endpoints', () => {
   it(`GET ${API_PREFIX}/orders - Fetch All Orders`, done => {
     chai
@@ -109,7 +104,6 @@ describe('Order Endpoints', () => {
           const userOrders = await Order.fetchUserOrders(2);
           const orderMeals = userOrders.order;
           expect(orderMeals[orderMeals.length - 1].id).to.equal(2);
-          await Order.deleteById(userOrders.id);
           done();
         } catch (err) {
           console.log(err.message);
@@ -117,25 +111,77 @@ describe('Order Endpoints', () => {
       })
       .catch(err => console.log('POST /orders', err.message));
   });
-  // it(`PUT ${API_PREFIX}/orders/:orderId - Modify an order`, done => {
-  //   getOrdersFromFile().then(ordersFromFile => {
-  //     chai
-  //       .request(app)
-  //       .put(`${API_PREFIX}/orders/${ordersFromFile.length}`)
-  //       .send(modifyPayload)
-  //       .then(async res => {
-  //         try {
-  //           expect(res).to.have.status(200);
-  //           assert.equal(res.body.status, 'success');
-  //           const userOrder = await Order.fetch(ordersFromFile.length);
-  //           expect(userOrder.quantity).to.equal(2);
-  //           await Order.deleteById(userOrder.id);
-  //           done();
-  //         } catch (err) {
-  //           console.log(err.message);
-  //         }
-  //       })
-  //       .catch(err => console.log('PUT /orders/:orderId', err.message));
-  //   });
-  // });
+  it(`PUT ${API_PREFIX}/orders/:orderId - Increase Meal Quantity In Order`, done => {
+    getOrdersFromFile().then(ordersFromFile => {
+      chai
+        .request(app)
+        .put(`${API_PREFIX}/orders/${ordersFromFile.length}`)
+        .send({
+          mealId: 2,
+          action: 'increase'
+        })
+        .then(async res => {
+          try {
+            expect(res).to.have.status(200);
+            assert.equal(res.body.status, 'success');
+            const userOrders = await Order.fetchUserOrders(2);
+            const orderMeals = userOrders.order;
+            expect(orderMeals[orderMeals.length - 1].quantity).to.equal(2);
+            done();
+          } catch (err) {
+            console.log(err.message);
+          }
+        })
+        .catch(err => console.log('PUT /orders/:orderId', err.message));
+    });
+  });
+  it(`PUT ${API_PREFIX}/orders/:orderId - Decrease Meal Quantity In Order`, done => {
+    getOrdersFromFile().then(ordersFromFile => {
+      chai
+        .request(app)
+        .put(`${API_PREFIX}/orders/${ordersFromFile.length}`)
+        .send({
+          mealId: 2,
+          action: 'decrease'
+        })
+        .then(async res => {
+          try {
+            expect(res).to.have.status(200);
+            assert.equal(res.body.status, 'success');
+            const userOrders = await Order.fetchUserOrders(2);
+            const orderMeals = userOrders.order;
+            expect(orderMeals[orderMeals.length - 1].quantity).to.equal(1);
+            done();
+          } catch (err) {
+            console.log(err.message);
+          }
+        })
+        .catch(err => console.log('PUT /orders/:orderId', err.message));
+    });
+  });
+  it(`PUT ${API_PREFIX}/orders/:orderId - Delete Meal From Order`, done => {
+    getOrdersFromFile().then(ordersFromFile => {
+      chai
+        .request(app)
+        .put(`${API_PREFIX}/orders/${ordersFromFile.length}`)
+        .send({
+          mealId: 2,
+          action: 'delete'
+        })
+        .then(async res => {
+          try {
+            expect(res).to.have.status(200);
+            assert.equal(res.body.status, 'success');
+            const userOrders = await Order.fetchUserOrders(2);
+            const orderMeals = userOrders.order;
+            expect(orderMeals[orderMeals.length - 1].id).to.not.equal(2);
+            await Order.deleteById(userOrders.id);
+            done();
+          } catch (err) {
+            console.log(err.message);
+          }
+        })
+        .catch(err => console.log('PUT /orders/:orderId', err.message));
+    });
+  });
 });

@@ -38,9 +38,8 @@ class OrderController {
 
   static async modifyOrder(req, res) {
     const { orderId } = req.params;
-    const increase = req.body.increase ? req.body.increase : false;
-    const decrease = req.body.decrease ? req.body.decrease : false;
-    await Order.modifyOrderQuantity(orderId, increase, decrease);
+    const { mealId, action } = req.body;
+    await Order.modifyOrderMeals(orderId, mealId, action);
     return res.status(200).json({
       status: 'success',
       message: 'Order Updated'
