@@ -27,7 +27,38 @@ class UserController {
     } catch (err) {
       return res.status(500).json({
         status: 'error',
-        message: 'Email Already used'
+        message: err.message
+      });
+    }
+  }
+
+  static async loginUser(req, res) {
+    try {
+      const { email, password } = req.body;
+      const user = await User.find({ where: { email } });
+      const result = await bcrypt.compare(password, user.password);
+      if (!result) {
+        throw new Error("Password doesn't match our records");
+      }
+      const safeUser = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone
+      };
+      const jwtToken = jwt.sign({ safeUser }, secret, {
+        expiresIn: 86400
+      });
+      return res.status(200).json({
+        status: 'success',
+        message: 'User Logged In',
+        token: `Bearer ${jwtToken}`,
+        user: safeUser
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: 'error',
+        message: err.message
       });
     }
   }

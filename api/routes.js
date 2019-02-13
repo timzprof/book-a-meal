@@ -16,6 +16,13 @@ router.post(
   UserController.registerUser
 );
 
+router.post(
+  '/auth/login',
+  trimRequest.body,
+  UserMiddleware.validateUserLogin,
+  UserController.loginUser
+);
+
 router.get('/meals/', MealController.getMealOptions);
 
 router.post('/meals/', MealController.addMealOption);
