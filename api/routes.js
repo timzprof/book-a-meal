@@ -1,4 +1,6 @@
 import express from 'express';
+import trimRequest from 'trim-request';
+import UserMiddleware from './middleware/user';
 import AuthController from './controllers/auth';
 import MealController from './controllers/meals';
 import MenuController from './controllers/menu';
@@ -7,7 +9,12 @@ import UserController from './controllers/user';
 
 const router = express.Router();
 
-router.post('/auth/signup', UserController.registerUser);
+router.post(
+  '/auth/signup',
+  trimRequest.body,
+  UserMiddleware.validateUserRegister,
+  UserController.registerUser
+);
 
 router.get('/meals/', MealController.getMealOptions);
 
