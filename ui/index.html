@@ -129,6 +129,38 @@
   <footer>
     <p>&copy; 2019 Copyright. <span class="red">Book A Meal</span>.</p>
   </footer>
+  <div class="modal hidden" id="orderQuantityModal" role="dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <span class="red">B</span>ook
+          <span class="red">A</span>
+          Mea<span class="red">l</span> Add to Orders
+        </h3>
+        <button type="button" class="btn close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post" id="addToOrders">
+          <div class="meal-details">
+            <div class="meal-details__img">
+              <img src="images/meal3.jpg" alt="Meal">
+            </div>
+            <div class="meal-details__info">
+              <p>Jollof Rice</p>
+              <p>$500.00</p> 
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="number" class="form-field" placeholder="Quantity" required>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal">Close</button>
+        <button type="submit">Add</button>
+      </div>
+      </form>
+    </div>
+  </div>
 <script src="js/iziToast.min.js"></script>
 <script src="js/app.js"></script>
 </body>

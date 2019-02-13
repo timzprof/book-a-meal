@@ -522,6 +522,7 @@ footer {
   text-align: center;
   transition: all 0.5s ease-out;
   z-index: 10;
+  overflow-y: scroll;
 }
 
 .modal-header {
@@ -566,6 +567,13 @@ footer {
 .hidden {
   visibility: hidden;
   opacity: 0;
+}
+
+/* Modal Meal Details */
+
+.meal-details__img img {
+  width: 200px;
+  height: 200px;
 }
 
 /* Burger Styles */

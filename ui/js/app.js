@@ -36,17 +36,50 @@ const orderBtns = document.querySelectorAll('.order-btn');
 if (orderBtns !== null) {
   orderBtns.forEach(orderBtn => {
     orderBtn.addEventListener("click", () => {
-      overlay.classList.remove("hide");
-      iziToast.show({
-        color: "green",
-        icon: "ico-success",
-        title: "Success",
-        message: "Adding to Cart..",
-        position: "center",
-        onClosing: () => {
-          redirect("orders");
-        }
-      });
+      let modal = document.querySelector('#orderQuantityModal');
+      toggleModal(modal);
+    });
+  });
+}
+
+const addToOrdersForm = document.getElementById('addToOrders');
+
+if(addToOrdersForm !== null) {
+  addToOrdersForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let modal = document.getElementById(addToOrdersForm.parentElement.parentElement.parentElement.id);
+    toggleModal(modal);
+    overlay.classList.remove('hide');
+    iziToast.show({
+      color: "green",
+      icon: "ico-success",
+      title: "Success",
+      message: "Adding to Orders..",
+      position: "center",
+      onClosing: () => {
+        redirect("orders");
+      }
+    });
+  });
+}
+
+const checkoutForm = document.getElementById('checkoutForm');
+
+if(checkoutForm !== null) {
+  checkoutForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let modal = document.getElementById(checkoutForm.parentElement.parentElement.parentElement.id);
+    toggleModal(modal);
+    overlay.classList.remove('hide');
+    iziToast.show({
+      color: "green",
+      icon: "ico-success",
+      title: "Success",
+      message: "Checking Out..",
+      position: "center",
+      onClosing: () => {
+        redirect("index");
+      }
     });
   });
 }
@@ -109,24 +142,6 @@ if (registerForm !== null) {
   });
 }
 
-const makeOrderBtn = document.getElementById('makeOrder');
-
-if (makeOrderBtn !== null) {
-  makeOrderBtn.addEventListener("click", () => {
-    overlay.classList.remove("hide");
-    iziToast.show({
-      color: "green",
-      icon: "ico-success",
-      title: "Success",
-      message: "Order Made",
-      position: "center",
-      onClosing: () => {
-        redirect("index");
-      }
-    });
-  });
-}
-
 const toggleModal = modal => {
   overlay.classList.toggle('hide');
   modal.classList.toggle("hidden");
@@ -138,14 +153,15 @@ if (modalToggles !== null) {
   modalToggles.forEach(modalToggle => {
     let modal = document.querySelector(modalToggle.dataset.target);
     modalToggle.addEventListener('click', () => toggleModal(modal));
-
-    let dismissModalBtns = document.querySelectorAll('[data-dismiss="modal"]');
-
-    dismissModalBtns.forEach(dismissBtn => {
-      dismissBtn.addEventListener('click', () => toggleModal(modal));
-    });
   });
 }
+
+let dismissModalBtns = document.querySelectorAll('[data-dismiss="modal"]');
+
+dismissModalBtns.forEach(dismissBtn => {
+  let modal = document.getElementById(dismissBtn.parentElement.parentElement.parentElement.id);
+  dismissBtn.addEventListener('click', () => toggleModal(modal));
+});
 
 const mealOptionForm = document.getElementById('addMealOption');
 
