@@ -24,11 +24,6 @@ const getOrdersFromFile = () => {
   });
 };
 
-const payload = {
-  customerId: 1,
-  mealId: 1
-};
-
 const modifyPayload = {
   increase: true,
   decrease: false
@@ -51,17 +46,22 @@ describe('Order Endpoints', () => {
       })
       .catch(err => console.log('GET /orders', err.message));
   });
-  it(`POST ${API_PREFIX}/orders- Order A Meal`, done => {
+  it(`POST ${API_PREFIX}/orders- Create New User Order`, done => {
     chai
       .request(app)
       .post(`${API_PREFIX}/orders`)
-      .send(payload)
+      .send({
+        mealId: 1,
+        quantity: 1,
+        customerId: 2
+      })
       .then(async res => {
         try {
           expect(res).to.have.status(201);
           assert.equal(res.body.status, 'success');
-          const userOrders = await Order.fetchUserOrders(1);
-          expect(userOrders[userOrders.length - 1].mealId).to.equal(1);
+          const userOrders = await Order.fetchUserOrders(2);
+          const orderMeals = userOrders.order;
+          expect(orderMeals[orderMeals.length - 1].id).to.equal(1);
           done();
         } catch (err) {
           console.log(err.message);
@@ -69,25 +69,73 @@ describe('Order Endpoints', () => {
       })
       .catch(err => console.log('POST /orders', err.message));
   });
-  it(`PUT ${API_PREFIX}/orders/:orderId - Modify an order`, done => {
-    getOrdersFromFile().then(ordersFromFile => {
-      chai
-        .request(app)
-        .put(`${API_PREFIX}/orders/${ordersFromFile.length}`)
-        .send(modifyPayload)
-        .then(async res => {
-          try {
-            expect(res).to.have.status(200);
-            assert.equal(res.body.status, 'success');
-            const userOrder = await Order.fetch(ordersFromFile.length);
-            expect(userOrder.quantity).to.equal(2);
-            await Order.deleteById(userOrder.id);
-            done();
-          } catch (err) {
-            console.log(err.message);
-          }
-        })
-        .catch(err => console.log('PUT /orders/:orderId', err.message));
-    });
+  it(`POST ${API_PREFIX}/orders- Increase Meal Quantity By Ordering it again`, done => {
+    chai
+      .request(app)
+      .post(`${API_PREFIX}/orders`)
+      .send({
+        mealId: 1,
+        quantity: 1,
+        customerId: 2
+      })
+      .then(async res => {
+        try {
+          expect(res).to.have.status(201);
+          assert.equal(res.body.status, 'success');
+          const userOrders = await Order.fetchUserOrders(2);
+          const orderMeals = userOrders.order;
+          expect(orderMeals[orderMeals.length - 1].id).to.equal(1);
+          expect(orderMeals[orderMeals.length - 1].quantity).to.equal(2);
+          done();
+        } catch (err) {
+          console.log(err.message);
+        }
+      })
+      .catch(err => console.log('POST /orders', err.message));
   });
+  it(`POST ${API_PREFIX}/orders- Add a Different Meal to User Order`, done => {
+    chai
+      .request(app)
+      .post(`${API_PREFIX}/orders`)
+      .send({
+        mealId: 2,
+        quantity: 1,
+        customerId: 2
+      })
+      .then(async res => {
+        try {
+          expect(res).to.have.status(201);
+          assert.equal(res.body.status, 'success');
+          const userOrders = await Order.fetchUserOrders(2);
+          const orderMeals = userOrders.order;
+          expect(orderMeals[orderMeals.length - 1].id).to.equal(2);
+          await Order.deleteById(userOrders.id);
+          done();
+        } catch (err) {
+          console.log(err.message);
+        }
+      })
+      .catch(err => console.log('POST /orders', err.message));
+  });
+  // it(`PUT ${API_PREFIX}/orders/:orderId - Modify an order`, done => {
+  //   getOrdersFromFile().then(ordersFromFile => {
+  //     chai
+  //       .request(app)
+  //       .put(`${API_PREFIX}/orders/${ordersFromFile.length}`)
+  //       .send(modifyPayload)
+  //       .then(async res => {
+  //         try {
+  //           expect(res).to.have.status(200);
+  //           assert.equal(res.body.status, 'success');
+  //           const userOrder = await Order.fetch(ordersFromFile.length);
+  //           expect(userOrder.quantity).to.equal(2);
+  //           await Order.deleteById(userOrder.id);
+  //           done();
+  //         } catch (err) {
+  //           console.log(err.message);
+  //         }
+  //       })
+  //       .catch(err => console.log('PUT /orders/:orderId', err.message));
+  //   });
+  // });
 });
