@@ -1,3 +1,4 @@
+import fs from 'fs';
 import Meal from '../models/meals';
 
 class MealController {
@@ -43,29 +44,38 @@ class MealController {
   }
 
   static async updateMealOption(req, res) {
-    let response;
     try {
-      const { id } = req.params;
-      const { name, price, imageUrl } = req.body;
-      const meal = new Meal(id, name, price, imageUrl);
-      await meal.update();
-      response = {
-        code: 200,
-        body: {
-          status: 'success',
-          message: 'Meal Option Updated'
-        }
+      const meal = await Meal.findById(req.params.id);
+      if (!meal) {
+        throw new Error(`Meal With ID ${req.params.id} does not exist`);
+      }
+      const mealUpdate = {
+        name: req.body.name ? req.body.name : meal.name,
+        price: req.body.price ? req.body.price : meal.price
       };
+      if (req.files !== null) {
+        const { image } = req.files;
+        const imageUrl = `/api/images/${image.name}`;
+        fs.unlink(`.${meal.imageUrl}`, err => {
+          if (err) throw new Error(err.message);
+        });
+        mealUpdate.imageUrl = imageUrl;
+        await image.mv(`.${imageUrl}`);
+      } else {
+        mealUpdate.imageUrl = meal.imageUrl;
+      }
+      const { name, price, imageUrl } = mealUpdate;
+      await Meal.update({ name, price, imageUrl }, { where: { id: req.params.id } });
+      return res.status(200).json({
+        status: 'success',
+        message: 'Meal Option Updated'
+      });
     } catch (err) {
-      response = {
-        code: 500,
-        body: {
-          status: 'error',
-          message: 'Falied to Updated Meal'
-        }
-      };
+      return res.status(500).json({
+        status: 'error',
+        message: err.message
+      });
     }
-    return res.status(response.code).json(response.body);
   }
 
   static async deleteMealOption(req, res) {
