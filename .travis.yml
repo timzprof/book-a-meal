@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+ - "node"
+services:
+  - postgresql
+env:
+  global:
+  - CODECLIMATE_REPO_TOKEN=096eba8d4801fa3d74634b4f237045a7c15239d0e6c454d992689cab00ab7593
+before_script:
+  - cat .env.travis >> .env
+  - psql -c "DROP DATABASE travis;" -U postgres
+  - psql -c "CREATE DATABASE travis;" -U postgres
+  - psql -c "CREATE USER root WITH PASSWORD 'password';" -U postgres
+after_success:
+  - npm run coverage
