@@ -58,7 +58,7 @@ router.put(
   MealController.updateMealOption
 );
 
-router.delete('/meals/:id', MealController.deleteMealOption);
+router.delete('/meals/:id', AuthController.verifyAdminToken, MealController.deleteMealOption);
 
 router.post('/menu/', MenuController.addMealToMenu);
 
