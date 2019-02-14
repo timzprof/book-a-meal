@@ -39,7 +39,7 @@ router.post(
   CatererController.loginCaterer
 );
 
-router.get('/meals/', MealController.getMealOptions);
+router.get('/meals/', AuthController.verifyAdminToken, MealController.getMealOptions);
 
 router.post('/meals/', MealController.addMealOption);
 
