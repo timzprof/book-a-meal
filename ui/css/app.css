@@ -230,7 +230,7 @@ header {
   display: flex;
   text-align: center;
   color: #fff;
-  width: 10%;
+  width: 15%;
   background-color: var(--red);
   padding: 20px 0;
 }
@@ -247,7 +247,7 @@ header {
   flex-wrap: wrap;
   justify-content: space-evenly;
   padding: 40px 0;
-  width: 90%;
+  width: 85%;
 }
 
 .menu__food-item {
@@ -360,6 +360,34 @@ footer {
 
 .page_link a:hover {
   text-decoration: underline;
+}
+
+/* Homepage */
+.home-page {
+  color: #fff;
+  background-image: url("../images/banner.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0.7);
+  background-blend-mode: multiply;
+  background-position: 10% 65%;
+  overflow: scroll;
+}
+
+.home-page .home-header {
+  background: none;
+}
+
+.home-page .banner {
+  padding: 120px;
+}
+
+.home-page .banner__text {
+  font-size: 2.5rem;
+}
+
+.home-page footer {
+  background: none;
 }
 
 /* Cart Page */
@@ -732,10 +760,24 @@ footer {
   }
 }
 
+/* Laptop */
+@media only screen and (min-width: 1000px) {
+  .home-page .banner__text {
+    font-size: 2rem;
+  }
+}
+
 /* Tablet */
 @media only screen and (min-width: 768px) and (max-width: 1000px) {
   .card-btn {
     padding: 0.8rem;
+  }
+  .home-page .banner {
+    padding: 80px 60px;
+  }
+
+  .home-page .banner__text {
+    font-size: 1.7rem;
   }
 }
 
@@ -765,6 +807,14 @@ footer {
   .table-head__list-item,
   .table-row__list-item {
     margin: 5px 20px;
+  }
+
+  .home-page .banner {
+    padding: 60px 30px;
+  }
+
+  .home-page .banner__text {
+    font-size: 1.5rem;
   }
 }
 
@@ -810,5 +860,9 @@ footer {
 
   .modal-header .close {
     font-size: 0.7rem;
+  }
+
+  .home-page .banner__text {
+    font-size: 1.3rem;
   }
 }
