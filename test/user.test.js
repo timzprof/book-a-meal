@@ -9,7 +9,7 @@ use(chaiHTTP);
 
 const API_PREFIX = '/api/v1';
 
-describe('User Auth Endpoints', () => {
+describe('User Auth Signup Endpoint Tests', () => {
   it('POST /auth/signup - User SignUp Validation Test(Required)', done => {
     chai
       .request(app)
@@ -95,6 +95,10 @@ describe('User Auth Endpoints', () => {
       })
       .catch(err => console.log('POST /auth/signup', err.message));
   });
+});
+
+describe('User Auth Login Endpoint Tests', () => {
+
   it('POST /auth/login - User Login Validation Test(Required)', done => {
     chai
       .request(app)

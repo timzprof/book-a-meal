@@ -50,7 +50,13 @@ router.post(
   MealController.addMealOption
 );
 
-router.put('/meals/:id', MealController.updateMealOption);
+router.put(
+  '/meals/:id',
+  trimRequest.body,
+  AuthController.verifyAdminToken,
+  MealMiddleware.validateUpdateMeal,
+  MealController.updateMealOption
+);
 
 router.delete('/meals/:id', MealController.deleteMealOption);
 
