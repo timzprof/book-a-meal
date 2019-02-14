@@ -15,7 +15,7 @@ before(done => {
   });
 });
 
-describe('Caterer Auth Endpoints', () => {
+describe('Caterer Auth Signup Endpoint Tests', () => {
   it('POST /auth/caterer/signup - Caterer SignUp Validation Test', done => {
     chai
       .request(app)
@@ -79,6 +79,9 @@ describe('Caterer Auth Endpoints', () => {
       })
       .catch(err => console.log('POST /auth/caterer/signup', err.message));
   });
+});
+
+describe('Caterer Login Endpoint Tests', () => {
   it('POST /auth/caterer/login - Caterer Login Validation Test(Required)', done => {
     chai
       .request(app)
