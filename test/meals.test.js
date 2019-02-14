@@ -1,4 +1,3 @@
-import fs from 'fs';
 import chai from 'chai';
 import chaiHTTP from 'chai-http';
 import jwt from 'jsonwebtoken';
@@ -381,9 +380,106 @@ describe('Caterer Modify Meal Endpoint Tests', () => {
             try {
               expect(res).to.have.status(200);
               assert.equal(res.body.status, 'success');
-              fs.unlink('./api/images/test2.jpg', err => {
-                if (err) throw new Error(err.message);
-              });
+              done();
+            } catch (err) {
+              console.log(err.message);
+            }
+          })
+          .catch(err => console.log('POST /meals/', err.message));
+      });
+    });
+  });
+});
+
+describe('Caterer Can Delete Endpoint Tests', () => {
+  it(`DELETE ${API_PREFIX}/meals/:mealId - Delete Meal (Unauthorized)`, done => {
+    Meal.findAll({
+      limit: 1,
+      order: [['createdAt', 'DESC']]
+    }).then(meals => {
+      let mealId = meals[0].id;
+      chai
+        .request(app)
+        .delete(`${API_PREFIX}/meals/${mealId}`)
+        .then(async res => {
+          try {
+            expect(res).to.have.status(401);
+            assert.equal(res.body.status, 'error');
+            done();
+          } catch (err) {
+            console.log(err.message);
+          }
+        })
+        .catch(err => console.log('DELETE /meals/:mealId', err.message));
+    });
+  });
+  it(`DELETE ${API_PREFIX}/meals/:mealId - Delete Meal - (Normal User Unauthorized)`, done => {
+    Meal.findAll({
+      limit: 1,
+      order: [['createdAt', 'DESC']]
+    }).then(meals => {
+      const mealId = meals[0].id;
+      User.create({
+        name: 'Billy Newton',
+        email: 'billy@newton.com',
+        phone: '07075748392',
+        password: 'billions'
+      }).then(user => {
+        const { id, name, email, phone } = user;
+        const token = jwt.sign(
+          {
+            user: { id, name, email, phone }
+          },
+          secret,
+          {
+            expiresIn: 86400
+          }
+        );
+        chai
+          .request(app)
+          .delete(`${API_PREFIX}/meals/${mealId}`)
+          .set('Authorization', `Bearer ${token}`)
+          .then(async res => {
+            try {
+              expect(res).to.have.status(401);
+              assert.equal(res.body.status, 'error');
+              const authUser = await User.findOne({ where: { email: 'billy@newton.com' } });
+              await authUser.destroy();
+              done();
+            } catch (err) {
+              console.log(err.message);
+            }
+          })
+          .catch(err => console.log('DELETE /meals/:mealId', err.message));
+      });
+    });
+  });
+  it(`DELETE ${API_PREFIX}/meals/:mealId - Delete Meal - (Caterer Authorized)`, done => {
+    Meal.findAll({
+      limit: 1,
+      order: [['createdAt', 'DESC']]
+    }).then(meals => {
+      const mealId = meals[0].id;
+      Caterer.findOne({ where: { email: 'billy@newton.com' } }).then(caterer => {
+        const { id, name, email, phone } = caterer;
+        const token = jwt.sign(
+          {
+            caterer: { id, name, email, phone },
+            isCaterer: true
+          },
+          secret,
+          {
+            expiresIn: 86400
+          }
+        );
+        chai
+          .request(app)
+          .delete(`${API_PREFIX}/meals/${mealId}`)
+          .set('Authorization', `Bearer ${token}`)
+          .then(async res => {
+            try {
+              expect(res).to.have.status(200);
+              assert.equal(res.body.status, 'success');
               const authCaterer = await Caterer.findOne({ where: { email: 'billy@newton.com' } });
               await authCaterer.destroy();
               done();
@@ -391,7 +487,7 @@ describe('Caterer Modify Meal Endpoint Tests', () => {
               console.log(err.message);
             }
           })
-          .catch(err => console.log('POST /meals/', err.message));
+          .catch(err => console.log('DELETE /meals/:mealId', err.message));
       });
     });
   });

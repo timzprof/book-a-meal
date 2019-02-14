@@ -79,12 +79,23 @@ class MealController {
   }
 
   static async deleteMealOption(req, res) {
-    const { id } = req.params;
-    await Meal.deleteById(id);
-    return res.status(200).json({
-      status: 'success',
-      message: 'Meal Option Deleted'
-    });
+    try {
+      const { id } = req.params;
+      const meal = await Meal.findOne({ where: { id } });
+      fs.unlink(`.${meal.imageUrl}`, err => {
+        if (err) throw new Error(err.message);
+      });
+      await meal.destroy();
+      return res.status(200).json({
+        status: 'success',
+        message: 'Meal Option Deleted'
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: 'error',
+        message: err.message
+      });
+    }
   }
 }
 
