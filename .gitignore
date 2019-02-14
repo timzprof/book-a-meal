@@ -4,4 +4,3 @@ node_modules
 lcov.info
 .coveralls.yml
 hidden_tests
-test_images
