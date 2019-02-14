@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors';
 import { config } from 'dotenv';
+import cors from 'cors';
 import Routes from './routes';
 import sequelize from './util/db';
 import User from './models/user';
