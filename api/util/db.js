@@ -3,11 +3,18 @@ import { config } from 'dotenv';
 
 config();
 
-const { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST } = process.env;
+if (process.env.NODE_ENV === 'test') {
+  process.env.DB_NAME = 'travis';
+  process.env.DB_HOST = 'localhost';
+  process.env.DB_USER = 'root';
+  process.env.DB_PASSWORD = 'password';
+  process.env.DB_PORT = 5432;
+}
 
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
   dialect: 'postgres',
-  host: DB_HOST,
+  port: process.env.DB_PORT,
+  host: process.env.DB_HOST,
   logging: false
 });
 
