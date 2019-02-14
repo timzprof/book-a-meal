@@ -18,7 +18,7 @@ const Caterer = sequelize.define('caterer', {
     unique: true
   },
   phone: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: false
   },
   password: {

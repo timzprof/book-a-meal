@@ -23,6 +23,31 @@ class AuthController {
       });
     }
   }
+
+  static async verifyAdminToken(req, res, next) {
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'No Token Provided'
+      });
+    }
+    const jwtToken = token.split(' ')[1];
+    try {
+      const decoded = await jwt.verify(jwtToken, secret);
+      if (!decoded.isCaterer) {
+        throw new Error('Unauthorized');
+      }
+      req.caterer = decoded.caterer;
+      next();
+      return true;
+    } catch (err) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Unauthorized'
+      });
+    }
+  }
 }
 
 export default AuthController;

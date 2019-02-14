@@ -9,12 +9,6 @@ use(chaiHTTP);
 
 const API_PREFIX = '/api/v1';
 
-before(done => {
-  app.on('dbConnected', () => {
-    done();
-  });
-});
-
 describe('User Auth Endpoints', () => {
   it('POST /auth/signup - User SignUp Validation Test(Required)', done => {
     chai

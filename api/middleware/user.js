@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 class UserMiddleware {
-  static async validateUserRegister(req, res, next) {
+  static async validateRegister(req, res, next) {
     try {
       const schema = {
         name: Joi.string().required(),
@@ -27,7 +27,7 @@ class UserMiddleware {
     }
   }
 
-  static async validateUserLogin(req, res, next) {
+  static async validateLogin(req, res, next) {
     try {
       const schema = {
         email: Joi.string()
