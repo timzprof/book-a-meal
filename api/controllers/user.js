@@ -46,7 +46,7 @@ class UserController {
         email: user.email,
         phone: user.phone
       };
-      const jwtToken = jwt.sign({ safeUser }, secret, {
+      const jwtToken = jwt.sign({ user: safeUser }, secret, {
         expiresIn: 86400
       });
       return res.status(200).json({

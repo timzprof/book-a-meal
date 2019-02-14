@@ -31,6 +31,37 @@ class CatererController {
       });
     }
   }
+
+  static async loginCaterer(req, res) {
+    try {
+      const { email, password } = req.body;
+      const caterer = await Caterer.find({ where: { email } });
+      const result = await bcrypt.compare(password, caterer.password);
+      if (!result) {
+        throw new Error("Password doesn't match our records");
+      }
+      const safeCaterer = {
+        id: caterer.id,
+        name: caterer.name,
+        email: caterer.email,
+        phone: caterer.phone
+      };
+      const jwtToken = jwt.sign({ caterer: safeCaterer, isCaterer: true }, secret, {
+        expiresIn: 86400
+      });
+      return res.status(200).json({
+        status: 'success',
+        message: 'Caterer Logged In',
+        token: `Bearer ${jwtToken}`,
+        user: safeCaterer
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: 'error',
+        message: err.message
+      });
+    }
+  }
 }
 
 export default CatererController;

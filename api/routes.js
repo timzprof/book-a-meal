@@ -32,6 +32,13 @@ router.post(
   CatererController.registerCaterer
 );
 
+router.post(
+  '/auth/caterer/login',
+  trimRequest.body,
+  CatererMiddleware.validateLogin,
+  CatererController.loginCaterer
+);
+
 router.get('/meals/', MealController.getMealOptions);
 
 router.post('/meals/', MealController.addMealOption);
