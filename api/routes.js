@@ -60,9 +60,9 @@ router.put(
 
 router.delete('/meals/:id', AuthController.verifyAdminToken, MealController.deleteMealOption);
 
-router.post('/menu/', MenuController.addMealToMenu);
+router.get('/menu/', AuthController.verifyUserToken, MenuController.getMenus);
 
-router.get('/menu/', MenuController.getMenus);
+router.post('/menu/', MenuController.addMealToMenu);
 
 router.get('/orders', OrderController.getOrders);
 

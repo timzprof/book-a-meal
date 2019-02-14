@@ -16,8 +16,8 @@ const Menu = sequelize.define('menu', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE
+  createdAt: Sequelize.DATEONLY,
+  updatedAt: Sequelize.DATEONLY
 });
 
 export default Menu;
