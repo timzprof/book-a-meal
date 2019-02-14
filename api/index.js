@@ -1,4 +1,5 @@
 import express from 'express';
+import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import { config } from 'dotenv';
 import cors from 'cors';
@@ -19,6 +20,7 @@ const PORT = process.env.PORT || 4000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+app.use(fileUpload());
 app.use('/api/v1', Routes);
 
 User.hasMany(Order, { constraints: true, onDelete: 'CASCADE' });

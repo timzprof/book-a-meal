@@ -35,7 +35,10 @@ class CatererController {
   static async loginCaterer(req, res) {
     try {
       const { email, password } = req.body;
-      const caterer = await Caterer.find({ where: { email } });
+      const caterer = await Caterer.findOne({ where: { email } });
+      if (!caterer) {
+        throw new Error('Caterer with that email does not exist');
+      }
       const result = await bcrypt.compare(password, caterer.password);
       if (!result) {
         throw new Error("Password doesn't match our records");
