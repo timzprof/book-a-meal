@@ -36,6 +36,9 @@ class UserController {
     try {
       const { email, password } = req.body;
       const user = await User.find({ where: { email } });
+      if (!user) {
+        throw new Error('User with that email does not exist');
+      }
       const result = await bcrypt.compare(password, user.password);
       if (!result) {
         throw new Error("Password doesn't match our records");

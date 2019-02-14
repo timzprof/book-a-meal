@@ -134,6 +134,25 @@ describe('User Auth Endpoints', () => {
       })
       .catch(err => console.log('POST /auth/login', err.message));
   });
+  it('POST /auth/login - User Cannot Login without being registered', done => {
+    chai
+      .request(app)
+      .post(`${API_PREFIX}/auth/login`)
+      .send({
+        email: 'thesis@science.com',
+        password: 'password'
+      })
+      .then(async res => {
+        try {
+          expect(res).to.have.status(500);
+          assert.equal(res.body.status, 'error');
+          done();
+        } catch (err) {
+          console.log(err.message);
+        }
+      })
+      .catch(err => console.log('POST /auth/login', err.message));
+  });
   it('POST /auth/login - User Can Login', done => {
     chai
       .request(app)

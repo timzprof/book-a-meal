@@ -12,12 +12,19 @@ class MealController {
   }
 
   static async getMealOptions(req, res) {
-    const meals = await Meal.fetchAll();
-    return res.status(200).json({
-      status: 'success',
-      message: 'Meals Retrieved',
-      data: meals
-    });
+    try {
+      const meals = await Meal.findAll({ where: { catererId: req.caterer.id } });
+      return res.status(200).json({
+        status: 'success',
+        message: 'Meals Retrieved',
+        data: meals
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Failed to Retrieve Meals'
+      });
+    }
   }
 
   static async updateMealOption(req, res) {
