@@ -29,8 +29,8 @@ const Order = sequelize.define('order', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE
+  createdAt: Sequelize.DATEONLY,
+  updatedAt: Sequelize.DATEONLY
 });
 
 export default Order;

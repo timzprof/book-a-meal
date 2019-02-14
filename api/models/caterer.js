@@ -25,8 +25,8 @@ const Caterer = sequelize.define('caterer', {
     type: Sequelize.STRING,
     allowNull: false
   },
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE
+  createdAt: Sequelize.DATEONLY,
+  updatedAt: Sequelize.DATEONLY
 });
 
 export default Caterer;
