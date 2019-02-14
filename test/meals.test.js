@@ -31,135 +31,215 @@ describe('Meal Endpoints', () => {
       .catch(err => console.log('GET /meals/', err.message));
   });
   it(`GET ${API_PREFIX}/meals/ - Fetch All Meals - (Normal User Unauthorized)`, done => {
-    const user = User.create({
+    User.create({
       name: 'Billy Newton',
       email: 'billy@newton.com',
       phone: '07075748392',
       password: 'billions'
+    }).then(user => {
+      const { id, name, email, phone } = user;
+      const token = jwt.sign(
+        {
+          user: { id, name, email, phone }
+        },
+        secret,
+        {
+          expiresIn: 86400
+        }
+      );
+      chai
+        .request(app)
+        .get(`${API_PREFIX}/meals/`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(async res => {
+          try {
+            expect(res).to.have.status(401);
+            assert.equal(res.body.status, 'error');
+            const authUser = await User.findOne({ where: { email: 'billy@newton.com' } });
+            await authUser.destroy();
+            done();
+          } catch (err) {
+            console.log(err.message);
+          }
+        })
+        .catch(err => console.log('GET /meals/', err.message));
     });
-    const { id, name, email, phone } = user;
-    const token = jwt.sign(
-      {
-        user: { id, name, email, phone }
-      },
-      secret,
-      {
-        expiresIn: 86400
-      }
-    );
+  });
+  it(`GET ${API_PREFIX}/meals/ - Fetch All Meals - (Caterer Authorized)`, done => {
+    Caterer.create({
+      name: 'Billy Newton',
+      email: 'billy@newton.com',
+      phone: '07075748392',
+      password: 'billions'
+    }).then(caterer => {
+      const { id, name, email, phone } = caterer;
+      const token = jwt.sign(
+        {
+          caterer: { id, name, email, phone },
+          isCaterer: true
+        },
+        secret,
+        {
+          expiresIn: 86400
+        }
+      );
+      chai
+        .request(app)
+        .get(`${API_PREFIX}/meals/`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(async res => {
+          try {
+            expect(res).to.have.status(200);
+            assert.equal(res.body.status, 'success');
+            const authCaterer = await Caterer.findOne({ where: { email: 'billy@newton.com' } });
+            await authCaterer.destroy();
+            done();
+          } catch (err) {
+            console.log(err.message);
+          }
+        })
+        .catch(err => console.log('GET /meals/', err.message));
+    });
+  });
+  it(`POST ${API_PREFIX}/meals/ - Add Meal Option (Unauthorized)`, done => {
     chai
       .request(app)
-      .get(`${API_PREFIX}/meals/`)
-      .set('Authorization', `Bearer ${token}`)
+      .post(`${API_PREFIX}/meals/`)
+      .send({
+        name: 'Test Meal',
+        price: '500'
+      })
       .then(async res => {
         try {
           expect(res).to.have.status(401);
           assert.equal(res.body.status, 'error');
-          const authUser = await User.findOne({ where: { email: 'billy@newton.com' } });
-          await authUser.destroy();
           done();
         } catch (err) {
           console.log(err.message);
         }
       })
-      .catch(err => console.log('GET /meals/', err.message));
+      .catch(err => console.log('POST /meals/', err.message));
   });
-  it(`GET ${API_PREFIX}/meals/ - Fetch All Meals - (Caterer Authorized)`, done => {
-    const caterer = Caterer.create({
+  it(`POST ${API_PREFIX}/meals/ - Add Meal Option - (Normal User Unauthorized)`, done => {
+    User.create({
       name: 'Billy Newton',
       email: 'billy@newton.com',
       phone: '07075748392',
       password: 'billions'
-    });
-    const { id, name, email, phone } = caterer;
-    const token = jwt.sign(
-      {
-        caterer: { id, name, email, phone },
-        isCaterer: true
-      },
-      secret,
-      {
-        expiresIn: 86400
-      }
-    );
-    chai
-      .request(app)
-      .get(`${API_PREFIX}/meals/`)
-      .set('Authorization', `Bearer ${token}`)
-      .then(async res => {
-        try {
-          expect(res).to.have.status(200);
-          assert.equal(res.body.status, 'success');
-          const authCaterer = await Caterer.findOne({ where: { email: 'billy@newton.com' } });
-          await authCaterer.destroy();
-          done();
-        } catch (err) {
-          console.log(err.message);
+    }).then(user => {
+      const { id, name, email, phone } = user;
+      const token = jwt.sign(
+        {
+          user: { id, name, email, phone }
+        },
+        secret,
+        {
+          expiresIn: 86400
         }
-      })
-      .catch(err => console.log('GET /meals/', err.message));
+      );
+      chai
+        .request(app)
+        .post(`${API_PREFIX}/meals/`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test Meal',
+          price: '500'
+        })
+        .then(async res => {
+          try {
+            expect(res).to.have.status(401);
+            assert.equal(res.body.status, 'error');
+            const authUser = await User.findOne({ where: { email: 'billy@newton.com' } });
+            await authUser.destroy();
+            done();
+          } catch (err) {
+            console.log(err.message);
+          }
+        })
+        .catch(err => console.log('POST /meals/', err.message));
+    });
   });
-  // it(`POST ${API_PREFIX}/meals/ - Add A Meal Option`, done => {
-  //   chai
-  //     .request(app)
-  //     .post(`${API_PREFIX}/meals/`)
-  //     .send(payload)
-  //     .then(async res => {
-  //       try {
-  //         expect(res).to.have.status(201);
-  //         assert.equal(res.body.status, 'success');
-  //         const mealsFromFile = await getMealsFromFile();
-  //         const lastMeal = mealsFromFile[mealsFromFile.length - 1];
-  //         expect(lastMeal.name).to.equal('Test Meal');
-  //         expect(lastMeal.price).to.equal(400);
-  //         expect(lastMeal.imageUrl).to.equal('img.png');
-  //         done();
-  //       } catch (err) {
-  //         console.log(err.message);
-  //       }
-  //     })
-  //     .catch(err => console.log('POST /meals/', err.message));
-  // });
-  // it(`PUT ${API_PREFIX}/meals/:mealId - Update Meal Option`, done => {
-  //   getMealsFromFile().then(mealsFromFile => {
-  //     chai
-  //       .request(app)
-  //       .put(`${API_PREFIX}/meals/${mealsFromFile.length}`)
-  //       .send({ price: 10000 })
-  //       .then(async res => {
-  //         try {
-  //           expect(res).to.have.status(200);
-  //           assert.equal(res.body.status, 'success');
-  //           const newMealsFromFile = await getMealsFromFile();
-  //           const lastMeal = newMealsFromFile[newMealsFromFile.length - 1];
-  //           expect(lastMeal.price).to.equal(10000);
-  //           done();
-  //         } catch (err) {
-  //           console.log(err.message);
-  //         }
-  //       })
-  //       .catch(err => console.log('PUT /meals/:mealId', err.message));
-  //   });
-  // });
-  // it(`DELETE ${API_PREFIX}/meals/:mealId - Delete Meal Option`, done => {
-  //   getMealsFromFile().then(mealsFromFile => {
-  //     chai
-  //       .request(app)
-  //       .delete(`${API_PREFIX}/meals/${mealsFromFile.length}`)
-  //       .then(async res => {
-  //         try {
-  //           expect(res).to.have.status(200);
-  //           assert.equal(res.body.status, 'success');
-  //           const newMealsFromFile = await getMealsFromFile();
-  //           const lastMeal = newMealsFromFile[newMealsFromFile.length - 1];
-  //           expect(lastMeal.name).to.not.equal('Test Meal');
-  //           expect(lastMeal.imageUrl).to.not.equal('img.png');
-  //           done();
-  //         } catch (err) {
-  //           console.log(err.message);
-  //         }
-  //       })
-  //       .catch(err => console.log('DELETE /meals/:mealId', err.message));
-  //   });
-  // });
+  it(`POST ${API_PREFIX}/meals/ - Add Meal Option - (Validation Test)`, done => {
+    Caterer.create({
+      name: 'Billy Newton',
+      email: 'billy@newton.com',
+      phone: '07075748392',
+      password: 'billions'
+    }).then(caterer => {
+      const token = jwt.sign(
+        {
+          caterer: {
+            id: caterer.id,
+            name: caterer.name,
+            email: caterer.email,
+            phone: caterer.phone
+          },
+          isCaterer: true
+        },
+        secret,
+        {
+          expiresIn: 86400
+        }
+      );
+      chai
+        .request(app)
+        .post(`${API_PREFIX}/meals/`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test Meal',
+          price: '500'
+        })
+        .then(async res => {
+          try {
+            expect(res).to.have.status(400);
+            assert.equal(res.body.status, 'error');
+            done();
+          } catch (err) {
+            console.log(err.message);
+          }
+        })
+        .catch(err => console.log('POST /meals/', err.message));
+    });
+  });
+  it(`POST ${API_PREFIX}/meals/ - Add Meal Option - (Caterer Can Add Meal Option)`, done => {
+    Caterer.findOne({ where: { email: 'billy@newton.com' } }).then(caterer => {
+      const token = jwt.sign(
+        {
+          caterer: {
+            id: caterer.id,
+            name: caterer.name,
+            email: caterer.email,
+            phone: caterer.phone
+          },
+          isCaterer: true
+        },
+        secret,
+        {
+          expiresIn: 86400
+        }
+      );
+      chai
+        .request(app)
+        .post(`${API_PREFIX}/meals/`)
+        .set('Authorization', `Bearer ${token}`)
+        .field('name', 'Test Meal')
+        .field('price', '500')
+        .attach('image', './test_images/test.png', 'test.png')
+        .then(async res => {
+          try {
+            expect(res).to.have.status(201);
+            assert.equal(res.body.status, 'success');
+            fs.unlink('./api/images/test.png', err => {
+              if (err) throw new Error(err.message);
+            });
+            const authCaterer = await Caterer.findOne({ where: { email: 'billy@newton.com' } });
+            await authCaterer.destroy();
+            done();
+          } catch (err) {
+            console.log(err.message);
+          }
+        })
+        .catch(err => console.log('POST /meals/', err.message));
+    });
+  });
 });

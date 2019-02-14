@@ -2,6 +2,7 @@ import express from 'express';
 import trimRequest from 'trim-request';
 import UserMiddleware from './middleware/user';
 import CatererMiddleware from './middleware/caterer';
+import MealMiddleware from './middleware/meals';
 import AuthController from './controllers/auth';
 import MealController from './controllers/meals';
 import MenuController from './controllers/menu';
@@ -41,7 +42,13 @@ router.post(
 
 router.get('/meals/', AuthController.verifyAdminToken, MealController.getMealOptions);
 
-router.post('/meals/', MealController.addMealOption);
+router.post(
+  '/meals/',
+  trimRequest.body,
+  AuthController.verifyAdminToken,
+  MealMiddleware.validateAddMeal,
+  MealController.addMealOption
+);
 
 router.put('/meals/:id', MealController.updateMealOption);
 

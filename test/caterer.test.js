@@ -98,6 +98,25 @@ describe('Caterer Auth Endpoints', () => {
       })
       .catch(err => console.log('POST /auth/caterer/login', err.message));
   });
+  it('POST /auth/caterer/login - Caterer Cannot Login without being registered', done => {
+    chai
+      .request(app)
+      .post(`${API_PREFIX}/auth/caterer/login`)
+      .send({
+        email: 'thesis@science.com',
+        password: 'password'
+      })
+      .then(async res => {
+        try {
+          expect(res).to.have.status(500);
+          assert.equal(res.body.status, 'error');
+          done();
+        } catch (err) {
+          console.log(err.message);
+        }
+      })
+      .catch(err => console.log('POST /auth/caterer/login', err.message));
+  });
   it('POST /auth/caterer/login - Caterer Can Login', done => {
     chai
       .request(app)
