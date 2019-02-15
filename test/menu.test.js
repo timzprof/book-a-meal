@@ -28,19 +28,22 @@ const catererPayload = {
   password: 'bellish:)'
 };
 
+beforeEach(done => {
+  done();
+});
+
 describe('User Get all Menus Endpoint Tests', () => {
+  beforeEach(done => {
+    done();
+  });
   it(`GET ${API_PREFIX}/menu/ - Fetch All Menus (Unauthorized)`, done => {
     chai
       .request(app)
       .get(`${API_PREFIX}/menu/`)
-      .then(async res => {
-        try {
-          expect(res).to.have.status(401);
-          assert.equal(res.body.status, 'error');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(401);
+        assert.equal(res.body.status, 'error');
+        done();
       })
       .catch(err => console.log('GET /menu/', err.message));
   });
@@ -60,15 +63,12 @@ describe('User Get all Menus Endpoint Tests', () => {
         .request(app)
         .get(`${API_PREFIX}/menu/`)
         .set('Authorization', `Bearer ${token}`)
-        .then(async res => {
-          try {
-            expect(res).to.have.status(200);
-            assert.equal(res.body.status, 'success');
-            await User.destroy({ where: { email: 'bastard@stark.com' } });
+        .then(res => {
+          expect(res).to.have.status(200);
+          assert.equal(res.body.status, 'success');
+          User.destroy({ where: { email: 'bastard@stark.com' } }).then(() => {
             done();
-          } catch (err) {
-            console.log(err.message);
-          }
+          });
         })
         .catch(err => console.log('GET /menu/', err.message));
     });
@@ -76,6 +76,9 @@ describe('User Get all Menus Endpoint Tests', () => {
 });
 
 describe('Caterer Add Meal To Menu Endpoint Tests', () => {
+  beforeEach(done => {
+    done();
+  });
   Caterer.create(catererPayload)
     .then(caterer => {
       return Meal.create({
@@ -95,14 +98,10 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
             mealId,
             quantity: 2
           })
-          .then(async res => {
-            try {
-              expect(res).to.have.status(401);
-              assert.equal(res.body.status, 'error');
-              done();
-            } catch (err) {
-              console.log(err.message);
-            }
+          .then(res => {
+            expect(res).to.have.status(401);
+            assert.equal(res.body.status, 'error');
+            done();
           })
           .catch(err => console.log('POST /menu/', err.message));
       });
@@ -126,15 +125,12 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
               mealId,
               quantity: 2
             })
-            .then(async res => {
-              try {
-                expect(res).to.have.status(401);
-                assert.equal(res.body.status, 'error');
-                await User.destroy({ where: { email: 'bastard@stark.com' } });
+            .then(res => {
+              expect(res).to.have.status(401);
+              assert.equal(res.body.status, 'error');
+              User.destroy({ where: { email: 'bastard@stark.com' } }).then(() => {
                 done();
-              } catch (err) {
-                console.log(err.message);
-              }
+              });
             })
             .catch(err => console.log('POST /menu/', err.message));
         });
@@ -163,14 +159,10 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
             .send({
               mealId
             })
-            .then(async res => {
-              try {
-                expect(res).to.have.status(400);
-                assert.equal(res.body.status, 'error');
-                done();
-              } catch (err) {
-                console.log(err.message);
-              }
+            .then(res => {
+              expect(res).to.have.status(400);
+              assert.equal(res.body.status, 'error');
+              done();
             })
             .catch(err => console.log('POST /menu/', err.message));
         });
@@ -200,14 +192,10 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
               mealId,
               quantity: 2
             })
-            .then(async res => {
-              try {
-                expect(res).to.have.status(200);
-                assert.equal(res.body.status, 'success');
-                done();
-              } catch (err) {
-                console.log(err.message);
-              }
+            .then(res => {
+              expect(res).to.have.status(200);
+              assert.equal(res.body.status, 'success');
+              done();
             })
             .catch(err => console.log('POST /menu/', err.message));
         });
@@ -237,20 +225,21 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
               mealId,
               quantity: 2
             })
-            .then(async res => {
-              try {
-                expect(res).to.have.status(200);
-                assert.equal(res.body.status, 'success');
-                assert.equal(res.body.data[0].quantity, 4);
-                await Meal.destroy({ where: { id: mealId } });
-                await Caterer.destroy({ where: { email: 'agirl@hasnoface.com' } });
-                done();
-              } catch (err) {
-                console.log(err.message);
-              }
+            .then(res => {
+              expect(res).to.have.status(200);
+              assert.equal(res.body.status, 'success');
+              assert.equal(res.body.data[0].quantity, 4);
+              Meal.destroy({ where: { id: mealId } })
+                .then(() => {
+                  return Caterer.destroy({ where: { email: 'agirl@hasnoface.com' } });
+                })
+                .then(() => {
+                  done();
+                });
             })
             .catch(err => console.log('POST /menu/', err.message));
         });
       });
-    });
+    })
+    .catch(err => console.log(err.message));
 });

@@ -20,6 +20,9 @@ beforeEach(done => {
 });
 
 describe('Caterer Auth Signup Endpoint Tests', () => {
+  beforeEach(done => {
+    done();
+  });
   it('POST /auth/caterer/signup - Caterer SignUp Validation Test', done => {
     chai
       .request(app)
@@ -30,15 +33,11 @@ describe('Caterer Auth Signup Endpoint Tests', () => {
         phone: '08028372825',
         catering_service: 'Book A Meal'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(400);
-          assert.equal(res.body.status, 'error');
-          assert.equal(res.body.type, 'validation');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(400);
+        assert.equal(res.body.status, 'error');
+        assert.equal(res.body.type, 'validation');
+        done();
       })
       .catch(err => console.log('POST /auth/caterer/signup', err.message));
   });
@@ -53,14 +52,10 @@ describe('Caterer Auth Signup Endpoint Tests', () => {
         catering_service: 'Book A Meal',
         password: 'password'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(201);
-          assert.equal(res.body.status, 'success');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(201);
+        assert.equal(res.body.status, 'success');
+        done();
       })
       .catch(err => console.log('POST /auth/caterer/signup', err.message));
   });
@@ -75,20 +70,19 @@ describe('Caterer Auth Signup Endpoint Tests', () => {
         catering_service: 'Book A Meal',
         password: 'password'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(500);
-          assert.equal(res.body.status, 'error');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(500);
+        assert.equal(res.body.status, 'error');
+        done();
       })
       .catch(err => console.log('POST /auth/caterer/signup', err.message));
   });
 });
 
 describe('Caterer Login Endpoint Tests', () => {
+  beforeEach(done => {
+    done();
+  });
   it('POST /auth/caterer/login - Caterer Login Validation Test(Required)', done => {
     chai
       .request(app)
@@ -96,15 +90,11 @@ describe('Caterer Login Endpoint Tests', () => {
       .send({
         email: 'roger@test.com'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(400);
-          assert.equal(res.body.status, 'error');
-          assert.equal(res.body.type, 'validation');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(400);
+        assert.equal(res.body.status, 'error');
+        assert.equal(res.body.type, 'validation');
+        done();
       })
       .catch(err => console.log('POST /auth/caterer/login', err.message));
   });
@@ -116,14 +106,10 @@ describe('Caterer Login Endpoint Tests', () => {
         email: 'thesis@science.com',
         password: 'password'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(500);
-          assert.equal(res.body.status, 'error');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(500);
+        assert.equal(res.body.status, 'error');
+        done();
       })
       .catch(err => console.log('POST /auth/caterer/login', err.message));
   });
@@ -135,14 +121,10 @@ describe('Caterer Login Endpoint Tests', () => {
         email: 'roger@test.com',
         password: 'password'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(200);
-          assert.equal(res.body.status, 'success');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(200);
+        assert.equal(res.body.status, 'success');
+        done();
       })
       .catch(err => console.log('POST /auth/caterer/login', err.message));
   });
@@ -154,15 +136,12 @@ describe('Caterer Login Endpoint Tests', () => {
         email: 'roger@test.com',
         password: 'password111'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(500);
-          assert.equal(res.body.status, 'error');
-          await Caterer.destroy({ where: { email: 'roger@test.com' } });
+      .then(res => {
+        expect(res).to.have.status(500);
+        assert.equal(res.body.status, 'error');
+        Caterer.destroy({ where: { email: 'roger@test.com' } }).then(() => {
           done();
-        } catch (err) {
-          console.log(err.message);
-        }
+        });
       })
       .catch(err => console.log('POST /auth/caterer/login', err.message));
   });

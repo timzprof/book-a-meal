@@ -1,31 +1,18 @@
 import Sequelize from 'sequelize';
 import sequelize from '../util/db';
 
-const Order = sequelize.define('order', {
+const OrderItem = sequelize.define('orderItem', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
-  order: {
-    type: Sequelize.JSON,
-    allowNull: false
-  },
-  total: {
+  mealId: {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  billing_address: {
-    type: Sequelize.TEXT,
-    allowNull: false
-  },
-  delivery_status: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false,
-    default: false
-  },
-  catererId: {
+  quantity: {
     type: Sequelize.INTEGER,
     allowNull: false
   },
@@ -37,4 +24,4 @@ const Order = sequelize.define('order', {
   updatedAt: Sequelize.DATEONLY
 });
 
-export default Order;
+export default OrderItem;

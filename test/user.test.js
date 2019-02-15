@@ -19,15 +19,11 @@ describe('User Auth Signup Endpoint Tests', () => {
         email: 'roger@test.com',
         phone: '08028372825'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(400);
-          assert.equal(res.body.status, 'error');
-          assert.equal(res.body.type, 'validation');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(400);
+        assert.equal(res.body.status, 'error');
+        assert.equal(res.body.type, 'validation');
+        done();
       })
       .catch(err => console.log('POST /auth/signup', err.message));
   });
@@ -41,15 +37,11 @@ describe('User Auth Signup Endpoint Tests', () => {
         phone: '08028372825',
         password: 'pass'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(400);
-          assert.equal(res.body.status, 'error');
-          assert.equal(res.body.type, 'validation');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(400);
+        assert.equal(res.body.status, 'error');
+        assert.equal(res.body.type, 'validation');
+        done();
       })
       .catch(err => console.log('POST /auth/signup', err.message));
   });
@@ -63,14 +55,10 @@ describe('User Auth Signup Endpoint Tests', () => {
         phone: '08028372825',
         password: 'password'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(201);
-          assert.equal(res.body.status, 'success');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(201);
+        assert.equal(res.body.status, 'success');
+        done();
       })
       .catch(err => console.log('POST /auth/signup', err.message));
   });
@@ -84,21 +72,16 @@ describe('User Auth Signup Endpoint Tests', () => {
         phone: '08028372825',
         password: 'password'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(500);
-          assert.equal(res.body.status, 'error');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(500);
+        assert.equal(res.body.status, 'error');
+        done();
       })
       .catch(err => console.log('POST /auth/signup', err.message));
   });
 });
 
 describe('User Auth Login Endpoint Tests', () => {
-
   it('POST /auth/login - User Login Validation Test(Required)', done => {
     chai
       .request(app)
@@ -106,15 +89,11 @@ describe('User Auth Login Endpoint Tests', () => {
       .send({
         email: 'roger@test.com'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(400);
-          assert.equal(res.body.status, 'error');
-          assert.equal(res.body.type, 'validation');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(400);
+        assert.equal(res.body.status, 'error');
+        assert.equal(res.body.type, 'validation');
+        done();
       })
       .catch(err => console.log('POST /auth/login', err.message));
   });
@@ -126,15 +105,11 @@ describe('User Auth Login Endpoint Tests', () => {
         email: 'roger',
         password: 'password'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(400);
-          assert.equal(res.body.status, 'error');
-          assert.equal(res.body.type, 'validation');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(400);
+        assert.equal(res.body.status, 'error');
+        assert.equal(res.body.type, 'validation');
+        done();
       })
       .catch(err => console.log('POST /auth/login', err.message));
   });
@@ -146,14 +121,10 @@ describe('User Auth Login Endpoint Tests', () => {
         email: 'thesis@science.com',
         password: 'password'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(500);
-          assert.equal(res.body.status, 'error');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(500);
+        assert.equal(res.body.status, 'error');
+        done();
       })
       .catch(err => console.log('POST /auth/login', err.message));
   });
@@ -165,14 +136,10 @@ describe('User Auth Login Endpoint Tests', () => {
         email: 'roger@test.com',
         password: 'password'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(200);
-          assert.equal(res.body.status, 'success');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .then(res => {
+        expect(res).to.have.status(200);
+        assert.equal(res.body.status, 'success');
+        done();
       })
       .catch(err => console.log('POST /auth/login', err.message));
   });
@@ -184,15 +151,12 @@ describe('User Auth Login Endpoint Tests', () => {
         email: 'roger@test.com',
         password: 'password111'
       })
-      .then(async res => {
-        try {
-          expect(res).to.have.status(500);
-          assert.equal(res.body.status, 'error');
-          await User.destroy({ where: { email: 'roger@test.com' } });
+      .then(res => {
+        expect(res).to.have.status(500);
+        assert.equal(res.body.status, 'error');
+        User.destroy({ where: { email: 'roger@test.com' } }).then(() => {
           done();
-        } catch (err) {
-          console.log(err.message);
-        }
+        });
       })
       .catch(err => console.log('POST /auth/login', err.message));
   });

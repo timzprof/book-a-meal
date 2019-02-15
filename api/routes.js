@@ -78,7 +78,7 @@ router.post(
   trimRequest.body,
   AuthController.verifyUserToken,
   OrderMiddleware.validateOrder,
-  OrderController.orderMeal
+  OrderController.addToOrders
 );
 
 router.put('/orders/:orderId', OrderController.modifyOrder);

@@ -6,6 +6,7 @@ import secret from '../api/util/jwt_secret';
 import User from '../api/models/user';
 import Caterer from '../api/models/caterer';
 import Order from '../api/models/orders';
+import Meal from '../api/models/meals';
 
 const { assert, expect, use } = chai;
 
@@ -28,19 +29,16 @@ const catererPayload = {
   password: 'oursisthefury'
 };
 
+
 describe('Caterer Get all Orders Endpoint Tests', () => {
   it(`GET ${API_PREFIX}/orders - Fetch All Orders (Unauthorized)`, done => {
     chai
       .request(app)
-      .get(`${API_PREFIX}/meals/`)
-      .then(async res => {
-        try {
-          expect(res).to.have.status(401);
-          assert.equal(res.body.status, 'error');
-          done();
-        } catch (err) {
-          console.log(err.message);
-        }
+      .get(`${API_PREFIX}/orders`)
+      .then(res => {
+        expect(res).to.have.status(401);
+        assert.equal(res.body.status, 'error');
+        done();
       })
       .catch(err => console.log('GET /orders', err.message));
   });
@@ -60,15 +58,12 @@ describe('Caterer Get all Orders Endpoint Tests', () => {
         .request(app)
         .get(`${API_PREFIX}/orders`)
         .set('Authorization', `Bearer ${token}`)
-        .then(async res => {
-          try {
-            expect(res).to.have.status(401);
-            assert.equal(res.body.status, 'error');
-            await User.destroy({ where: { email: 'bruce@batman.com' } });
+        .then(res => {
+          expect(res).to.have.status(401);
+          assert.equal(res.body.status, 'error');
+          User.destroy({ where: { id: user.id } }).then(() => {
             done();
-          } catch (err) {
-            console.log(err.message);
-          }
+          });
         })
         .catch(err => console.log('GET /orders', err.message));
     });
@@ -90,17 +85,135 @@ describe('Caterer Get all Orders Endpoint Tests', () => {
         .request(app)
         .get(`${API_PREFIX}/orders`)
         .set('Authorization', `Bearer ${token}`)
-        .then(async res => {
-          try {
-            expect(res).to.have.status(200);
-            assert.equal(res.body.status, 'success');
-            await Caterer.destroy({ where: { email: 'jof@sppiledbrat.com' } });
+        .then(res => {
+          expect(res).to.have.status(200);
+          assert.equal(res.body.status, 'success');
+          Caterer.destroy({ where: { id: caterer.id } }).then(() => {
             done();
-          } catch (err) {
-            console.log(err.message);
-          }
+          });
         })
         .catch(err => console.log('GET /orders', err.message));
     });
   });
+});
+
+describe('User can add to Orders Endpoint Tests', () => {
+  Caterer.create(catererPayload)
+    .then(caterer => {
+      return Meal.create({
+        name: 'Dummy Meal',
+        price: 500,
+        imageUrl: 'fk.png',
+        catererId: caterer.id
+      });
+    })
+    .then(meal => {
+      it(`POST ${API_PREFIX}/orders - Add To Orders (Unauthorized)`, done => {
+        chai
+          .request(app)
+          .post(`${API_PREFIX}/orders`)
+          .send({
+            mealId: meal.id,
+            quantity: 1
+          })
+          .then(res => {
+            expect(res).to.have.status(401);
+            assert.equal(res.body.status, 'error');
+            done();
+          })
+          .catch(err => console.log('POST /orders', err.message));
+      });
+      it(`POST ${API_PREFIX}/orders - Add To Orders - (Validation Test)`, done => {
+        User.create(userPayload).then(user => {
+          const { id, name, email, phone } = user;
+          const token = jwt.sign(
+            {
+              user: { id, name, email, phone }
+            },
+            secret,
+            {
+              expiresIn: 86400
+            }
+          );
+          chai
+            .request(app)
+            .post(`${API_PREFIX}/orders`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              mealId: meal.id
+            })
+            .then(res => {
+              expect(res).to.have.status(400);
+              assert.equal(res.body.status, 'error');
+              done();
+            })
+            .catch(err => console.log('POST /orders', err.message));
+        });
+      });
+      it(`POST ${API_PREFIX}/orders - Add To Orders - (User can Add to Order)`, done => {
+        User.findOne({ where: { email: 'bruce@batman.com' } }).then(user => {
+          const { id, name, email, phone } = user;
+          const token = jwt.sign(
+            {
+              user: { id, name, email, phone }
+            },
+            secret,
+            {
+              expiresIn: 86400
+            }
+          );
+          chai
+            .request(app)
+            .post(`${API_PREFIX}/orders`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              mealId: meal.id,
+              quantity: 1
+            })
+            .then(res => {
+              expect(res).to.have.status(200);
+              assert.equal(res.body.status, 'success');
+              done();
+            })
+            .catch(err => console.log('POST /orders', err.message));
+        });
+      });
+      it(`POST ${API_PREFIX}/orders - Add To Orders - (User Cannot increament Order Item quantity from this route)`, done => {
+        User.findOne({ where: { email: 'bruce@batman.com' } }).then(user => {
+          const { id, name, email, phone } = user;
+          const token = jwt.sign(
+            {
+              user: { id, name, email, phone }
+            },
+            secret,
+            {
+              expiresIn: 86400
+            }
+          );
+          chai
+            .request(app)
+            .post(`${API_PREFIX}/orders`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              mealId: meal.id,
+              quantity: 1
+            })
+            .then(res => {
+              expect(res).to.have.status(200);
+              assert.equal(res.body.status, 'warning');
+              Meal.destroy({ where: { id: meal.id } })
+                .then(() => {
+                  return User.destroy({ where: { id: user.id } });
+                })
+                .then(() => {
+                  return Caterer.destroy({ where: { email: 'jof@sppiledbrat.com' } });
+                })
+                .then(() => {
+                  done();
+                });
+            })
+            .catch(err => console.log('POST /orders', err.message));
+        });
+      });
+    });
 });
