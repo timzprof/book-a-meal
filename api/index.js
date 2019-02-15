@@ -10,6 +10,7 @@ import Caterer from './models/caterer';
 import Meal from './models/meals';
 import Menu from './models/menu';
 import Order from './models/orders';
+import OrderItem from './models/orderItem';
 
 config();
 
@@ -24,9 +25,11 @@ app.use(fileUpload());
 app.use('/api/v1', Routes);
 
 User.hasMany(Order, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(OrderItem, { constraints: true, onDelete: 'CASCADE' });
 Order.belongsTo(Caterer, { constraints: true, onDelete: 'CASCADE' });
 Meal.belongsTo(Caterer, { constraints: true, onDelete: 'CASCADE' });
 Menu.belongsTo(Caterer, { constraints: true, onDelete: 'CASCADE' });
+OrderItem.belongsTo(Meal, { constraints: true, onDelete: 'CASCADE' });
 
 sequelize
   .sync()

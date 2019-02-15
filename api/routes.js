@@ -3,6 +3,7 @@ import trimRequest from 'trim-request';
 import UserMiddleware from './middleware/user';
 import CatererMiddleware from './middleware/caterer';
 import MealMiddleware from './middleware/meals';
+import OrderMiddleware from './middleware/order';
 import AuthController from './controllers/auth';
 import MealController from './controllers/meals';
 import MenuController from './controllers/menu';
@@ -72,7 +73,13 @@ router.post(
 
 router.get('/orders', AuthController.verifyAdminToken, OrderController.getOrders);
 
-router.post('/orders', OrderController.orderMeal);
+router.post(
+  '/orders',
+  trimRequest.body,
+  AuthController.verifyUserToken,
+  OrderMiddleware.validateOrder,
+  OrderController.addToOrders
+);
 
 router.put('/orders/:orderId', OrderController.modifyOrder);
 
