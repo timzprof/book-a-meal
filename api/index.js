@@ -32,7 +32,7 @@ Menu.belongsTo(Caterer, { constraints: true, onDelete: 'CASCADE' });
 OrderItem.belongsTo(Meal);
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then(() => {
     console.log('DB Connection has been established');
     app.listen(PORT, null, null, () => {
