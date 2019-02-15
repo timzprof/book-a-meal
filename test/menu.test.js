@@ -28,14 +28,17 @@ const catererPayload = {
   password: 'bellish:)'
 };
 
-beforeEach(done => {
-  done();
+before(done => {
+  User.create(userPayload)
+    .then(() => {
+      return Caterer.create(catererPayload);
+    })
+    .then(() => {
+      done();
+    });
 });
 
 describe('User Get all Menus Endpoint Tests', () => {
-  beforeEach(done => {
-    done();
-  });
   it(`GET ${API_PREFIX}/menu/ - Fetch All Menus (Unauthorized)`, done => {
     chai
       .request(app)
@@ -48,7 +51,7 @@ describe('User Get all Menus Endpoint Tests', () => {
       .catch(err => console.log('GET /menu/', err.message));
   });
   it(`GET ${API_PREFIX}/menu/ - Fetch All Menus - (User Authorized)`, done => {
-    User.create(userPayload).then(user => {
+    User.findOne({ where: { email: userPayload.email } }).then(user => {
       const { id, name, email, phone } = user;
       const token = jwt.sign(
         {
@@ -66,9 +69,7 @@ describe('User Get all Menus Endpoint Tests', () => {
         .then(res => {
           expect(res).to.have.status(200);
           assert.equal(res.body.status, 'success');
-          User.destroy({ where: { email: 'bastard@stark.com' } }).then(() => {
-            done();
-          });
+          done();
         })
         .catch(err => console.log('GET /menu/', err.message));
     });
@@ -76,10 +77,7 @@ describe('User Get all Menus Endpoint Tests', () => {
 });
 
 describe('Caterer Add Meal To Menu Endpoint Tests', () => {
-  beforeEach(done => {
-    done();
-  });
-  Caterer.create(catererPayload)
+  Caterer.findOne({ where: { email: catererPayload.email } })
     .then(caterer => {
       return Meal.create({
         name: 'Fake Food',
@@ -105,38 +103,8 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
           })
           .catch(err => console.log('POST /menu/', err.message));
       });
-      it(`POST ${API_PREFIX}/menu/ - Add Meal Option To Menu - (Normal User Unauthorized)`, done => {
-        User.create(userPayload).then(user => {
-          const { id, name, email, phone } = user;
-          const token = jwt.sign(
-            {
-              user: { id, name, email, phone }
-            },
-            secret,
-            {
-              expiresIn: 86400
-            }
-          );
-          chai
-            .request(app)
-            .post(`${API_PREFIX}/menu/`)
-            .set('Authorization', `Bearer ${token}`)
-            .send({
-              mealId,
-              quantity: 2
-            })
-            .then(res => {
-              expect(res).to.have.status(401);
-              assert.equal(res.body.status, 'error');
-              User.destroy({ where: { email: 'bastard@stark.com' } }).then(() => {
-                done();
-              });
-            })
-            .catch(err => console.log('POST /menu/', err.message));
-        });
-      });
       it(`POST ${API_PREFIX}/menu/ - Add Meal Option To Menu - (Validation Test)`, done => {
-        Caterer.findOne({ where: { email: 'agirl@hasnoface.com' } }).then(caterer => {
+        Caterer.findOne({ where: { email: catererPayload.email } }).then(caterer => {
           const token = jwt.sign(
             {
               caterer: {
@@ -168,40 +136,42 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
         });
       });
       it(`POST ${API_PREFIX}/menu/ - Add Meal Option To Menu - (Caterer Can Add Menu Meal)`, done => {
-        Caterer.findOne({ where: { email: 'agirl@hasnoface.com' } }).then(caterer => {
-          const token = jwt.sign(
-            {
-              caterer: {
-                id: caterer.id,
-                name: caterer.name,
-                email: caterer.email,
-                phone: caterer.phone
+        Caterer.findOne({ where: { email: catererPayload.email } })
+          .then(caterer => {
+            const token = jwt.sign(
+              {
+                caterer: {
+                  id: caterer.id,
+                  name: caterer.name,
+                  email: caterer.email,
+                  phone: caterer.phone
+                },
+                isCaterer: true
               },
-              isCaterer: true
-            },
-            secret,
-            {
-              expiresIn: 86400
-            }
-          );
-          chai
-            .request(app)
-            .post(`${API_PREFIX}/menu/`)
-            .set('Authorization', `Bearer ${token}`)
-            .send({
-              mealId,
-              quantity: 2
-            })
-            .then(res => {
-              expect(res).to.have.status(200);
-              assert.equal(res.body.status, 'success');
-              done();
-            })
-            .catch(err => console.log('POST /menu/', err.message));
-        });
+              secret,
+              {
+                expiresIn: 86400
+              }
+            );
+            chai
+              .request(app)
+              .post(`${API_PREFIX}/menu/`)
+              .set('Authorization', `Bearer ${token}`)
+              .send({
+                mealId,
+                quantity: 2
+              })
+              .then(res => {
+                expect(res).to.have.status(200);
+                assert.equal(res.body.status, 'success');
+                done();
+              })
+              .catch(err => console.log('POST /menu/', err.message));
+          })
+          .catch(err => console.log(err.message));
       });
       it(`POST ${API_PREFIX}/menu/ - Add Meal Option To Menu - (Caterer Can Update Menu Meal)`, done => {
-        Caterer.findOne({ where: { email: 'agirl@hasnoface.com' } }).then(caterer => {
+        Caterer.findOne({ where: { email: catererPayload.email } }).then(caterer => {
           const token = jwt.sign(
             {
               caterer: {
@@ -229,17 +199,23 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
               expect(res).to.have.status(200);
               assert.equal(res.body.status, 'success');
               assert.equal(res.body.data[0].quantity, 4);
-              Meal.destroy({ where: { id: mealId } })
-                .then(() => {
-                  return Caterer.destroy({ where: { email: 'agirl@hasnoface.com' } });
-                })
-                .then(() => {
-                  done();
-                });
+              Meal.destroy({ where: { id: mealId } }).then(() => {
+                done();
+              });
             })
             .catch(err => console.log('POST /menu/', err.message));
         });
       });
     })
     .catch(err => console.log(err.message));
+});
+
+after(done => {
+  User.destroy({ where: { email: userPayload.email } })
+    .then(() => {
+      return Caterer.destroy({ where: { email: catererPayload.email } });
+    })
+    .then(() => {
+      done();
+    });
 });

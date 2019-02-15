@@ -20,9 +20,6 @@ beforeEach(done => {
 });
 
 describe('Caterer Auth Signup Endpoint Tests', () => {
-  beforeEach(done => {
-    done();
-  });
   it('POST /auth/caterer/signup - Caterer SignUp Validation Test', done => {
     chai
       .request(app)
@@ -80,9 +77,6 @@ describe('Caterer Auth Signup Endpoint Tests', () => {
 });
 
 describe('Caterer Login Endpoint Tests', () => {
-  beforeEach(done => {
-    done();
-  });
   it('POST /auth/caterer/login - Caterer Login Validation Test(Required)', done => {
     chai
       .request(app)
@@ -139,10 +133,14 @@ describe('Caterer Login Endpoint Tests', () => {
       .then(res => {
         expect(res).to.have.status(500);
         assert.equal(res.body.status, 'error');
-        Caterer.destroy({ where: { email: 'roger@test.com' } }).then(() => {
-          done();
-        });
+        done();
       })
       .catch(err => console.log('POST /auth/caterer/login', err.message));
+  });
+});
+
+after(done => {
+  Caterer.destroy({ where: { email: 'roger@test.com' } }).then(() => {
+    done();
   });
 });

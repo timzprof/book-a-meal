@@ -9,6 +9,10 @@ use(chaiHTTP);
 
 const API_PREFIX = '/api/v1';
 
+beforeEach(done => {
+  done();
+});
+
 describe('User Auth Signup Endpoint Tests', () => {
   it('POST /auth/signup - User SignUp Validation Test(Required)', done => {
     chai
@@ -154,10 +158,14 @@ describe('User Auth Login Endpoint Tests', () => {
       .then(res => {
         expect(res).to.have.status(500);
         assert.equal(res.body.status, 'error');
-        User.destroy({ where: { email: 'roger@test.com' } }).then(() => {
-          done();
-        });
+        done();
       })
       .catch(err => console.log('POST /auth/login', err.message));
+  });
+});
+
+after(done => {
+  User.destroy({ where: { email: 'roger@test.com' } }).then(() => {
+    done();
   });
 });

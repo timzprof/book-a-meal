@@ -29,7 +29,7 @@ User.hasMany(OrderItem, { constraints: true, onDelete: 'CASCADE' });
 Order.belongsTo(Caterer, { constraints: true, onDelete: 'CASCADE' });
 Meal.belongsTo(Caterer, { constraints: true, onDelete: 'CASCADE' });
 Menu.belongsTo(Caterer, { constraints: true, onDelete: 'CASCADE' });
-OrderItem.belongsTo(Meal);
+OrderItem.belongsTo(Meal, { constraints: true, onDelete: 'CASCADE' });
 
 sequelize
   .sync()
