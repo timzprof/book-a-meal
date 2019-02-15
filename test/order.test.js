@@ -29,7 +29,6 @@ const catererPayload = {
   password: 'oursisthefury'
 };
 
-
 describe('Caterer Get all Orders Endpoint Tests', () => {
   it(`GET ${API_PREFIX}/orders - Fetch All Orders (Unauthorized)`, done => {
     chai
@@ -69,31 +68,33 @@ describe('Caterer Get all Orders Endpoint Tests', () => {
     });
   });
   it(`GET ${API_PREFIX}/orders - Fetch All Orders - (Caterer Authorized)`, done => {
-    Caterer.create(catererPayload).then(caterer => {
-      const { id, name, email, phone } = caterer;
-      const token = jwt.sign(
-        {
-          caterer: { id, name, email, phone },
-          isCaterer: true
-        },
-        secret,
-        {
-          expiresIn: 86400
-        }
-      );
-      chai
-        .request(app)
-        .get(`${API_PREFIX}/orders`)
-        .set('Authorization', `Bearer ${token}`)
-        .then(res => {
-          expect(res).to.have.status(200);
-          assert.equal(res.body.status, 'success');
-          Caterer.destroy({ where: { id: caterer.id } }).then(() => {
-            done();
-          });
-        })
-        .catch(err => console.log('GET /orders', err.message));
-    });
+    Caterer.create(catererPayload)
+      .then(caterer => {
+        const { id, name, email, phone } = caterer;
+        const token = jwt.sign(
+          {
+            caterer: { id, name, email, phone },
+            isCaterer: true
+          },
+          secret,
+          {
+            expiresIn: 86400
+          }
+        );
+        chai
+          .request(app)
+          .get(`${API_PREFIX}/orders`)
+          .set('Authorization', `Bearer ${token}`)
+          .then(res => {
+            expect(res).to.have.status(200);
+            assert.equal(res.body.status, 'success');
+            Caterer.destroy({ where: { id: caterer.id } }).then(() => {
+              done();
+            });
+          })
+          .catch(err => console.log('GET /orders', err.message));
+      })
+      .catch(err => console.log(err.errors));
   });
 });
 

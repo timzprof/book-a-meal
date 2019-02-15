@@ -29,9 +29,10 @@ User.hasMany(OrderItem, { constraints: true, onDelete: 'CASCADE' });
 Order.belongsTo(Caterer, { constraints: true, onDelete: 'CASCADE' });
 Meal.belongsTo(Caterer, { constraints: true, onDelete: 'CASCADE' });
 Menu.belongsTo(Caterer, { constraints: true, onDelete: 'CASCADE' });
+OrderItem.belongsTo(Meal);
 
 sequelize
-  .sync()
+  .sync({ force: true })
   .then(() => {
     console.log('DB Connection has been established');
     app.listen(PORT, null, null, () => {
