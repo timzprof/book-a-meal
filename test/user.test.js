@@ -188,8 +188,7 @@ describe('User Auth Login Endpoint Tests', () => {
         try {
           expect(res).to.have.status(500);
           assert.equal(res.body.status, 'error');
-          const user = await User.findOne({ where: { email: 'roger@test.com' } });
-          await user.destroy();
+          await User.destroy({ where: { email: 'roger@test.com' } });
           done();
         } catch (err) {
           console.log(err.message);

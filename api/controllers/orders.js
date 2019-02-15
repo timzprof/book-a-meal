@@ -12,28 +12,19 @@ class OrderController {
   }
 
   static async getOrders(req, res) {
-    let response;
     try {
-      const orders = await Order.fetchAll();
-      response = {
-        code: 200,
-        body: {
-          status: 'success',
-          message: 'Orders Retrieved',
-          data: orders
-        }
-      };
+      const orders = await Order.findAll({ where: { catererId: req.caterer.id } });
+      return res.status(200).json({
+        status: 'success',
+        message: 'Orders Retrieved',
+        data: orders
+      });
     } catch (err) {
-      response = {
-        code: 500,
-        body: {
-          status: 'error',
-          message: 'Failed to Retrive Orders',
-          error: err.message
-        }
-      };
+      return res.status(500).json({
+        status: 'error',
+        message: err.message
+      });
     }
-    return res.status(response.code).json(response.body);
   }
 
   static async modifyOrder(req, res) {

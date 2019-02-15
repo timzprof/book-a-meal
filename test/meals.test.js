@@ -54,8 +54,7 @@ describe('Caterer Get all Meals Endpoint Tests', () => {
           try {
             expect(res).to.have.status(401);
             assert.equal(res.body.status, 'error');
-            const authUser = await User.findOne({ where: { email: 'billy@newton.com' } });
-            await authUser.destroy();
+            await User.destroy({ where: { email: 'billy@newton.com' } });
             done();
           } catch (err) {
             console.log(err.message);
@@ -90,8 +89,7 @@ describe('Caterer Get all Meals Endpoint Tests', () => {
           try {
             expect(res).to.have.status(200);
             assert.equal(res.body.status, 'success');
-            const authCaterer = await Caterer.findOne({ where: { email: 'billy@newton.com' } });
-            await authCaterer.destroy();
+            await Caterer.destroy({ where: { email: 'billy@newton.com' } });
             done();
           } catch (err) {
             console.log(err.message);
@@ -294,8 +292,7 @@ describe('Caterer Modify Meal Endpoint Tests', () => {
             try {
               expect(res).to.have.status(401);
               assert.equal(res.body.status, 'error');
-              const authUser = await User.findOne({ where: { email: 'billy@newton.com' } });
-              await authUser.destroy();
+              await User.destroy({ where: { email: 'billy@newton.com' } });
               done();
             } catch (err) {
               console.log(err.message);
@@ -443,8 +440,7 @@ describe('Caterer Can Delete Endpoint Tests', () => {
             try {
               expect(res).to.have.status(401);
               assert.equal(res.body.status, 'error');
-              const authUser = await User.findOne({ where: { email: 'billy@newton.com' } });
-              await authUser.destroy();
+              await User.destroy({ where: { email: 'billy@newton.com' } });
               done();
             } catch (err) {
               console.log(err.message);
@@ -480,8 +476,7 @@ describe('Caterer Can Delete Endpoint Tests', () => {
             try {
               expect(res).to.have.status(200);
               assert.equal(res.body.status, 'success');
-              const authCaterer = await Caterer.findOne({ where: { email: 'billy@newton.com' } });
-              await authCaterer.destroy();
+              await Caterer.destroy({ where: { email: 'billy@newton.com' } });
               done();
             } catch (err) {
               console.log(err.message);

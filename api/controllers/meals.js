@@ -45,7 +45,7 @@ class MealController {
 
   static async updateMealOption(req, res) {
     try {
-      const meal = await Meal.findById(req.params.id);
+      const meal = await Meal.findOne({ where: { id: req.params.id } });
       if (!meal) {
         throw new Error(`Meal With ID ${req.params.id} does not exist`);
       }

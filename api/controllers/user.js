@@ -35,7 +35,7 @@ class UserController {
   static async loginUser(req, res) {
     try {
       const { email, password } = req.body;
-      const user = await User.find({ where: { email } });
+      const user = await User.findOne({ where: { email } });
       if (!user) {
         throw new Error('User with that email does not exist');
       }

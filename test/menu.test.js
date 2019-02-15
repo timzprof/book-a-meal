@@ -54,8 +54,7 @@ describe('User Get all Menus Endpoint Tests', () => {
           try {
             expect(res).to.have.status(200);
             assert.equal(res.body.status, 'success');
-            const authUser = await User.findOne({ where: { email: 'bastard@stark.com' } });
-            await authUser.destroy();
+            await User.destroy({ where: { email: 'bastard@stark.com' } });
             done();
           } catch (err) {
             console.log(err.message);

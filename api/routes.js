@@ -70,7 +70,7 @@ router.post(
   MenuController.addMealToMenu
 );
 
-router.get('/orders', OrderController.getOrders);
+router.get('/orders', AuthController.verifyAdminToken, OrderController.getOrders);
 
 router.post('/orders', OrderController.orderMeal);
 
