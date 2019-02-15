@@ -13,6 +13,21 @@ use(chaiHTTP);
 
 const API_PREFIX = '/api/v1';
 
+const userPayload = {
+  name: 'Bruce Wayne',
+  email: 'bruce@batman.com',
+  phone: '07075748392',
+  password: 'waynemanor'
+};
+
+const catererPayload = {
+  name: 'Joffery Baratheon',
+  email: 'jof@sppiledbrat.com',
+  phone: '07075748391',
+  catering_service: 'Iron Throne Eats',
+  password: 'oursisthefury'
+};
+
 describe('Caterer Get all Orders Endpoint Tests', () => {
   it(`GET ${API_PREFIX}/orders - Fetch All Orders (Unauthorized)`, done => {
     chai
@@ -30,12 +45,7 @@ describe('Caterer Get all Orders Endpoint Tests', () => {
       .catch(err => console.log('GET /orders', err.message));
   });
   it(`GET ${API_PREFIX}/orders - Fetch All Orders - (Normal User Unauthorized)`, done => {
-    User.create({
-      name: 'Bruce Wayne',
-      email: 'bruce@batman.com',
-      phone: '07075748392',
-      password: 'waynemanor'
-    }).then(user => {
+    User.create(userPayload).then(user => {
       const { id, name, email, phone } = user;
       const token = jwt.sign(
         {
@@ -64,12 +74,7 @@ describe('Caterer Get all Orders Endpoint Tests', () => {
     });
   });
   it(`GET ${API_PREFIX}/orders - Fetch All Orders - (Caterer Authorized)`, done => {
-    Caterer.create({
-      name: 'Joffery Baratheon',
-      email: 'jof@sppiledbrat.com',
-      phone: '07075748391',
-      password: 'oursisthefury'
-    }).then(caterer => {
+    Caterer.create(catererPayload).then(caterer => {
       const { id, name, email, phone } = caterer;
       const token = jwt.sign(
         {

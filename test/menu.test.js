@@ -13,6 +13,21 @@ use(chaiHTTP);
 
 const API_PREFIX = '/api/v1';
 
+const userPayload = {
+  name: 'Jon Snow',
+  email: 'bastard@stark.com',
+  phone: '09019272712',
+  password: 'winterishere'
+};
+
+const catererPayload = {
+  name: 'Arya Stark',
+  email: 'agirl@hasnoface.com',
+  phone: '00000000000',
+  catering_service: 'Stark Foods',
+  password: 'bellish:)'
+};
+
 describe('User Get all Menus Endpoint Tests', () => {
   it(`GET ${API_PREFIX}/menu/ - Fetch All Menus (Unauthorized)`, done => {
     chai
@@ -30,12 +45,7 @@ describe('User Get all Menus Endpoint Tests', () => {
       .catch(err => console.log('GET /menu/', err.message));
   });
   it(`GET ${API_PREFIX}/menu/ - Fetch All Menus - (User Authorized)`, done => {
-    User.create({
-      name: 'Jon Snow',
-      email: 'bastard@stark.com',
-      phone: '09019272712',
-      password: 'winterishere'
-    }).then(user => {
+    User.create(userPayload).then(user => {
       const { id, name, email, phone } = user;
       const token = jwt.sign(
         {
@@ -66,12 +76,7 @@ describe('User Get all Menus Endpoint Tests', () => {
 });
 
 describe('Caterer Add Meal To Menu Endpoint Tests', () => {
-  Caterer.create({
-    name: 'Arya Stark',
-    email: 'agirl@hasnoface.com',
-    phone: '00000000000',
-    password: 'bellish:)'
-  })
+  Caterer.create(catererPayload)
     .then(caterer => {
       return Meal.create({
         name: 'Fake Food',
@@ -102,12 +107,7 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
           .catch(err => console.log('POST /menu/', err.message));
       });
       it(`POST ${API_PREFIX}/menu/ - Add Meal Option To Menu - (Normal User Unauthorized)`, done => {
-        User.create({
-          name: 'Lord Bellish',
-          email: 'billy@vale.com',
-          phone: '01075748362',
-          password: 'sansapupeteer'
-        }).then(user => {
+        User.create(userPayload).then(user => {
           const { id, name, email, phone } = user;
           const token = jwt.sign(
             {
@@ -130,7 +130,7 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
               try {
                 expect(res).to.have.status(401);
                 assert.equal(res.body.status, 'error');
-                await User.destroy({ where: { email: 'billy@vale.com' } });
+                await User.destroy({ where: { email: 'bastard@stark.com' } });
                 done();
               } catch (err) {
                 console.log(err.message);

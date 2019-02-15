@@ -13,6 +13,21 @@ use(chaiHTTP);
 
 const API_PREFIX = '/api/v1';
 
+const userPayload = {
+  name: 'Billy Newton',
+  email: 'billy@newton.com',
+  phone: '07075748392',
+  password: 'billions'
+};
+
+const catererPayload = {
+  name: 'Billy Newton',
+  email: 'billy@newton.com',
+  phone: '07075748392',
+  catering_service: 'Buy Food',
+  password: 'billions'
+};
+
 describe('Caterer Get all Meals Endpoint Tests', () => {
   it(`GET ${API_PREFIX}/meals/ - Fetch All Meals (Unauthorized)`, done => {
     chai
@@ -30,12 +45,7 @@ describe('Caterer Get all Meals Endpoint Tests', () => {
       .catch(err => console.log('GET /meals/', err.message));
   });
   it(`GET ${API_PREFIX}/meals/ - Fetch All Meals - (Normal User Unauthorized)`, done => {
-    User.create({
-      name: 'Billy Newton',
-      email: 'billy@newton.com',
-      phone: '07075748392',
-      password: 'billions'
-    }).then(user => {
+    User.create(userPayload).then(user => {
       const { id, name, email, phone } = user;
       const token = jwt.sign(
         {
@@ -64,12 +74,7 @@ describe('Caterer Get all Meals Endpoint Tests', () => {
     });
   });
   it(`GET ${API_PREFIX}/meals/ - Fetch All Meals - (Caterer Authorized)`, done => {
-    Caterer.create({
-      name: 'Billy Newton',
-      email: 'billy@newton.com',
-      phone: '07075748392',
-      password: 'billions'
-    }).then(caterer => {
+    Caterer.create(catererPayload).then(caterer => {
       const { id, name, email, phone } = caterer;
       const token = jwt.sign(
         {
@@ -121,12 +126,7 @@ describe('Caterer Add Meal Endpoint Tests', () => {
       .catch(err => console.log('POST /meals/', err.message));
   });
   it(`POST ${API_PREFIX}/meals/ - Add Meal Option - (Normal User Unauthorized)`, done => {
-    User.create({
-      name: 'Billy Newton',
-      email: 'billy@newton.com',
-      phone: '07075748392',
-      password: 'billions'
-    }).then(user => {
+    User.create(userPayload).then(user => {
       const { id, name, email, phone } = user;
       const token = jwt.sign(
         {
@@ -158,12 +158,7 @@ describe('Caterer Add Meal Endpoint Tests', () => {
     });
   });
   it(`POST ${API_PREFIX}/meals/ - Add Meal Option - (Validation Test)`, done => {
-    Caterer.create({
-      name: 'Billy Newton',
-      email: 'billy@newton.com',
-      phone: '07075748392',
-      password: 'billions'
-    }).then(caterer => {
+    Caterer.create(catererPayload).then(caterer => {
       const token = jwt.sign(
         {
           caterer: {

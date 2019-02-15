@@ -21,6 +21,10 @@ const Caterer = sequelize.define('caterer', {
     type: Sequelize.STRING,
     allowNull: false
   },
+  catering_service: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   password: {
     type: Sequelize.STRING,
     allowNull: false
