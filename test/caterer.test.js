@@ -155,8 +155,7 @@ describe('Caterer Login Endpoint Tests', () => {
         try {
           expect(res).to.have.status(500);
           assert.equal(res.body.status, 'error');
-          const caterer = await Caterer.findOne({ where: { email: 'roger@test.com' } });
-          await caterer.destroy();
+          await Caterer.destroy({ where: { email: 'roger@test.com' } });
           done();
         } catch (err) {
           console.log(err.message);
