@@ -1,11 +1,17 @@
 import Menu from '../models/menu';
+import Meal from '../models/meals';
 
 class MenuController {
+  static generateDate() {
+    const date = new Date();
+    const month = `${date.getMonth() + 1}`;
+    const today = `${date.getFullYear()}-${month.padStart(2, '0')}-${date.getDate()}`;
+    return today;
+  }
+
   static async getMenus(req, res) {
     try {
-      const date = new Date();
-      const month = `${date.getMonth() + 1}`;
-      const today = `${date.getFullYear()}-${month.padStart(2, '0')}-${date.getDate()}`;
+      const today = MenuController.generateDate();
       const menus = await Menu.findAll({ where: { createdAt: today } });
       return res.status(200).json({
         status: 'success',
@@ -21,28 +27,55 @@ class MenuController {
   }
 
   static async addMealToMenu(req, res) {
-    let response;
-    const { mealId, quantity } = req.body;
-    const menu = new Menu();
     try {
-      await menu.add(mealId, quantity);
-      response = {
-        code: 200,
-        body: {
-          status: 'success',
-          message: 'Meal Added to Menu'
-        }
-      };
+      const { mealId, quantity } = req.body;
+      const meal = await Meal.findOne({ where: { id: mealId, catererId: req.caterer.id } });
+      const { createdAt, updatedAt, ...safeMeal } = meal.dataValues;
+      safeMeal.quantity = Number(quantity);
+      const today = MenuController.generateDate();
+      const menu = await Menu.findAll({ where: { catererId: req.caterer.id, createdAt: today } });
+      let menuMeals;
+      if (menu.length === 0) {
+        menuMeals = [];
+        menuMeals.push(safeMeal);
+        await Menu.create({
+          meals: JSON.stringify(menuMeals),
+          catererId: req.caterer.id
+        });
+      } else {
+        menuMeals = await MenuController.updateMeals(menu[0], safeMeal, mealId, quantity);
+        await Menu.update(
+          { meals: JSON.stringify(menuMeals) },
+          { where: { catererId: req.caterer.id, createdAt: today } }
+        );
+      }
+      return res.status(200).json({
+        status: 'success',
+        message: 'Meal Added to Menu',
+        data: menuMeals
+      });
     } catch (err) {
-      response = {
-        code: 500,
-        body: {
-          status: 'error',
-          message: 'Failed to Add Meal to Menu'
-        }
-      };
+      return res.status(500).json({
+        status: 'error',
+        message: err.message
+      });
     }
-    return res.status(response.code).json(response.body);
+  }
+
+  static async updateMeals(menu, safeMeal, mealId, quantity) {
+    try {
+      const { meals } = menu.dataValues;
+      const updatedMenuMeals = JSON.parse(meals);
+      const mealIndex = updatedMenuMeals.findIndex(menuMeal => menuMeal.id === Number(mealId));
+      if (mealIndex < 0) {
+        updatedMenuMeals.push(safeMeal);
+      } else {
+        updatedMenuMeals[mealIndex].quantity += Number(quantity);
+      }
+      return updatedMenuMeals;
+    } catch (err) {
+      throw new Error(`Update - ${err.message}`);
+    }
   }
 }
 

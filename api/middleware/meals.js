@@ -63,6 +63,32 @@ class MealMiddleware {
       });
     }
   }
+
+  static async validateAddMealToMenu(req, res, next) {
+    try {
+      const schema = {
+        mealId: Joi.number().required(),
+        quantity: Joi.number()
+          .min(1)
+          .required()
+      };
+      await Joi.validate(req.body, schema);
+      next();
+      return true;
+    } catch (err) {
+      let message;
+      if (err.details !== undefined) {
+        message = String(err.details[0].message);
+      } else {
+        message = String(err.message);
+      }
+      return res.status(400).json({
+        status: 'error',
+        message,
+        type: 'validation'
+      });
+    }
+  }
 }
 
 export default MealMiddleware;

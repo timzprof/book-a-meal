@@ -15,6 +15,10 @@ before(done => {
   });
 });
 
+beforeEach(done => {
+  done();
+});
+
 describe('Caterer Auth Signup Endpoint Tests', () => {
   it('POST /auth/caterer/signup - Caterer SignUp Validation Test', done => {
     chai
