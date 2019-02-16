@@ -46,6 +46,37 @@ class OrderController {
     }
   }
 
+  static async getOrderItems(req, res) {
+    try {
+      const orderItems = await OrderItem.findAll({
+        where: { userId: req.user.id },
+        include: [Meal]
+      });
+      if (!orderItems) {
+        throw new Error('User Has No Order Items');
+      }
+      const meals = [];
+      let total = 0;
+      orderItems.forEach(orderItem => {
+        const orderMeal = { ...orderItem };
+        orderMeal.meal.quantity = orderItem.quantity;
+        meals.push(orderMeal.meal);
+        total += orderItem.quantity * orderMeal.meal.price;
+      });
+      const order = { meals, total };
+      return res.status(200).json({
+        status: 'success',
+        message: 'Orders Retrieved',
+        data: order
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: 'error',
+        message: err.message
+      });
+    }
+  }
+
   static async modifyOrder(req, res) {
     try {
       const { orderId } = req.params;

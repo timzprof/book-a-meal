@@ -29,6 +29,13 @@ const user2Payload = {
   password: 'waynemanor'
 };
 
+const user3Payload = {
+  name: 'Dick Grayson',
+  email: 'dick@batman.com',
+  phone: '07075748392',
+  password: 'waynemanor'
+};
+
 const catererPayload = {
   name: 'Joffery Baratheon',
   phone: '07075748391',
@@ -49,6 +56,14 @@ const caterer3Payload = {
   name: 'Joffery Baratheon',
   phone: '07075748391',
   email: 'email@got.com',
+  catering_service: 'Iron Throne Eats',
+  password: 'oursisthefury'
+};
+
+const caterer4Payload = {
+  name: 'King Baratheon',
+  phone: '07075748391',
+  email: 'iron@got.com',
   catering_service: 'Iron Throne Eats',
   password: 'oursisthefury'
 };
@@ -363,13 +378,71 @@ describe('User can Modify Orders Endpoints', () => {
     .catch(err => console.log(err.message));
 });
 
+describe('Caterer Can Get theit Menu Endpoint Tests', () => {
+  Caterer.create(caterer4Payload)
+    .then(caterer => {
+      return Meal.create({
+        name: 'Dummy Meal',
+        price: 500,
+        quantity: 4,
+        imageUrl: 'fk.png',
+        catererId: caterer.id
+      });
+    })
+    .then(meal => {
+      User.create(user3Payload)
+        .then(user => {
+          return OrderItem.create({ mealId: meal.id, quantity: 3, userId: user.id });
+        })
+        .then(() => {
+          it(`GET ${API_PREFIX}/orders/user - Fetch Order Items (Unauthorized)`, done => {
+            chai
+              .request(app)
+              .get(`${API_PREFIX}/orders/user`)
+              .then(res => {
+                expect(res).to.have.status(401);
+                assert.equal(res.body.status, 'error');
+                done();
+              })
+              .catch(err => console.log('GET /orders/user', err.message));
+          });
+          it(`GET ${API_PREFIX}/orders/user - Fetch Order Items - (User Authorized)`, done => {
+            User.findOne({ where: { email: user3Payload.email } }).then(user => {
+              const { id, name, email, phone } = user;
+              const token = jwt.sign(
+                {
+                  user: { id, name, email, phone }
+                },
+                secret,
+                {
+                  expiresIn: 86400
+                }
+              );
+              chai
+                .request(app)
+                .get(`${API_PREFIX}/orders/user`)
+                .set('Authorization', `Bearer ${token}`)
+                .then(res => {
+                  expect(res).to.have.status(200);
+                  assert.equal(res.body.status, 'success');
+                  done();
+                })
+                .catch(err => console.log('GET /orders/user', err.message));
+            });
+          });
+        });
+    });
+});
+
 after(done => {
   User.destroy({ where: { email: userPayload.email } })
     .then(async () => {
       await Caterer.destroy({ where: { email: catererPayload.email } });
       await Caterer.destroy({ where: { email: caterer2Payload.email } });
       await Caterer.destroy({ where: { email: caterer3Payload.email } });
-      return User.destroy({ where: { email: user2Payload.email } });
+      await Caterer.destroy({ where: { email: caterer4Payload.email } });
+      await User.destroy({ where: { email: user2Payload.email } });
+      return User.destroy({ where: { email: user3Payload.email } });
     })
     .then(() => {
       done();
