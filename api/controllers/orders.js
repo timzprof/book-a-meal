@@ -1,5 +1,6 @@
 import Order from '../models/orders';
 import OrderItem from '../models/orderItem';
+import Meal from '../models/meals';
 
 class OrderController {
   static async addToOrders(req, res) {
@@ -13,10 +14,11 @@ class OrderController {
           message: 'Order Already exists'
         };
       } else {
-        await OrderItem.create({ mealId, quantity, userId: req.user.id });
+        const newOrderItem = await OrderItem.create({ mealId, quantity, userId: req.user.id });
         response.body = {
           status: 'success',
-          message: 'Added to Orders'
+          message: 'Added to Orders',
+          data: newOrderItem
         };
       }
       return res.status(200).json(response.body);
@@ -45,13 +47,41 @@ class OrderController {
   }
 
   static async modifyOrder(req, res) {
-    const { orderId } = req.params;
-    const { mealId, action } = req.body;
-    await Order.modifyOrderMeals(orderId, mealId, action);
-    return res.status(200).json({
-      status: 'success',
-      message: 'Order Updated'
-    });
+    try {
+      const { orderId } = req.params;
+      const { action } = req.body;
+      const orderItem = await OrderItem.findOne({
+        where: { id: orderId, userId: req.user.id },
+        include: [Meal]
+      });
+      if (action === 'increase') {
+        orderItem.quantity += 1;
+        if (orderItem.quantity > orderItem.meal.quantity) {
+          throw new Error(
+            `Only ${orderItem.meal.quantity} servings of ${orderItem.meal.name} is available`
+          );
+        }
+        await OrderItem.update({ quantity: orderItem.quantity }, { where: { id: orderItem.id } });
+      } else if (action === 'decrease') {
+        orderItem.quantity -= 1;
+        if (orderItem.quantity === 0) {
+          await OrderItem.destroy({ where: { id: orderItem.id } });
+        } else {
+          await OrderItem.update({ quantity: orderItem.quantity }, { where: { id: orderItem.id } });
+        }
+      } else if (action === 'delete') {
+        await OrderItem.destroy({ where: { id: orderItem.id } });
+      }
+      return res.status(200).json({
+        status: 'success',
+        message: 'Order Updated'
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: 'error',
+        message: err.message
+      });
+    }
   }
 }
 

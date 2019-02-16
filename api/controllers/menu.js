@@ -30,6 +30,9 @@ class MenuController {
     try {
       const { mealId, quantity } = req.body;
       const meal = await Meal.findOne({ where: { id: mealId, catererId: req.caterer.id } });
+      if (!meal) {
+        throw new Error(`Meal with that ID Doesn't exist`);
+      }
       const { createdAt, updatedAt, ...safeMeal } = meal.dataValues;
       safeMeal.quantity = Number(quantity);
       const today = MenuController.generateDate();
@@ -42,12 +45,15 @@ class MenuController {
           meals: JSON.stringify(menuMeals),
           catererId: req.caterer.id
         });
+        await Meal.update({ quantity }, { where: { id: mealId } });
       } else {
         menuMeals = await MenuController.updateMeals(menu[0], safeMeal, mealId, quantity);
         await Menu.update(
           { meals: JSON.stringify(menuMeals) },
           { where: { catererId: req.caterer.id, createdAt: today } }
         );
+        const mealIndex = menuMeals.findIndex(menuMeal => menuMeal.id === Number(mealId));
+        await Meal.update({ quantity: menuMeals[mealIndex].quantity }, { where: { id: mealId } });
       }
       return res.status(200).json({
         status: 'success',
