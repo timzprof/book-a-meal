@@ -63,6 +63,8 @@ router.delete('/meals/:id', AuthController.verifyAdminToken, MealController.dele
 
 router.get('/menu/', AuthController.verifyUserToken, MenuController.getMenus);
 
+router.get('/menu/caterer', AuthController.verifyAdminToken, MenuController.getSingleMenu);
+
 router.post(
   '/menu/',
   trimRequest.body,
