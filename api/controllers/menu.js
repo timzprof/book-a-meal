@@ -26,6 +26,23 @@ class MenuController {
     }
   }
 
+  static async getSingleMenu(req, res) {
+    try {
+      const today = MenuController.generateDate();
+      const menu = await Menu.findOne({ where: { createdAt: today, catererId: req.caterer.id } });
+      return res.status(200).json({
+        status: 'success',
+        message: 'Caterer Menu Retrieved',
+        data: menu
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: 'error',
+        message: err.message
+      });
+    }
+  }
+
   static async addMealToMenu(req, res) {
     try {
       const { mealId, quantity } = req.body;

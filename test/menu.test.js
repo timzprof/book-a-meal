@@ -84,6 +84,45 @@ describe('User Get all Menus Endpoint Tests', () => {
   });
 });
 
+describe('Caterer Can Get theit Menu Endpoint Tests', () => {
+  it(`GET ${API_PREFIX}/menu/caterer - Fetch Menu (Unauthorized)`, done => {
+    chai
+      .request(app)
+      .get(`${API_PREFIX}/menu/caterer`)
+      .then(res => {
+        expect(res).to.have.status(401);
+        assert.equal(res.body.status, 'error');
+        done();
+      })
+      .catch(err => console.log('GET /menu/caterer', err.message));
+  });
+  it(`GET ${API_PREFIX}/menu/caterer - Fetch Menu - (Caterer Authorized)`, done => {
+    Caterer.findOne({ where: { email: catererPayload.email } }).then(caterer => {
+      const { id, name, email, phone } = caterer;
+      const token = jwt.sign(
+        {
+          caterer: { id, name, email, phone },
+          isCaterer: true
+        },
+        secret,
+        {
+          expiresIn: 86400
+        }
+      );
+      chai
+        .request(app)
+        .get(`${API_PREFIX}/menu/caterer`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => {
+          expect(res).to.have.status(200);
+          assert.equal(res.body.status, 'success');
+          done();
+        })
+        .catch(err => console.log('GET /menu/caterer', err.message));
+    });
+  });
+});
+
 describe('Caterer Add Meal To Menu Endpoint Tests', () => {
   Caterer.create(caterer2Payload)
     .then(caterer => {
@@ -220,11 +259,9 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
 
 after(done => {
   User.destroy({ where: { email: userPayload.email } })
-    .then(() => {
+    .then(async () => {
+      await Caterer.destroy({ where: { email: caterer2Payload.email } });
       return Caterer.destroy({ where: { email: catererPayload.email } });
-    })
-    .then(() => {
-      return Caterer.destroy({ where: { email: caterer2Payload.email } });
     })
     .then(() => {
       done();
