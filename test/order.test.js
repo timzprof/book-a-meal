@@ -7,6 +7,7 @@ import User from '../api/models/user';
 import Caterer from '../api/models/caterer';
 import Order from '../api/models/orders';
 import Meal from '../api/models/meals';
+import OrderItem from '../api/models/orderItem';
 
 const { assert, expect, use } = chai;
 
@@ -21,10 +22,33 @@ const userPayload = {
   password: 'waynemanor'
 };
 
+const user2Payload = {
+  name: 'Damien Wayne',
+  email: 'damien@batman.com',
+  phone: '07075748392',
+  password: 'waynemanor'
+};
+
 const catererPayload = {
   name: 'Joffery Baratheon',
   phone: '07075748391',
   email: 'caterer@bookameal.com',
+  catering_service: 'Iron Throne Eats',
+  password: 'oursisthefury'
+};
+
+const caterer2Payload = {
+  name: 'Joffery Baratheon',
+  phone: '07075748391',
+  email: 'caterer@got.com',
+  catering_service: 'Iron Throne Eats',
+  password: 'oursisthefury'
+};
+
+const caterer3Payload = {
+  name: 'Joffery Baratheon',
+  phone: '07075748391',
+  email: 'email@got.com',
   catering_service: 'Iron Throne Eats',
   password: 'oursisthefury'
 };
@@ -81,7 +105,7 @@ describe('Caterer Get all Orders Endpoint Tests', () => {
 });
 
 describe('User can add to Orders Endpoint Tests', () => {
-  Caterer.findOne({ where: { email: catererPayload.email } })
+  Caterer.create(caterer2Payload)
     .then(caterer => {
       return Meal.create({
         name: 'Dummy Meal',
@@ -195,10 +219,157 @@ describe('User can add to Orders Endpoint Tests', () => {
     .catch(err => console.log(err.message));
 });
 
+describe('User can Modify Orders Endpoints', () => {
+  Caterer.create(caterer3Payload)
+    .then(caterer => {
+      return Meal.create({
+        name: 'Dummy Meal',
+        price: 500,
+        quantity: 4,
+        imageUrl: 'fk.png',
+        catererId: caterer.id
+      });
+    })
+    .then(meal => {
+      User.create(user2Payload)
+        .then(user => {
+          return OrderItem.create({ mealId: meal.id, quantity: 3, userId: user.id });
+        })
+        .then(orderItem => {
+          it(`PUT ${API_PREFIX}/orders/:orderId - Modify Orders (Unauthorized)`, done => {
+            chai
+              .request(app)
+              .put(`${API_PREFIX}/orders/${orderItem.id}`)
+              .send({
+                action: 'increase'
+              })
+              .then(res => {
+                expect(res).to.have.status(401);
+                assert.equal(res.body.status, 'error');
+                done();
+              })
+              .catch(err => console.log('PUT /orders/:orderId', err.message));
+          });
+          it(`PUT ${API_PREFIX}/orders/:orderId - Modify Orders (Validation Test)`, done => {
+            User.findOne({ where: { email: user2Payload.email } }).then(user => {
+              const { id, name, email, phone } = user;
+              const token = jwt.sign(
+                {
+                  user: { id, name, email, phone }
+                },
+                secret,
+                {
+                  expiresIn: 86400
+                }
+              );
+              chai
+                .request(app)
+                .put(`${API_PREFIX}/orders/${orderItem.id}`)
+                .set('Authorization', `Bearer ${token}`)
+                .send({
+                  action: 'something'
+                })
+                .then(res => {
+                  expect(res).to.have.status(400);
+                  assert.equal(res.body.status, 'error');
+                  done();
+                })
+                .catch(err => console.log('PUT /orders/:orderId', err.message));
+            });
+          });
+          it(`PUT ${API_PREFIX}/orders/:orderId - Modify Orders (User Can Increase Order Quantity)`, done => {
+            User.findOne({ where: { email: user2Payload.email } }).then(user => {
+              const { id, name, email, phone } = user;
+              const token = jwt.sign(
+                {
+                  user: { id, name, email, phone }
+                },
+                secret,
+                {
+                  expiresIn: 86400
+                }
+              );
+              chai
+                .request(app)
+                .put(`${API_PREFIX}/orders/${orderItem.id}`)
+                .set('Authorization', `Bearer ${token}`)
+                .send({
+                  action: 'increase'
+                })
+                .then(res => {
+                  expect(res).to.have.status(200);
+                  assert.equal(res.body.status, 'success');
+                  done();
+                })
+                .catch(err => console.log('PUT /orders/:orderId', err.message));
+            });
+          });
+          it(`PUT ${API_PREFIX}/orders/:orderId - Modify Orders (User Can Decrease Order Quantity)`, done => {
+            User.findOne({ where: { email: user2Payload.email } }).then(user => {
+              const { id, name, email, phone } = user;
+              const token = jwt.sign(
+                {
+                  user: { id, name, email, phone }
+                },
+                secret,
+                {
+                  expiresIn: 86400
+                }
+              );
+              chai
+                .request(app)
+                .put(`${API_PREFIX}/orders/${orderItem.id}`)
+                .set('Authorization', `Bearer ${token}`)
+                .send({
+                  action: 'decrease'
+                })
+                .then(res => {
+                  expect(res).to.have.status(200);
+                  assert.equal(res.body.status, 'success');
+                  done();
+                })
+                .catch(err => console.log('PUT /orders/:orderId', err.message));
+            });
+          });
+          it(`PUT ${API_PREFIX}/orders/:orderId - Modify Orders (User Can Delete Order)`, done => {
+            User.findOne({ where: { email: user2Payload.email } }).then(user => {
+              const { id, name, email, phone } = user;
+              const token = jwt.sign(
+                {
+                  user: { id, name, email, phone }
+                },
+                secret,
+                {
+                  expiresIn: 86400
+                }
+              );
+              chai
+                .request(app)
+                .put(`${API_PREFIX}/orders/${orderItem.id}`)
+                .set('Authorization', `Bearer ${token}`)
+                .send({
+                  action: 'delete'
+                })
+                .then(res => {
+                  expect(res).to.have.status(200);
+                  assert.equal(res.body.status, 'success');
+                  done();
+                })
+                .catch(err => console.log('PUT /orders/:orderId', err.message));
+            });
+          });
+        });
+    })
+    .catch(err => console.log(err.message));
+});
+
 after(done => {
   User.destroy({ where: { email: userPayload.email } })
-    .then(() => {
-      return Caterer.destroy({ where: { email: catererPayload.email } });
+    .then(async () => {
+      await Caterer.destroy({ where: { email: catererPayload.email } });
+      await Caterer.destroy({ where: { email: caterer2Payload.email } });
+      await Caterer.destroy({ where: { email: caterer3Payload.email } });
+      return User.destroy({ where: { email: user2Payload.email } });
     })
     .then(() => {
       done();

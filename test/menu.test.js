@@ -28,6 +28,14 @@ const catererPayload = {
   password: 'bellish:)'
 };
 
+const caterer2Payload = {
+  name: 'Arya Stark',
+  email: 'stark@short.com',
+  phone: '00000000000',
+  catering_service: 'Stark Foods',
+  password: 'bellish:)'
+};
+
 before(done => {
   User.create(userPayload)
     .then(() => {
@@ -77,7 +85,7 @@ describe('User Get all Menus Endpoint Tests', () => {
 });
 
 describe('Caterer Add Meal To Menu Endpoint Tests', () => {
-  Caterer.findOne({ where: { email: catererPayload.email } })
+  Caterer.create(caterer2Payload)
     .then(caterer => {
       return Meal.create({
         name: 'Fake Food',
@@ -104,7 +112,7 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
           .catch(err => console.log('POST /menu/', err.message));
       });
       it(`POST ${API_PREFIX}/menu/ - Add Meal Option To Menu - (Validation Test)`, done => {
-        Caterer.findOne({ where: { email: catererPayload.email } }).then(caterer => {
+        Caterer.findOne({ where: { email: caterer2Payload.email } }).then(caterer => {
           const token = jwt.sign(
             {
               caterer: {
@@ -136,7 +144,7 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
         });
       });
       it(`POST ${API_PREFIX}/menu/ - Add Meal Option To Menu - (Caterer Can Add Menu Meal)`, done => {
-        Caterer.findOne({ where: { email: catererPayload.email } })
+        Caterer.findOne({ where: { email: caterer2Payload.email } })
           .then(caterer => {
             const token = jwt.sign(
               {
@@ -171,7 +179,7 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
           .catch(err => console.log(err.message));
       });
       it(`POST ${API_PREFIX}/menu/ - Add Meal Option To Menu - (Caterer Can Update Menu Meal)`, done => {
-        Caterer.findOne({ where: { email: catererPayload.email } }).then(caterer => {
+        Caterer.findOne({ where: { email: caterer2Payload.email } }).then(caterer => {
           const token = jwt.sign(
             {
               caterer: {
@@ -214,6 +222,9 @@ after(done => {
   User.destroy({ where: { email: userPayload.email } })
     .then(() => {
       return Caterer.destroy({ where: { email: catererPayload.email } });
+    })
+    .then(() => {
+      return Caterer.destroy({ where: { email: caterer2Payload.email } });
     })
     .then(() => {
       done();

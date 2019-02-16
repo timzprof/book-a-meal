@@ -77,10 +77,16 @@ router.post(
   '/orders',
   trimRequest.body,
   AuthController.verifyUserToken,
-  OrderMiddleware.validateOrder,
+  OrderMiddleware.validateAddToOrder,
   OrderController.addToOrders
 );
 
-router.put('/orders/:orderId', OrderController.modifyOrder);
+router.put(
+  '/orders/:orderId',
+  trimRequest.body,
+  AuthController.verifyUserToken,
+  OrderMiddleware.validateModifyOrder,
+  OrderController.modifyOrder
+);
 
 export default router;
