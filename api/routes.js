@@ -93,4 +93,12 @@ router.put(
   OrderController.modifyOrder
 );
 
+router.post(
+  '/orders/checkout',
+  trimRequest.body,
+  AuthController.verifyUserToken,
+  OrderMiddleware.validateOrdeCheckout,
+  OrderController.checkoutOrders
+);
+
 export default router;

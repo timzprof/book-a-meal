@@ -1,6 +1,7 @@
 import Order from '../models/orders';
 import OrderItem from '../models/orderItem';
 import Meal from '../models/meals';
+import Menu from '../models/menu';
 
 class OrderController {
   static async addToOrders(req, res) {
@@ -112,6 +113,83 @@ class OrderController {
         status: 'error',
         message: err.message
       });
+    }
+  }
+
+  static async checkoutOrders(req, res) {
+    try {
+      const orderItems = await OrderItem.findAll({
+        where: { userId: req.user.id },
+        include: [Meal]
+      });
+      const meals = [];
+      const caterers = new Set();
+      orderItems.forEach(orderItem => {
+        const orderMeal = { ...orderItem };
+        orderMeal.meal.quantity = orderItem.quantity;
+        meals.push(orderMeal.meal);
+        caterers.add(orderMeal.meal.catererId);
+      });
+      await OrderController.reduceQuantity(meals);
+      await OrderItem.destroy({ where: { userId: req.user.id } });
+      await OrderController.createOrders(caterers, meals, req.body.billingAddress, req.user.id);
+      return res.status(201).json({
+        status: 'success',
+        message: 'Order Made'
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: 'error',
+        message: err.message
+      });
+    }
+  }
+
+  static async reduceQuantity(meals) {
+    try {
+      meals.forEach(async meal => {
+        const dbMeal = await Meal.findOne({ where: { id: meal.id } });
+        dbMeal.quantity -= meal.quantity;
+        await Meal.update({ quantity: dbMeal.quantity }, { where: { id: meal.id } });
+        const menu = await Menu.findOne({ where: { catererId: meal.catererId } });
+        const menuMeals = JSON.parse(menu.meals);
+        menuMeals.forEach((menuMeal, index) => {
+          const updatedMenuMeal = { ...menuMeal };
+          if (menuMeal.id === meal.id) {
+            updatedMenuMeal.quantity -= meal.quantity;
+          }
+          menuMeals[index] = updatedMenuMeal;
+        });
+        await Menu.update(
+          { meals: JSON.stringify(menuMeals) },
+          { where: { catererId: meal.catererId } }
+        );
+      });
+      return true;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  static async createOrders(caterers, meals, billingAddress, userId) {
+    try {
+      caterers.forEach(async caterer => {
+        let catererTotal = 0;
+        const catererMeals = meals.filter(meal => meal.catererId === caterer);
+        catererMeals.forEach(catererMeal => {
+          catererTotal += catererMeal.quantity * catererMeal.price;
+        });
+        await Order.create({
+          order: JSON.stringify(catererMeals),
+          total: catererTotal,
+          billing_address: billingAddress,
+          catererId: caterer,
+          userId,
+          delivery_status: 0
+        });
+      });
+    } catch (err) {
+      throw new Error(err.message);
     }
   }
 }
