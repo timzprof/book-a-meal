@@ -75,6 +75,8 @@ router.post(
 
 router.get('/orders', AuthController.verifyAdminToken, OrderController.getOrders);
 
+router.get('/orders/user', AuthController.verifyUserToken, OrderController.getOrderItems);
+
 router.post(
   '/orders',
   trimRequest.body,
