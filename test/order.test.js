@@ -5,9 +5,9 @@ import app from '../api/index';
 import secret from '../api/util/jwt_secret';
 import User from '../api/models/user';
 import Caterer from '../api/models/caterer';
-import Order from '../api/models/orders';
 import Meal from '../api/models/meals';
 import OrderItem from '../api/models/orderItem';
+import Menu from '../api/models/menu';
 
 const { assert, expect, use } = chai;
 
@@ -32,6 +32,13 @@ const user2Payload = {
 const user3Payload = {
   name: 'Dick Grayson',
   email: 'dick@batman.com',
+  phone: '07075748392',
+  password: 'waynemanor'
+};
+
+const user4Payload = {
+  name: 'Jason Todd',
+  email: 'todd@batman.com',
   phone: '07075748392',
   password: 'waynemanor'
 };
@@ -64,6 +71,14 @@ const caterer4Payload = {
   name: 'King Baratheon',
   phone: '07075748391',
   email: 'iron@got.com',
+  catering_service: 'Iron Throne Eats',
+  password: 'oursisthefury'
+};
+
+const caterer5Payload = {
+  name: 'Cerci Lannister',
+  phone: '07075748391',
+  email: 'iron@queen.com',
   catering_service: 'Iron Throne Eats',
   password: 'oursisthefury'
 };
@@ -378,7 +393,7 @@ describe('User can Modify Orders Endpoints', () => {
     .catch(err => console.log(err.message));
 });
 
-describe('Caterer Can Get theit Menu Endpoint Tests', () => {
+describe('Caterer Can Get their Menu Endpoint Tests', () => {
   Caterer.create(caterer4Payload)
     .then(caterer => {
       return Meal.create({
@@ -434,6 +449,109 @@ describe('Caterer Can Get theit Menu Endpoint Tests', () => {
     });
 });
 
+describe('User can Checkout Orders Endpoint Tests', () => {
+  Caterer.create(caterer5Payload)
+    .then(caterer => {
+      return Meal.create({
+        name: 'Dummy Meal',
+        price: 500,
+        quantity: 4,
+        imageUrl: 'fk.png',
+        catererId: caterer.id
+      });
+    })
+    .then(meal => {
+      const newMenu = [];
+      newMenu.push({
+        id: meal.id,
+        name: meal.name,
+        price: meal.price,
+        quantity: meal.quantity,
+        imageUrl: meal.imageUrl,
+        catererId: meal.catererId
+      });
+      return Menu.create({ meals: JSON.stringify(newMenu), catererId: meal.catererId });
+    })
+    .then(menu => {
+      User.create(user4Payload)
+        .then(user => {
+          const meals = JSON.parse(menu.meals);
+          return OrderItem.create({ mealId: meals[0].id, quantity: 1, userId: user.id });
+        })
+        .then(() => {
+          it(`POST ${API_PREFIX}/orders/checkout - Order Checkout (Unauthorized)`, done => {
+            chai
+              .request(app)
+              .post(`${API_PREFIX}/orders/checkout`)
+              .send({
+                billingAddress: 'desert'
+              })
+              .then(res => {
+                expect(res).to.have.status(401);
+                assert.equal(res.body.status, 'error');
+                done();
+              })
+              .catch(err => console.log('POST /orders/checkout', err.message));
+          });
+          it(`POST ${API_PREFIX}/orders/checkout - Order Checkout (Validation Test)`, done => {
+            User.findOne({ where: { email: user4Payload.email } }).then(user => {
+              const { id, name, email, phone } = user;
+              const token = jwt.sign(
+                {
+                  user: { id, name, email, phone }
+                },
+                secret,
+                {
+                  expiresIn: 86400
+                }
+              );
+              chai
+                .request(app)
+                .post(`${API_PREFIX}/orders/checkout`)
+                .set('Authorization', `Bearer ${token}`)
+                .send({
+                  billingAddress: 18828
+                })
+                .then(res => {
+                  expect(res).to.have.status(400);
+                  assert.equal(res.body.status, 'error');
+                  done();
+                })
+                .catch(err => console.log('POST /orders/checkout', err.message));
+            });
+          });
+          it(`POST ${API_PREFIX}/orders/checkout - Order Checkout (User Can Checkout)`, done => {
+            User.findOne({ where: { email: user4Payload.email } }).then(user => {
+              const { id, name, email, phone } = user;
+              const token = jwt.sign(
+                {
+                  user: { id, name, email, phone }
+                },
+                secret,
+                {
+                  expiresIn: 86400
+                }
+              );
+              chai
+                .request(app)
+                .post(`${API_PREFIX}/orders/checkout`)
+                .set('Authorization', `Bearer ${token}`)
+                .send({
+                  billingAddress: 'somewhere'
+                })
+                .then(res => {
+                  expect(res).to.have.status(201);
+                  assert.equal(res.body.status, 'success');
+                  done();
+                })
+                .catch(err => console.log('POST /orders/checkout', err.message));
+            });
+          });
+        });
+    })
+    .catch(err => console.log(err.message));
+});
+
 after(done => {
   User.destroy({ where: { email: userPayload.email } })
     .then(async () => {
@@ -441,8 +559,10 @@ after(done => {
       await Caterer.destroy({ where: { email: caterer2Payload.email } });
       await Caterer.destroy({ where: { email: caterer3Payload.email } });
       await Caterer.destroy({ where: { email: caterer4Payload.email } });
+      await Caterer.destroy({ where: { email: caterer5Payload.email } });
       await User.destroy({ where: { email: user2Payload.email } });
-      return User.destroy({ where: { email: user3Payload.email } });
+      await User.destroy({ where: { email: user3Payload.email } });
+      return User.destroy({ where: { email: user4Payload.email } });
     })
     .then(() => {
       done();
