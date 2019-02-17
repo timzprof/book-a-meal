@@ -4,7 +4,7 @@
   "description": "Meal Booking Ecommerce App",
   "main": "api/index.js",
   "scripts": {
-    "start": "npm run build && node ./build/index.js",
+    "start": "node ./build/index.js",
     "dev": "nodemon --exec babel-node api/index.js",
     "test": "nyc mocha -r esm --exit",
     "build": "npm run clean && npm run build-babel",
