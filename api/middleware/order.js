@@ -48,6 +48,29 @@ class OrderMiddleware {
       });
     }
   }
+
+  static async validateOrdeCheckout(req, res, next) {
+    try {
+      const schema = {
+        billingAddress: Joi.string().required()
+      };
+      await Joi.validate(req.body, schema);
+      next();
+      return true;
+    } catch (err) {
+      let message;
+      if (err.details !== undefined) {
+        message = String(err.details[0].message);
+      } else {
+        message = String(err.message);
+      }
+      return res.status(400).json({
+        status: 'error',
+        message,
+        type: 'validation'
+      });
+    }
+  }
 }
 
 export default OrderMiddleware;
