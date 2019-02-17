@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/timzprof/book-a-meal#readme",
   "dependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/preset-env": "^7.3.1",
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
