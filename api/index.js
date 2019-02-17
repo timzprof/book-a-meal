@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
@@ -12,8 +13,7 @@ import Meal from './models/meals';
 import Menu from './models/menu';
 import Order from './models/orders';
 import OrderItem from './models/orderItem';
-
-const swaggerDocument = require('./swagger.json');
+import swaggerDocument from './swagger';
 
 config();
 
