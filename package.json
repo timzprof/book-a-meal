@@ -4,7 +4,7 @@
   "description": "Meal Booking Ecommerce App",
   "main": "api/index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node api/index.js",
+    "start": "node --exec babel-node api/index.js",
     "test": "nyc mocha -r esm --exit",
     "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
     "coveralls-coverage": "coveralls < lcov.info",
