@@ -4,7 +4,7 @@
   "description": "Meal Booking Ecommerce App",
   "main": "api/index.js",
   "scripts": {
-    "start": "node ./build/index.js",
+    "start": "npm run build && node ./build/index.js",
     "dev": "nodemon --exec babel-node api/index.js",
     "test": "nyc mocha -r esm --exit",
     "build": "npm run clean && npm run build-babel",
@@ -26,6 +26,9 @@
   },
   "homepage": "https://github.com/timzprof/book-a-meal#readme",
   "dependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
     "@babel/polyfill": "^7.2.5",
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
@@ -43,10 +46,7 @@
     "trim-request": "^1.0.6"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
-    "@babel/preset-env": "^7.3.1",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "codeclimate-test-reporter": "^0.5.1",
