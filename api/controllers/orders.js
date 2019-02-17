@@ -147,25 +147,39 @@ class OrderController {
 
   static async reduceQuantity(meals) {
     try {
-      meals.forEach(async meal => {
-        const dbMeal = await Meal.findOne({ where: { id: meal.id } });
-        dbMeal.quantity -= meal.quantity;
-        await Meal.update({ quantity: dbMeal.quantity }, { where: { id: meal.id } });
-        const menu = await Menu.findOne({ where: { catererId: meal.catererId } });
-        const menuMeals = JSON.parse(menu.meals);
-        menuMeals.forEach((menuMeal, index) => {
-          const updatedMenuMeal = { ...menuMeal };
-          if (menuMeal.id === meal.id) {
-            updatedMenuMeal.quantity -= meal.quantity;
+      const meal = meals[0];
+      Meal.findOne({ where: { id: meal.id } })
+        .then(dbMeal => {
+          return dbMeal.update(
+            { quantity: dbMeal.quantity - meal.quantity },
+            { where: { id: meal.id } }
+          );
+        })
+        .then(() => {
+          return Menu.findOne({ where: { catererId: meal.catererId } });
+        })
+        .then(menu => {
+          const menuMeals = JSON.parse(menu.meals);
+          const updatedMenuMeals = menuMeals.map(menuMeal => {
+            const updatedMenuMeal = { ...menuMeal };
+            if (menuMeal.id === meal.id) {
+              updatedMenuMeal.quantity -= meal.quantity;
+            }
+            return updatedMenuMeal;
+          });
+          return menu.update(
+            { meals: JSON.stringify(updatedMenuMeals) },
+            { where: { id: menu.id } }
+          );
+        })
+        .then(() => {
+          meals.shift();
+          if (meals.length !== 0) {
+            OrderController.reduceQuantity(meals);
+          } else {
+            return true;
           }
-          menuMeals[index] = updatedMenuMeal;
         });
-        await Menu.update(
-          { meals: JSON.stringify(menuMeals) },
-          { where: { catererId: meal.catererId } }
-        );
-      });
-      return true;
     } catch (err) {
       throw new Error(err.message);
     }
