@@ -13,7 +13,7 @@ import Meal from './models/meals';
 import Menu from './models/menu';
 import Order from './models/orders';
 import OrderItem from './models/orderItem';
-import swaggerDocument from './swagger';
+import swaggerDocument from './swagger.json';
 
 config();
 
