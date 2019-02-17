@@ -3,6 +3,7 @@ import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import { config } from 'dotenv';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 import Routes from './routes';
 import sequelize from './util/db';
 import User from './models/user';
@@ -11,6 +12,8 @@ import Meal from './models/meals';
 import Menu from './models/menu';
 import Order from './models/orders';
 import OrderItem from './models/orderItem';
+
+const swaggerDocument = require('./swagger.json');
 
 config();
 
@@ -22,6 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(fileUpload());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1', Routes);
 
 User.hasMany(Order, { constraints: true, onDelete: 'CASCADE' });
