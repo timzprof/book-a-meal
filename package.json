@@ -4,10 +4,10 @@
   "description": "Meal Booking Ecommerce App",
   "main": "api/index.js",
   "scripts": {
-    "start": "npm run build && npm run dulpicate-swagger-docs && node ./build/index.js",
+    "start": "node ./build/index.js",
     "dev": "nodemon --exec babel-node api/index.js",
     "test": "nyc mocha -r esm --exit",
-    "build": "npm run clean && npm run build-babel",
+    "build": "npm run clean && npm run build-babel && npm run dulpicate-swagger-docs",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./api -s",
     "dulpicate-swagger-docs": "cat ./api/swagger.json >> ./build/swagger.json",
@@ -27,10 +27,6 @@
   },
   "homepage": "https://github.com/timzprof/book-a-meal#readme",
   "dependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/polyfill": "^7.2.5",
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
@@ -47,6 +43,10 @@
     "trim-request": "^1.0.6"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/polyfill": "^7.2.5",
     "@babel/node": "^7.2.2",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
