@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import trimRequest from 'trim-request';
 import UserMiddleware from './middleware/user';
 import CatererMiddleware from './middleware/caterer';
@@ -11,7 +11,7 @@ import OrderController from './controllers/orders';
 import UserController from './controllers/user';
 import CatererController from './controllers/caterer';
 
-const router = express.Router();
+const router = Router();
 
 router.post(
   '/auth/signup',
@@ -41,11 +41,17 @@ router.post(
   CatererController.loginCaterer
 );
 
-router.get('/meals/', AuthController.verifyAdminToken, MealController.getMealOptions);
+router.get(
+  '/meals/',
+  AuthController.checkForToken,
+  AuthController.verifyAdminToken,
+  MealController.getMealOptions
+);
 
 router.post(
   '/meals/',
   trimRequest.body,
+  AuthController.checkForToken,
   AuthController.verifyAdminToken,
   MealMiddleware.validateAddMeal,
   MealController.addMealOption
@@ -54,32 +60,60 @@ router.post(
 router.put(
   '/meals/:id',
   trimRequest.body,
+  AuthController.checkForToken,
   AuthController.verifyAdminToken,
   MealMiddleware.validateUpdateMeal,
   MealController.updateMealOption
 );
 
-router.delete('/meals/:id', AuthController.verifyAdminToken, MealController.deleteMealOption);
+router.delete(
+  '/meals/:id',
+  AuthController.checkForToken,
+  AuthController.verifyAdminToken,
+  MealController.deleteMealOption
+);
 
-router.get('/menu/', AuthController.verifyUserToken, MenuController.getMenus);
+router.get(
+  '/menu/',
+  AuthController.checkForToken,
+  AuthController.verifyUserToken,
+  MenuController.getMenus
+);
 
-router.get('/menu/caterer', AuthController.verifyAdminToken, MenuController.getSingleMenu);
+router.get(
+  '/menu/caterer',
+  AuthController.checkForToken,
+  AuthController.verifyAdminToken,
+  MenuController.getSingleMenu
+);
 
 router.post(
   '/menu/',
   trimRequest.body,
+  AuthController.checkForToken,
   AuthController.verifyAdminToken,
   MealMiddleware.validateAddMealToMenu,
   MenuController.addMealToMenu
 );
 
-router.get('/orders', AuthController.verifyAdminToken, OrderController.getOrders);
+router.get(
+  '/orders',
+  AuthController.checkForToken,
+  AuthController.verifyAdminToken,
+  OrderController.getOrders
+);
 
-router.get('/orders/user', AuthController.verifyUserToken, OrderController.getOrderItems);
+router.get(
+  '/orders/user',
+  AuthController.checkForToken,
+  AuthController.verifyUserToken,
+  OrderController.getOrderItems
+);
 
 router.post(
   '/orders',
   trimRequest.body,
+  AuthController.checkForToken,
   AuthController.verifyUserToken,
   OrderMiddleware.validateAddToOrder,
   OrderController.addToOrders
@@ -88,6 +122,7 @@ router.post(
 router.put(
   '/orders/:orderId',
   trimRequest.body,
+  AuthController.checkForToken,
   AuthController.verifyUserToken,
   OrderMiddleware.validateModifyOrder,
   OrderController.modifyOrder
@@ -96,6 +131,7 @@ router.put(
 router.post(
   '/orders/checkout',
   trimRequest.body,
+  AuthController.checkForToken,
   AuthController.verifyUserToken,
   OrderMiddleware.validateOrdeCheckout,
   OrderController.checkoutOrders

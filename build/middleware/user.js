@@ -49,10 +49,11 @@ function () {
 
               case 4:
                 next();
-                return _context.abrupt("return", true);
+                _context.next = 10;
+                break;
 
-              case 8:
-                _context.prev = 8;
+              case 7:
+                _context.prev = 7;
                 _context.t0 = _context["catch"](0);
                 return _context.abrupt("return", res.status(400).json({
                   status: 'error',
@@ -60,12 +61,15 @@ function () {
                   type: 'validation'
                 }));
 
+              case 10:
+                return _context.abrupt("return", true);
+
               case 11:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 8]]);
+        }, _callee, this, [[0, 7]]);
       }));
 
       function validateRegister(_x, _x2, _x3) {
@@ -95,10 +99,11 @@ function () {
 
               case 4:
                 next();
-                return _context2.abrupt("return", true);
+                _context2.next = 10;
+                break;
 
-              case 8:
-                _context2.prev = 8;
+              case 7:
+                _context2.prev = 7;
                 _context2.t0 = _context2["catch"](0);
                 return _context2.abrupt("return", res.status(400).json({
                   status: 'error',
@@ -106,12 +111,15 @@ function () {
                   type: 'validation'
                 }));
 
+              case 10:
+                return _context2.abrupt("return", true);
+
               case 11:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[0, 8]]);
+        }, _callee2, this, [[0, 7]]);
       }));
 
       function validateLogin(_x4, _x5, _x6) {

@@ -23,7 +23,7 @@ class CatererMiddleware extends UserMiddleware {
     } catch (err) {
       return res.status(400).json({
         status: 'error',
-        message: String(err.details[0].message),
+        message: err.details[0].message,
         type: 'validation'
       });
     }

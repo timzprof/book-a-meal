@@ -17,7 +17,6 @@ class UserMiddleware {
       };
       await Joi.validate(req.body, schema);
       next();
-      return true;
     } catch (err) {
       return res.status(400).json({
         status: 'error',
@@ -25,6 +24,7 @@ class UserMiddleware {
         type: 'validation'
       });
     }
+    return true;
   }
 
   static async validateLogin(req, res, next) {
@@ -39,7 +39,6 @@ class UserMiddleware {
       };
       await Joi.validate(req.body, schema);
       next();
-      return true;
     } catch (err) {
       return res.status(400).json({
         status: 'error',
@@ -47,6 +46,7 @@ class UserMiddleware {
         type: 'validation'
       });
     }
+    return true;
   }
 }
 

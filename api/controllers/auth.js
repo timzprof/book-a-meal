@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import secret from '../util/jwt_secret';
 
 class AuthController {
-  static async verifyUserToken(req, res, next) {
+  static checkForToken(req, res, next) {
     const token = req.headers.authorization;
     if (!token) {
       return res.status(401).json({
@@ -11,8 +11,14 @@ class AuthController {
       });
     }
     const jwtToken = token.split(' ')[1];
+    req.jwt = jwtToken;
+    next();
+    return true;
+  }
+
+  static async verifyUserToken(req, res, next) {
     try {
-      const decoded = await jwt.verify(jwtToken, secret);
+      const decoded = await jwt.verify(req.jwt, secret);
       req.user = decoded.user;
       next();
       return true;
@@ -25,16 +31,8 @@ class AuthController {
   }
 
   static async verifyAdminToken(req, res, next) {
-    const token = req.headers.authorization;
-    if (!token) {
-      return res.status(401).json({
-        status: 'error',
-        message: 'No Token Provided'
-      });
-    }
-    const jwtToken = token.split(' ')[1];
     try {
-      const decoded = await jwt.verify(jwtToken, secret);
+      const decoded = await jwt.verify(req.jwt, secret);
       if (!decoded.isCaterer) {
         throw new Error('Unauthorized');
       }

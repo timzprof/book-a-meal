@@ -495,12 +495,7 @@ function () {
                   });
                 }).then(function () {
                   meals.shift();
-
-                  if (meals.length !== 0) {
-                    OrderController.reduceQuantity(meals);
-                  } else {
-                    return true;
-                  }
+                  return meals.length !== 0 ? OrderController.reduceQuantity(meals) : true;
                 });
 
                 _context6.next = 8;

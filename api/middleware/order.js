@@ -13,7 +13,6 @@ class OrderMiddleware {
       };
       await Joi.validate(req.body, schema);
       next();
-      return true;
     } catch (err) {
       return res.status(400).json({
         status: 'error',
@@ -21,6 +20,7 @@ class OrderMiddleware {
         type: 'validation'
       });
     }
+    return true;
   }
 
   static async validateModifyOrder(req, res, next) {
@@ -33,7 +33,6 @@ class OrderMiddleware {
         throw new Error('Invalid Action Requested');
       }
       next();
-      return true;
     } catch (err) {
       let message;
       if (err.details !== undefined) {
@@ -47,6 +46,7 @@ class OrderMiddleware {
         type: 'validation'
       });
     }
+    return true;
   }
 
   static async validateOrdeCheckout(req, res, next) {
@@ -56,7 +56,6 @@ class OrderMiddleware {
       };
       await Joi.validate(req.body, schema);
       next();
-      return true;
     } catch (err) {
       let message;
       if (err.details !== undefined) {
@@ -70,6 +69,7 @@ class OrderMiddleware {
         type: 'validation'
       });
     }
+    return true;
   }
 }
 

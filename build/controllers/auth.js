@@ -29,54 +29,57 @@ function () {
   }
 
   _createClass(AuthController, null, [{
+    key: "checkForToken",
+    value: function checkForToken(req, res, next) {
+      var token = req.headers.authorization;
+
+      if (!token) {
+        return res.status(401).json({
+          status: 'error',
+          message: 'No Token Provided'
+        });
+      }
+
+      var jwtToken = token.split(' ')[1];
+      req.jwt = jwtToken;
+      next();
+      return true;
+    }
+  }, {
     key: "verifyUserToken",
     value: function () {
       var _verifyUserToken = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(req, res, next) {
-        var token, jwtToken, decoded;
+        var decoded;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                token = req.headers.authorization;
-
-                if (token) {
-                  _context.next = 3;
-                  break;
-                }
-
-                return _context.abrupt("return", res.status(401).json({
-                  status: 'error',
-                  message: 'No Token Provided'
-                }));
+                _context.prev = 0;
+                _context.next = 3;
+                return _jsonwebtoken.default.verify(req.jwt, _jwt_secret.default);
 
               case 3:
-                jwtToken = token.split(' ')[1];
-                _context.prev = 4;
-                _context.next = 7;
-                return _jsonwebtoken.default.verify(jwtToken, _jwt_secret.default);
-
-              case 7:
                 decoded = _context.sent;
                 req.user = decoded.user;
                 next();
                 return _context.abrupt("return", true);
 
-              case 13:
-                _context.prev = 13;
-                _context.t0 = _context["catch"](4);
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context["catch"](0);
                 return _context.abrupt("return", res.status(401).json({
                   status: 'error',
                   message: 'Invalid Auth Token'
                 }));
 
-              case 16:
+              case 12:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[4, 13]]);
+        }, _callee, this, [[0, 9]]);
       }));
 
       function verifyUserToken(_x, _x2, _x3) {
@@ -91,58 +94,44 @@ function () {
       var _verifyAdminToken = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee2(req, res, next) {
-        var token, jwtToken, decoded;
+        var decoded;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                token = req.headers.authorization;
-
-                if (token) {
-                  _context2.next = 3;
-                  break;
-                }
-
-                return _context2.abrupt("return", res.status(401).json({
-                  status: 'error',
-                  message: 'No Token Provided'
-                }));
+                _context2.prev = 0;
+                _context2.next = 3;
+                return _jsonwebtoken.default.verify(req.jwt, _jwt_secret.default);
 
               case 3:
-                jwtToken = token.split(' ')[1];
-                _context2.prev = 4;
-                _context2.next = 7;
-                return _jsonwebtoken.default.verify(jwtToken, _jwt_secret.default);
-
-              case 7:
                 decoded = _context2.sent;
 
                 if (decoded.isCaterer) {
-                  _context2.next = 10;
+                  _context2.next = 6;
                   break;
                 }
 
                 throw new Error('Unauthorized');
 
-              case 10:
+              case 6:
                 req.caterer = decoded.caterer;
                 next();
                 return _context2.abrupt("return", true);
 
-              case 15:
-                _context2.prev = 15;
-                _context2.t0 = _context2["catch"](4);
+              case 11:
+                _context2.prev = 11;
+                _context2.t0 = _context2["catch"](0);
                 return _context2.abrupt("return", res.status(401).json({
                   status: 'error',
                   message: 'Unauthorized'
                 }));
 
-              case 18:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[4, 15]]);
+        }, _callee2, this, [[0, 11]]);
       }));
 
       function verifyAdminToken(_x4, _x5, _x6) {
