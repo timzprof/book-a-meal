@@ -75,7 +75,7 @@ function (_UserMiddleware) {
                 _context.t0 = _context["catch"](0);
                 return _context.abrupt("return", res.status(400).json({
                   status: 'error',
-                  message: String(_context.t0.details[0].message),
+                  message: _context.t0.details[0].message,
                   type: 'validation'
                 }));
 

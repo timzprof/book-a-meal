@@ -174,11 +174,7 @@ class OrderController {
         })
         .then(() => {
           meals.shift();
-          if (meals.length !== 0) {
-            OrderController.reduceQuantity(meals);
-          } else {
-            return true;
-          }
+          return meals.length !== 0 ? OrderController.reduceQuantity(meals) : true;
         });
     } catch (err) {
       throw new Error(err.message);

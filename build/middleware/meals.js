@@ -65,10 +65,11 @@ function () {
 
               case 9:
                 next();
-                return _context.abrupt("return", true);
+                _context.next = 16;
+                break;
 
-              case 13:
-                _context.prev = 13;
+              case 12:
+                _context.prev = 12;
                 _context.t0 = _context["catch"](0);
 
                 if (_context.t0.details !== undefined) {
@@ -83,12 +84,15 @@ function () {
                   type: 'validation'
                 }));
 
+              case 16:
+                return _context.abrupt("return", true);
+
               case 17:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 13]]);
+        }, _callee, this, [[0, 12]]);
       }));
 
       function validateAddMeal(_x, _x2, _x3) {
@@ -133,10 +137,11 @@ function () {
 
               case 8:
                 next();
-                return _context2.abrupt("return", true);
+                _context2.next = 15;
+                break;
 
-              case 12:
-                _context2.prev = 12;
+              case 11:
+                _context2.prev = 11;
                 _context2.t0 = _context2["catch"](0);
 
                 if (_context2.t0.details !== undefined) {
@@ -151,12 +156,15 @@ function () {
                   type: 'validation'
                 }));
 
+              case 15:
+                return _context2.abrupt("return", true);
+
               case 16:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[0, 12]]);
+        }, _callee2, this, [[0, 11]]);
       }));
 
       function validateUpdateMeal(_x4, _x5, _x6) {
@@ -186,10 +194,11 @@ function () {
 
               case 4:
                 next();
-                return _context3.abrupt("return", true);
+                _context3.next = 11;
+                break;
 
-              case 8:
-                _context3.prev = 8;
+              case 7:
+                _context3.prev = 7;
                 _context3.t0 = _context3["catch"](0);
 
                 if (_context3.t0.details !== undefined) {
@@ -204,12 +213,15 @@ function () {
                   type: 'validation'
                 }));
 
+              case 11:
+                return _context3.abrupt("return", true);
+
               case 12:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, this, [[0, 8]]);
+        }, _callee3, this, [[0, 7]]);
       }));
 
       function validateAddMealToMenu(_x7, _x8, _x9) {

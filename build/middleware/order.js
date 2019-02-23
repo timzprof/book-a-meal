@@ -47,10 +47,11 @@ function () {
 
               case 4:
                 next();
-                return _context.abrupt("return", true);
+                _context.next = 10;
+                break;
 
-              case 8:
-                _context.prev = 8;
+              case 7:
+                _context.prev = 7;
                 _context.t0 = _context["catch"](0);
                 return _context.abrupt("return", res.status(400).json({
                   status: 'error',
@@ -58,12 +59,15 @@ function () {
                   type: 'validation'
                 }));
 
+              case 10:
+                return _context.abrupt("return", true);
+
               case 11:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 8]]);
+        }, _callee, this, [[0, 7]]);
       }));
 
       function validateAddToOrder(_x, _x2, _x3) {
@@ -100,10 +104,11 @@ function () {
 
               case 6:
                 next();
-                return _context2.abrupt("return", true);
+                _context2.next = 13;
+                break;
 
-              case 10:
-                _context2.prev = 10;
+              case 9:
+                _context2.prev = 9;
                 _context2.t0 = _context2["catch"](0);
 
                 if (_context2.t0.details !== undefined) {
@@ -118,12 +123,15 @@ function () {
                   type: 'validation'
                 }));
 
+              case 13:
+                return _context2.abrupt("return", true);
+
               case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[0, 10]]);
+        }, _callee2, this, [[0, 9]]);
       }));
 
       function validateModifyOrder(_x4, _x5, _x6) {
@@ -152,10 +160,11 @@ function () {
 
               case 4:
                 next();
-                return _context3.abrupt("return", true);
+                _context3.next = 11;
+                break;
 
-              case 8:
-                _context3.prev = 8;
+              case 7:
+                _context3.prev = 7;
                 _context3.t0 = _context3["catch"](0);
 
                 if (_context3.t0.details !== undefined) {
@@ -170,12 +179,15 @@ function () {
                   type: 'validation'
                 }));
 
+              case 11:
+                return _context3.abrupt("return", true);
+
               case 12:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, this, [[0, 8]]);
+        }, _callee3, this, [[0, 7]]);
       }));
 
       function validateOrdeCheckout(_x7, _x8, _x9) {

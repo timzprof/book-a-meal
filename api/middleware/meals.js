@@ -18,7 +18,6 @@ class MealMiddleware {
         throw new Error('Only JPG, JPEG & PNG Images are allowed');
       }
       next();
-      return true;
     } catch (err) {
       let message;
       if (err.details !== undefined) {
@@ -32,6 +31,7 @@ class MealMiddleware {
         type: 'validation'
       });
     }
+    return true;
   }
 
   static async validateUpdateMeal(req, res, next) {
@@ -48,7 +48,6 @@ class MealMiddleware {
         }
       }
       next();
-      return true;
     } catch (err) {
       let message;
       if (err.details !== undefined) {
@@ -62,6 +61,7 @@ class MealMiddleware {
         type: 'validation'
       });
     }
+    return true;
   }
 
   static async validateAddMealToMenu(req, res, next) {
@@ -74,7 +74,6 @@ class MealMiddleware {
       };
       await Joi.validate(req.body, schema);
       next();
-      return true;
     } catch (err) {
       let message;
       if (err.details !== undefined) {
@@ -88,6 +87,7 @@ class MealMiddleware {
         type: 'validation'
       });
     }
+    return true;
   }
 }
 
