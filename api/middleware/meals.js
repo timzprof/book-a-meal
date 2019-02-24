@@ -19,15 +19,9 @@ class MealMiddleware {
       }
       next();
     } catch (err) {
-      let message;
-      if (err.details !== undefined) {
-        message = String(err.details[0].message);
-      } else {
-        message = String(err.message);
-      }
       return res.status(400).json({
         status: 'error',
-        message,
+        message: err.details !== undefined ? err.details[0].message : err.message,
         type: 'validation'
       });
     }
@@ -49,15 +43,9 @@ class MealMiddleware {
       }
       next();
     } catch (err) {
-      let message;
-      if (err.details !== undefined) {
-        message = String(err.details[0].message);
-      } else {
-        message = String(err.message);
-      }
       return res.status(400).json({
         status: 'error',
-        message,
+        message: err.details !== undefined ? err.details[0].message : err.message,
         type: 'validation'
       });
     }
@@ -75,15 +63,9 @@ class MealMiddleware {
       await Joi.validate(req.body, schema);
       next();
     } catch (err) {
-      let message;
-      if (err.details !== undefined) {
-        message = String(err.details[0].message);
-      } else {
-        message = String(err.message);
-      }
       return res.status(400).json({
         status: 'error',
-        message,
+        message: err.details[0].message,
         type: 'validation'
       });
     }

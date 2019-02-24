@@ -182,6 +182,39 @@ describe('Caterer Add Meal To Menu Endpoint Tests', () => {
             .catch(err => console.log('POST /menu/', err.message));
         });
       });
+      it(`POST ${API_PREFIX}/menu/ - Add Meal Option To Menu - (Meal ID does not exist)`, done => {
+        Caterer.findOne({ where: { email: caterer2Payload.email } }).then(caterer => {
+          const token = jwt.sign(
+            {
+              caterer: {
+                id: caterer.id,
+                name: caterer.name,
+                email: caterer.email,
+                phone: caterer.phone
+              },
+              isCaterer: true
+            },
+            secret,
+            {
+              expiresIn: 86400
+            }
+          );
+          chai
+            .request(app)
+            .post(`${API_PREFIX}/menu/`)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              mealId: 10000000,
+              quantity: 10
+            })
+            .then(res => {
+              expect(res).to.have.status(500);
+              assert.equal(res.body.status, 'error');
+              done();
+            })
+            .catch(err => console.log('POST /menu/', err.message));
+        });
+      });
       it(`POST ${API_PREFIX}/menu/ - Add Meal Option To Menu - (Caterer Can Add Menu Meal)`, done => {
         Caterer.findOne({ where: { email: caterer2Payload.email } })
           .then(caterer => {

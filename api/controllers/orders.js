@@ -122,6 +122,9 @@ class OrderController {
         where: { userId: req.user.id },
         include: [Meal]
       });
+      if (!orderItems) {
+        throw new Error('No Order Items Found');
+      }
       const meals = [];
       const caterers = new Set();
       orderItems.forEach(orderItem => {

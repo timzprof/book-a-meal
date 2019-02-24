@@ -10,37 +10,23 @@ class MenuController {
   }
 
   static async getMenus(req, res) {
-    try {
-      const today = MenuController.generateDate();
-      const menus = await Menu.findAll({ where: { createdAt: today } });
-      return res.status(200).json({
-        status: 'success',
-        message: 'Menus Retrieved',
-        data: menus
-      });
-    } catch (err) {
-      return res.status(500).json({
-        status: 'error',
-        message: err.message
-      });
-    }
+    const today = MenuController.generateDate();
+    const menus = await Menu.findAll({ where: { createdAt: today } });
+    return res.status(200).json({
+      status: 'success',
+      message: 'Menus Retrieved',
+      data: menus
+    });
   }
 
   static async getSingleMenu(req, res) {
-    try {
-      const today = MenuController.generateDate();
-      const menu = await Menu.findOne({ where: { createdAt: today, catererId: req.caterer.id } });
-      return res.status(200).json({
-        status: 'success',
-        message: 'Caterer Menu Retrieved',
-        data: menu
-      });
-    } catch (err) {
-      return res.status(500).json({
-        status: 'error',
-        message: err.message
-      });
-    }
+    const today = MenuController.generateDate();
+    const menu = await Menu.findOne({ where: { createdAt: today, catererId: req.caterer.id } });
+    return res.status(200).json({
+      status: 'success',
+      message: 'Caterer Menu Retrieved',
+      data: menu
+    });
   }
 
   static async addMealToMenu(req, res) {
@@ -86,19 +72,15 @@ class MenuController {
   }
 
   static async updateMeals(menu, safeMeal, mealId, quantity) {
-    try {
-      const { meals } = menu.dataValues;
-      const updatedMenuMeals = JSON.parse(meals);
-      const mealIndex = updatedMenuMeals.findIndex(menuMeal => menuMeal.id === Number(mealId));
-      if (mealIndex < 0) {
-        updatedMenuMeals.push(safeMeal);
-      } else {
-        updatedMenuMeals[mealIndex].quantity += Number(quantity);
-      }
-      return updatedMenuMeals;
-    } catch (err) {
-      throw new Error(`Update - ${err.message}`);
+    const { meals } = menu.dataValues;
+    const updatedMenuMeals = JSON.parse(meals);
+    const mealIndex = updatedMenuMeals.findIndex(menuMeal => menuMeal.id === Number(mealId));
+    if (mealIndex < 0) {
+      updatedMenuMeals.push(safeMeal);
+    } else {
+      updatedMenuMeals[mealIndex].quantity += Number(quantity);
     }
+    return updatedMenuMeals;
   }
 }
 

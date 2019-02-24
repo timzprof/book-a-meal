@@ -102,15 +102,14 @@ function () {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
+                _context2.next = 2;
                 return _meals.default.findAll({
                   where: {
                     catererId: req.caterer.id
                   }
                 });
 
-              case 3:
+              case 2:
                 meals = _context2.sent;
                 return _context2.abrupt("return", res.status(200).json({
                   status: 'success',
@@ -118,20 +117,12 @@ function () {
                   data: meals
                 }));
 
-              case 7:
-                _context2.prev = 7;
-                _context2.t0 = _context2["catch"](0);
-                return _context2.abrupt("return", res.status(500).json({
-                  status: 'error',
-                  message: 'Failed to Retrieve Meals'
-                }));
-
-              case 10:
+              case 4:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[0, 7]]);
+        }, _callee2, this);
       }));
 
       function getMealOptions(_x3, _x4) {
@@ -263,33 +254,41 @@ function () {
               case 4:
                 meal = _context4.sent;
 
+                if (meal) {
+                  _context4.next = 7;
+                  break;
+                }
+
+                throw new Error("Meal with ID ".concat(id, " does not exist"));
+
+              case 7:
                 _fs.default.unlink(".".concat(meal.imageUrl), function (err) {
                   if (err) throw new Error(err.message);
                 });
 
-                _context4.next = 8;
+                _context4.next = 10;
                 return meal.destroy();
 
-              case 8:
+              case 10:
                 return _context4.abrupt("return", res.status(200).json({
                   status: 'success',
                   message: 'Meal Option Deleted'
                 }));
 
-              case 11:
-                _context4.prev = 11;
+              case 13:
+                _context4.prev = 13;
                 _context4.t0 = _context4["catch"](0);
                 return _context4.abrupt("return", res.status(500).json({
                   status: 'error',
                   message: _context4.t0.message
                 }));
 
-              case 14:
+              case 16:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, this, [[0, 11]]);
+        }, _callee4, this, [[0, 13]]);
       }));
 
       function deleteMealOption(_x7, _x8) {

@@ -28,19 +28,12 @@ class MealController {
   }
 
   static async getMealOptions(req, res) {
-    try {
-      const meals = await Meal.findAll({ where: { catererId: req.caterer.id } });
-      return res.status(200).json({
-        status: 'success',
-        message: 'Meals Retrieved',
-        data: meals
-      });
-    } catch (err) {
-      return res.status(500).json({
-        status: 'error',
-        message: 'Failed to Retrieve Meals'
-      });
-    }
+    const meals = await Meal.findAll({ where: { catererId: req.caterer.id } });
+    return res.status(200).json({
+      status: 'success',
+      message: 'Meals Retrieved',
+      data: meals
+    });
   }
 
   static async updateMealOption(req, res) {
@@ -82,6 +75,9 @@ class MealController {
     try {
       const { id } = req.params;
       const meal = await Meal.findOne({ where: { id } });
+      if (!meal) {
+        throw new Error(`Meal with ID ${id} does not exist`);
+      }
       fs.unlink(`.${meal.imageUrl}`, err => {
         if (err) throw new Error(err.message);
       });
