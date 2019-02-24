@@ -391,6 +391,15 @@ function () {
 
               case 3:
                 orderItems = _context5.sent;
+
+                if (orderItems) {
+                  _context5.next = 6;
+                  break;
+                }
+
+                throw new Error('No Order Items Found');
+
+              case 6:
                 meals = [];
                 caterers = new Set();
                 orderItems.forEach(function (orderItem) {
@@ -400,41 +409,41 @@ function () {
                   meals.push(orderMeal.meal);
                   caterers.add(orderMeal.meal.catererId);
                 });
-                _context5.next = 9;
+                _context5.next = 11;
                 return OrderController.reduceQuantity(meals);
 
-              case 9:
-                _context5.next = 11;
+              case 11:
+                _context5.next = 13;
                 return _orderItem.default.destroy({
                   where: {
                     userId: req.user.id
                   }
                 });
 
-              case 11:
-                _context5.next = 13;
+              case 13:
+                _context5.next = 15;
                 return OrderController.createOrders(caterers, meals, req.body.billingAddress, req.user.id);
 
-              case 13:
+              case 15:
                 return _context5.abrupt("return", res.status(201).json({
                   status: 'success',
                   message: 'Order Made'
                 }));
 
-              case 16:
-                _context5.prev = 16;
+              case 18:
+                _context5.prev = 18;
                 _context5.t0 = _context5["catch"](0);
                 return _context5.abrupt("return", res.status(500).json({
                   status: 'error',
                   message: _context5.t0.message
                 }));
 
-              case 19:
+              case 21:
               case "end":
                 return _context5.stop();
             }
           }
-        }, _callee5, this, [[0, 16]]);
+        }, _callee5, this, [[0, 18]]);
       }));
 
       function checkoutOrders(_x9, _x10) {

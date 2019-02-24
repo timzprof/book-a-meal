@@ -51,16 +51,15 @@ function () {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
                 today = MenuController.generateDate();
-                _context.next = 4;
+                _context.next = 3;
                 return _menu.default.findAll({
                   where: {
                     createdAt: today
                   }
                 });
 
-              case 4:
+              case 3:
                 menus = _context.sent;
                 return _context.abrupt("return", res.status(200).json({
                   status: 'success',
@@ -68,20 +67,12 @@ function () {
                   data: menus
                 }));
 
-              case 8:
-                _context.prev = 8;
-                _context.t0 = _context["catch"](0);
-                return _context.abrupt("return", res.status(500).json({
-                  status: 'error',
-                  message: _context.t0.message
-                }));
-
-              case 11:
+              case 5:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 8]]);
+        }, _callee, this);
       }));
 
       function getMenus(_x, _x2) {
@@ -101,9 +92,8 @@ function () {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.prev = 0;
                 today = MenuController.generateDate();
-                _context2.next = 4;
+                _context2.next = 3;
                 return _menu.default.findOne({
                   where: {
                     createdAt: today,
@@ -111,7 +101,7 @@ function () {
                   }
                 });
 
-              case 4:
+              case 3:
                 menu = _context2.sent;
                 return _context2.abrupt("return", res.status(200).json({
                   status: 'success',
@@ -119,20 +109,12 @@ function () {
                   data: menu
                 }));
 
-              case 8:
-                _context2.prev = 8;
-                _context2.t0 = _context2["catch"](0);
-                return _context2.abrupt("return", res.status(500).json({
-                  status: 'error',
-                  message: _context2.t0.message
-                }));
-
-              case 11:
+              case 5:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[0, 8]]);
+        }, _callee2, this);
       }));
 
       function getSingleMenu(_x3, _x4) {
@@ -284,7 +266,6 @@ function () {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _context4.prev = 0;
                 meals = menu.dataValues.meals;
                 updatedMenuMeals = JSON.parse(meals);
                 mealIndex = updatedMenuMeals.findIndex(function (menuMeal) {
@@ -299,17 +280,12 @@ function () {
 
                 return _context4.abrupt("return", updatedMenuMeals);
 
-              case 8:
-                _context4.prev = 8;
-                _context4.t0 = _context4["catch"](0);
-                throw new Error("Update - ".concat(_context4.t0.message));
-
-              case 11:
+              case 5:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, this, [[0, 8]]);
+        }, _callee4, this);
       }));
 
       function updateMeals(_x7, _x8, _x9, _x10) {

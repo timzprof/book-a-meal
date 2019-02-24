@@ -7,7 +7,7 @@
     "postinstall": "npm audit fix",
     "start": "node ./build/index.js",
     "dev": "nodemon --exec babel-node api/index.js",
-    "test": "nyc mocha -r esm --recursive --exit",
+    "test": "nyc mocha -r esm --recursive -t 5000 --exit",
     "build": "npm run clean && npm run build-babel && npm run dulpicate-swagger-docs",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./api -s",

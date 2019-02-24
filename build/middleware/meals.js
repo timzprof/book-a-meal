@@ -32,7 +32,7 @@ function () {
       var _validateAddMeal = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(req, res, next) {
-        var schema, imageMimes, message;
+        var schema, imageMimes;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -65,29 +65,22 @@ function () {
 
               case 9:
                 next();
-                _context.next = 16;
+                _context.next = 15;
                 break;
 
               case 12:
                 _context.prev = 12;
                 _context.t0 = _context["catch"](0);
-
-                if (_context.t0.details !== undefined) {
-                  message = String(_context.t0.details[0].message);
-                } else {
-                  message = String(_context.t0.message);
-                }
-
                 return _context.abrupt("return", res.status(400).json({
                   status: 'error',
-                  message: message,
+                  message: _context.t0.details !== undefined ? _context.t0.details[0].message : _context.t0.message,
                   type: 'validation'
                 }));
 
-              case 16:
+              case 15:
                 return _context.abrupt("return", true);
 
-              case 17:
+              case 16:
               case "end":
                 return _context.stop();
             }
@@ -107,7 +100,7 @@ function () {
       var _validateUpdateMeal = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee2(req, res, next) {
-        var schema, imageMimes, message;
+        var schema, imageMimes;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -137,29 +130,22 @@ function () {
 
               case 8:
                 next();
-                _context2.next = 15;
+                _context2.next = 14;
                 break;
 
               case 11:
                 _context2.prev = 11;
                 _context2.t0 = _context2["catch"](0);
-
-                if (_context2.t0.details !== undefined) {
-                  message = String(_context2.t0.details[0].message);
-                } else {
-                  message = String(_context2.t0.message);
-                }
-
                 return _context2.abrupt("return", res.status(400).json({
                   status: 'error',
-                  message: message,
+                  message: _context2.t0.details !== undefined ? _context2.t0.details[0].message : _context2.t0.message,
                   type: 'validation'
                 }));
 
-              case 15:
+              case 14:
                 return _context2.abrupt("return", true);
 
-              case 16:
+              case 15:
               case "end":
                 return _context2.stop();
             }
@@ -179,7 +165,7 @@ function () {
       var _validateAddMealToMenu = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee3(req, res, next) {
-        var schema, message;
+        var schema;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
@@ -194,29 +180,22 @@ function () {
 
               case 4:
                 next();
-                _context3.next = 11;
+                _context3.next = 10;
                 break;
 
               case 7:
                 _context3.prev = 7;
                 _context3.t0 = _context3["catch"](0);
-
-                if (_context3.t0.details !== undefined) {
-                  message = String(_context3.t0.details[0].message);
-                } else {
-                  message = String(_context3.t0.message);
-                }
-
                 return _context3.abrupt("return", res.status(400).json({
                   status: 'error',
-                  message: message,
+                  message: _context3.t0.details[0].message,
                   type: 'validation'
                 }));
 
-              case 11:
+              case 10:
                 return _context3.abrupt("return", true);
 
-              case 12:
+              case 11:
               case "end":
                 return _context3.stop();
             }

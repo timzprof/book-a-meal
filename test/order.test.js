@@ -43,6 +43,13 @@ const user4Payload = {
   password: 'waynemanor'
 };
 
+const user5Payload = {
+  name: 'The Boss',
+  email: 'the boss@batman.com',
+  phone: '07075748392',
+  password: 'waynemanor'
+};
+
 const catererPayload = {
   name: 'Joffery Baratheon',
   phone: '07075748391',
@@ -520,6 +527,33 @@ describe('User can Checkout Orders Endpoint Tests', () => {
                 .catch(err => console.log('POST /orders/checkout', err.message));
             });
           });
+          it(`POST ${API_PREFIX}/orders/checkout - Order Checkout (User Cannot Checkout without order items)`, done => {
+            User.create(user5Payload).then(user => {
+              const { id, name, email, phone } = user;
+              const token = jwt.sign(
+                {
+                  user: { id, name, email, phone }
+                },
+                secret,
+                {
+                  expiresIn: 86400
+                }
+              );
+              chai
+                .request(app)
+                .post(`${API_PREFIX}/orders/checkout`)
+                .set('Authorization', `Bearer ${token}`)
+                .send({
+                  billingAddress: 'somewhere'
+                })
+                .then(res => {
+                  expect(res).to.have.status(500);
+                  assert.equal(res.body.status, 'error');
+                  done();
+                })
+                .catch(err => console.log('POST /orders/checkout', err.message));
+            });
+          });
           it(`POST ${API_PREFIX}/orders/checkout - Order Checkout (User Can Checkout)`, done => {
             User.findOne({ where: { email: user4Payload.email } }).then(user => {
               const { id, name, email, phone } = user;
@@ -562,7 +596,8 @@ after(done => {
       await Caterer.destroy({ where: { email: caterer5Payload.email } });
       await User.destroy({ where: { email: user2Payload.email } });
       await User.destroy({ where: { email: user3Payload.email } });
-      return User.destroy({ where: { email: user4Payload.email } });
+      await User.destroy({ where: { email: user4Payload.email } });
+      return User.destroy({ where: { email: user5Payload.email } });
     })
     .then(() => {
       done();
