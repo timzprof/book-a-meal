@@ -84,7 +84,7 @@ function () {
                 _context.t0 = _context["catch"](0);
                 return _context.abrupt("return", res.status(500).json({
                   status: 'error',
-                  message: _context.t0.message
+                  message: _context.t0
                 }));
 
               case 16:
