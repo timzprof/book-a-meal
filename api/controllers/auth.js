@@ -1,5 +1,9 @@
 import jwt from 'jsonwebtoken';
-import secret from '../util/jwt_secret';
+import { config } from 'dotenv';
+
+config();
+
+const secret = process.env.JWT_SECRET;
 
 class AuthController {
   static checkForToken(req, res, next) {
