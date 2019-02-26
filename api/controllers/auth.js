@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
 
 config();
-
 const secret = process.env.JWT_SECRET;
 
 class AuthController {
