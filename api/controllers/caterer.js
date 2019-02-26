@@ -1,11 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { config } from 'dotenv';
+import secret from '../util/jwt_secret';
 import Caterer from '../models/caterer';
-
-config();
-
-const secret = process.env.JWT_SECRET;
 
 class CatererController {
   static async registerCaterer(req, res) {

@@ -1,17 +1,13 @@
 import chai from 'chai';
 import chaiHTTP from 'chai-http';
 import jwt from 'jsonwebtoken';
-import { config } from 'dotenv';
+import secret from '../api/util/jwt_secret';
 import app from '../api/index';
 import User from '../api/models/user';
 import Caterer from '../api/models/caterer';
 import Meal from '../api/models/meals';
 import OrderItem from '../api/models/orderItem';
 import Menu from '../api/models/menu';
-
-config();
-
-const secret = process.env.JWT_SECRET;
 
 const { assert, expect, use } = chai;
 
