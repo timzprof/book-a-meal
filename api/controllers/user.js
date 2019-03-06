@@ -1,7 +1,12 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import secret from '../util/jwt_secret';
+import { config } from 'dotenv';
 import User from '../models/user';
+
+config();
+
+const secret = process.env.JWT_SECRET;
+
 
 class UserController {
   static async registerUser(req, res) {
