@@ -54,7 +54,7 @@
         "requestBody": {
           "description": "Input Data Format",
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
                 "properties": {
                   "name": {
@@ -66,7 +66,7 @@
                     "description": "Email of User"
                   },
                   "phone": {
-                    "type": "string",
+                    "type": "number",
                     "description": "Phone Number of User"
                   },
                   "password": {
@@ -104,7 +104,7 @@
         "requestBody": {
           "description": "Input Data Format",
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
                 "properties": {
                   "email": {
@@ -146,7 +146,7 @@
         "requestBody": {
           "description": "Input Data Format",
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
                 "properties": {
                   "name": {
@@ -158,7 +158,7 @@
                     "description": "Email of Caterer"
                   },
                   "phone": {
-                    "type": "string",
+                    "type": "number",
                     "description": "Phone Number of Caterer"
                   },
                   "catering_service": {
@@ -200,7 +200,7 @@
         "requestBody": {
           "description": "Input Data Format",
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
                 "properties": {
                   "email": {
@@ -264,7 +264,7 @@
         "requestBody": {
           "description": "Input Data Format",
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "properties": {
                   "name": {
@@ -272,8 +272,13 @@
                     "description": "Name of new Meal"
                   },
                   "price": {
-                    "type": "string",
+                    "type": "number",
                     "description": "Price of new Meal"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Image for the new Meal"
                   }
                 },
                 "type": "object"
@@ -309,7 +314,9 @@
           "in": "path",
           "required": true,
           "description": "ID of meal that we want to work with",
-          "type": "string"
+          "schema": {
+            "type": "number"
+          }
         }
       ],
       "delete": {
@@ -342,7 +349,7 @@
         "requestBody": {
           "description": "Input Data Format",
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "properties": {
                   "name": {
@@ -350,8 +357,13 @@
                     "description": "New name of Meal"
                   },
                   "price": {
-                    "type": "string",
+                    "type": "number",
                     "description": "New price of Meal"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "New Image for the Meal"
                   }
                 },
                 "type": "object"
@@ -414,15 +426,15 @@
         "requestBody": {
           "description": "Input Data Format",
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
                 "properties": {
                   "mealId": {
-                    "type": "string",
+                    "type": "number",
                     "description": "ID of Meal to be Added"
                   },
                   "quantity": {
-                    "type": "string",
+                    "type": "number",
                     "description": "Quantity of Meal in Menu"
                   }
                 },
@@ -507,15 +519,15 @@
         "requestBody": {
           "description": "Input Data Format",
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
                 "properties": {
                   "mealId": {
-                    "type": "string",
+                    "type": "number",
                     "description": "ID of Meal to be Added"
                   },
                   "quantity": {
-                    "type": "string",
+                    "type": "number",
                     "description": "Quantity of Meal to order"
                   }
                 },
@@ -576,7 +588,9 @@
           "in": "path",
           "required": true,
           "description": "ID of order item we want to work with",
-          "type": "string"
+          "schema": {
+            "type": "number"
+          }
         }
       ],
       "put": {
@@ -587,7 +601,7 @@
         "requestBody": {
           "description": "Input Data Format",
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
                 "properties": {
                   "action": {
@@ -630,7 +644,7 @@
         "requestBody": {
           "description": "Input Data Format",
           "content": {
-            "application/json": {
+            "application/x-www-form-urlencoded": {
               "schema": {
                 "properties": {
                   "billingAddress": {

@@ -41,7 +41,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 (0, _dotenv.config)();
 var app = (0, _express.default)();
-var PORT = process.env.PORT || 4000;
+var PORT = process.env.PORT || 7000;
 app.use(_bodyParser.default.json());
 app.use(_bodyParser.default.urlencoded({
   extended: true
