@@ -12,12 +12,7 @@ class MealController {
       return res.status(201).json({
         status: 'success',
         message: 'Meal Option Added',
-        data: {
-          id: meal.id,
-          name: meal.name,
-          price: meal.price,
-          imageUrl: meal.imageUrl
-        }
+        data: { meal }
       });
     } catch (err) {
       return res.status(500).json({
@@ -43,8 +38,8 @@ class MealController {
         throw new Error(`Meal With ID ${req.params.id} does not exist`);
       }
       const mealUpdate = {
-        name: req.body.name ? req.body.name : meal.name,
-        price: req.body.price ? req.body.price : meal.price
+        name: req.body.name !== '' ? req.body.name : meal.name,
+        price: req.body.price !== '' ? req.body.price : meal.price
       };
       if (req.files !== null) {
         const { image } = req.files;
@@ -61,7 +56,8 @@ class MealController {
       await Meal.update({ name, price, imageUrl }, { where: { id: req.params.id } });
       return res.status(200).json({
         status: 'success',
-        message: 'Meal Option Updated'
+        message: 'Meal Option Updated',
+        data: { mealUpdate }
       });
     } catch (err) {
       return res.status(500).json({

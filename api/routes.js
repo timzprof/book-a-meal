@@ -41,18 +41,12 @@ router.post(
   CatererController.loginCaterer
 );
 
-router.get(
-  '/meals/',
-  AuthController.checkForToken,
-  AuthController.verifyAdminToken,
-  MealController.getMealOptions
-);
+router.get('/meals/', AuthController.verifyAdmin, MealController.getMealOptions);
 
 router.post(
   '/meals/',
   trimRequest.body,
-  AuthController.checkForToken,
-  AuthController.verifyAdminToken,
+  AuthController.verifyAdmin,
   MealMiddleware.validateAddMeal,
   MealController.addMealOption
 );
@@ -60,61 +54,33 @@ router.post(
 router.put(
   '/meals/:id',
   trimRequest.body,
-  AuthController.checkForToken,
-  AuthController.verifyAdminToken,
+  AuthController.verifyAdmin,
   MealMiddleware.validateUpdateMeal,
   MealController.updateMealOption
 );
 
-router.delete(
-  '/meals/:id',
-  AuthController.checkForToken,
-  AuthController.verifyAdminToken,
-  MealController.deleteMealOption
-);
+router.delete('/meals/:id', AuthController.verifyAdmin, MealController.deleteMealOption);
 
-router.get(
-  '/menu/',
-  AuthController.checkForToken,
-  AuthController.verifyUserToken,
-  MenuController.getMenus
-);
+router.get('/menu/', AuthController.verifyUser, MenuController.getMenus);
 
-router.get(
-  '/menu/caterer',
-  AuthController.checkForToken,
-  AuthController.verifyAdminToken,
-  MenuController.getSingleMenu
-);
+router.get('/menu/caterer', AuthController.verifyAdmin, MenuController.getSingleMenu);
 
 router.post(
   '/menu/',
   trimRequest.body,
-  AuthController.checkForToken,
-  AuthController.verifyAdminToken,
+  AuthController.verifyAdmin,
   MealMiddleware.validateAddMealToMenu,
   MenuController.addMealToMenu
 );
 
-router.get(
-  '/orders',
-  AuthController.checkForToken,
-  AuthController.verifyAdminToken,
-  OrderController.getOrders
-);
+router.get('/orders', AuthController.verifyAdmin, OrderController.getOrders);
 
-router.get(
-  '/orders/user',
-  AuthController.checkForToken,
-  AuthController.verifyUserToken,
-  OrderController.getOrderItems
-);
+router.get('/orders/user', AuthController.verifyUser, OrderController.getOrderItems);
 
 router.post(
   '/orders',
   trimRequest.body,
-  AuthController.checkForToken,
-  AuthController.verifyUserToken,
+  AuthController.verifyUser,
   OrderMiddleware.validateAddToOrder,
   OrderController.addToOrders
 );
@@ -122,8 +88,7 @@ router.post(
 router.put(
   '/orders/:orderId',
   trimRequest.body,
-  AuthController.checkForToken,
-  AuthController.verifyUserToken,
+  AuthController.verifyUser,
   OrderMiddleware.validateModifyOrder,
   OrderController.modifyOrder
 );
@@ -131,8 +96,7 @@ router.put(
 router.post(
   '/orders/checkout',
   trimRequest.body,
-  AuthController.checkForToken,
-  AuthController.verifyUserToken,
+  AuthController.verifyUser,
   OrderMiddleware.validateOrdeCheckout,
   OrderController.checkoutOrders
 );

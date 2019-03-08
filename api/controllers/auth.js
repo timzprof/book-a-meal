@@ -6,47 +6,47 @@ config();
 const secret = process.env.JWT_SECRET;
 
 class AuthController {
-  static checkForToken(req, res, next) {
-    const token = req.headers.authorization;
-    if (!token) {
-      return res.status(401).json({
-        status: 'error',
-        message: 'No Token Provided'
-      });
+  static async decodeToken(req) {
+    try {
+      const token = req.headers.authorization;
+      if (!token) {
+        throw new Error('No Token Provided');
+      }
+      const jwtToken = token.split(' ')[1];
+      const decoded = await jwt.verify(jwtToken, secret);
+      return decoded;
+    } catch (error) {
+      throw new Error('Invalid Auth Token');
     }
-    const jwtToken = token.split(' ')[1];
-    req.jwt = jwtToken;
-    next();
-    return true;
   }
 
-  static async verifyUserToken(req, res, next) {
+  static async verifyUser(req, res, next) {
     try {
-      const decoded = await jwt.verify(req.jwt, secret);
+      const decoded = await AuthController.decodeToken(req);
       req.user = decoded.user;
       next();
       return true;
-    } catch (err) {
+    } catch (error) {
       return res.status(401).json({
         status: 'error',
-        message: 'Invalid Auth Token'
+        message: error.message
       });
     }
   }
 
-  static async verifyAdminToken(req, res, next) {
+  static async verifyAdmin(req, res, next) {
     try {
-      const decoded = await jwt.verify(req.jwt, secret);
+      const decoded = await AuthController.decodeToken(req);
       if (!decoded.isCaterer) {
         throw new Error('Unauthorized');
       }
       req.caterer = decoded.caterer;
       next();
       return true;
-    } catch (err) {
+    } catch (error) {
       return res.status(401).json({
         status: 'error',
-        message: 'Unauthorized'
+        message: error.message
       });
     }
   }

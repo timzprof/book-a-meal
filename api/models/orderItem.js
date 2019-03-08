@@ -1,6 +1,8 @@
 import Sequelize from 'sequelize';
 import sequelize from '../util/db';
 
+import Meal from './meals';
+
 const OrderItem = sequelize.define('orderItem', {
   id: {
     type: Sequelize.INTEGER,
@@ -23,5 +25,7 @@ const OrderItem = sequelize.define('orderItem', {
   createdAt: Sequelize.DATEONLY,
   updatedAt: Sequelize.DATEONLY
 });
+
+OrderItem.belongsTo(Meal, { constraints: true, onDelete: 'CASCADE' });
 
 export default OrderItem;

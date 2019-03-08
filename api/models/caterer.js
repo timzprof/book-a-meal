@@ -1,6 +1,10 @@
 import Sequelize from 'sequelize';
 import sequelize from '../util/db';
 
+import Meal from './meals';
+import Menu from './menu';
+import Order from './orders';
+
 const Caterer = sequelize.define('caterer', {
   id: {
     type: Sequelize.INTEGER,
@@ -32,5 +36,9 @@ const Caterer = sequelize.define('caterer', {
   createdAt: Sequelize.DATEONLY,
   updatedAt: Sequelize.DATEONLY
 });
+
+Caterer.hasMany(Order, { constraints: true, onDelete: 'CASCADE' });
+Caterer.hasMany(Meal, { constraints: true, onDelete: 'CASCADE' });
+Caterer.hasMany(Menu, { constraints: true, onDelete: 'CASCADE' });
 
 export default Caterer;

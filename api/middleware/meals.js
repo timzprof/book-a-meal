@@ -31,8 +31,10 @@ class MealMiddleware {
   static async validateUpdateMeal(req, res, next) {
     try {
       const schema = {
-        name: Joi.string(),
-        price: Joi.number().min(1)
+        name: Joi.string().allow('', null),
+        price: Joi.number()
+          .min(1)
+          .allow('', null)
       };
       await Joi.validate(req.body, schema);
       if (req.files !== null) {
