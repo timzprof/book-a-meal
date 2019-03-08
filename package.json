@@ -4,11 +4,10 @@
   "description": "Meal Booking Ecommerce App",
   "main": "api/index.js",
   "scripts": {
-    "postinstall": "npm audit fix",
-    "start": "npm run build && node ./build/index.js",
+    "start": "node ./build/index.js",
     "dev": "nodemon --exec babel-node api/index.js",
     "test": "nyc mocha -r esm --recursive -t 5000 --exit",
-    "build": "npm run clean && npm run build-babel && npm run dulpicate-swagger-docs",
+    "build": "npm run clean && npm run build-babel && npm run dulpicate-swagger-docs && npm audit fix",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./api -s",
     "dulpicate-swagger-docs": "cat ./api/swagger.json >> ./build/swagger.json",
@@ -17,6 +16,7 @@
     "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
     "coverage": "nyc npm test && npm run generate-lcov && npm run coveralls-coverage && npm run codeclimate-coverage"
   },
+  "heroku-run-build-script": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/timzprof/book-a-meal.git"
