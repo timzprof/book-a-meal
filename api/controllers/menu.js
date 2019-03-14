@@ -34,7 +34,7 @@ class MenuController {
       const { mealId, quantity } = req.body;
       const meal = await Meal.findOne({ where: { id: mealId, catererId: req.caterer.id } });
       if (!meal) {
-        throw new Error(`Meal with that ID Doesn't exist`);
+        throw new Error(`Meal with that ID Doesn't exist for this caterer`);
       }
       const { createdAt, updatedAt, ...safeMeal } = meal.dataValues;
       safeMeal.quantity = Number(quantity);
@@ -42,21 +42,15 @@ class MenuController {
       const menu = await Menu.findAll({ where: { catererId: req.caterer.id, createdAt: today } });
       let menuMeals;
       if (menu.length === 0) {
-        menuMeals = [];
-        menuMeals.push(safeMeal);
-        await Menu.create({
-          meals: JSON.stringify(menuMeals),
-          catererId: req.caterer.id
+        menuMeals = await MenuController.createNewMenu({
+          meal: safeMeal,
+          catererId: req.caterer.id,
+          quantity,
+          mealId
         });
-        await Meal.update({ quantity }, { where: { id: mealId } });
       } else {
         menuMeals = await MenuController.updateMeals(menu[0], safeMeal, mealId, quantity);
-        await Menu.update(
-          { meals: JSON.stringify(menuMeals) },
-          { where: { catererId: req.caterer.id, createdAt: today } }
-        );
-        const mealIndex = menuMeals.findIndex(menuMeal => menuMeal.id === Number(mealId));
-        await Meal.update({ quantity: menuMeals[mealIndex].quantity }, { where: { id: mealId } });
+        await MenuController.updateMenu({ menuMeals, today, mealId, catererId: req.caterer.id });
       }
       return res.status(200).json({
         status: 'success',
@@ -68,6 +62,30 @@ class MenuController {
         status: 'error',
         message: err.message
       });
+    }
+  }
+
+  static async createNewMenu({ meal, catererId, quantity, mealId }) {
+    const menuMeals = [];
+    menuMeals.push(meal);
+    await Menu.create({
+      meals: JSON.stringify(menuMeals),
+      catererId
+    });
+    await Meal.update({ quantity }, { where: { id: mealId } });
+    return menuMeals;
+  }
+
+  static async updateMenu({ menuMeals, today, mealId, catererId }) {
+    try {
+      await Menu.update(
+        { meals: JSON.stringify(menuMeals) },
+        { where: { catererId, createdAt: today } }
+      );
+      const mealIndex = menuMeals.findIndex(menuMeal => menuMeal.id === Number(mealId));
+      await Meal.update({ quantity: menuMeals[mealIndex].quantity }, { where: { id: mealId } });
+    } catch (error) {
+      throw new Error('Failed to Update Menu');
     }
   }
 
