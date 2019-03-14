@@ -1,0 +1,23 @@
+.Logo {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.Logo a {
+  color: #fff;
+}
+
+/* Tablet */
+@media only screen and (min-width: 768px) and (max-width: 1000px) {
+  .Logo {
+    font-size: 1.8rem;
+  }
+}
+
+/* Mobile - M & S*/
+@media only screen and (max-width: 380px) {
+  .Logo {
+    font-size: 1.5rem;
+  }
+}

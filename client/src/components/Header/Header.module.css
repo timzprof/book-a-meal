@@ -1,0 +1,130 @@
+.Header {
+  padding: 30px;
+  color: #fff;
+  background-image: url("../../assets/img/banner.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0.7);
+  background-blend-mode: multiply;
+  background-position: 10% 65%;
+}
+
+.HomeHeader {
+  background: none;
+}
+
+.MainNav {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.MainNav__list {
+  margin-left: auto;
+}
+
+.MainNav__list,
+.MobileNav__list {
+  list-style: none;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.MainNav__list__item {
+  display: inline-flex;
+  margin: 10px 30px;
+}
+
+.admin-nav .MainNav__list__item {
+  margin: 10px;
+}
+
+.MainNav__list__item,
+.MobileNav__list-item {
+  font-size: 1.1rem;
+}
+
+.MainNav__list__item a,
+.MobileNav__list__item a {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.5s;
+}
+
+.MobileNav__list__item a {
+  color: #fff;
+}
+
+.MainNav__list__item a:hover,
+.MainNav__list__item a:focus,
+.MainNav__list__item a:active,
+.MobileNav__list__item a:hover,
+.MobileNav__list__item a:focus,
+.MobileNav__list__item a:active {
+  color: var(--red);
+}
+
+.MainNav__list__item a:hover::after,
+.MainNav__list__item a:focus::after,
+.MainNav__list__item a:active::after,
+.MobileNav__list__item a:hover::after,
+.MobileNav__list__item a:focus::after,
+.MobileNav__list__item a:active::after {
+  width: 100%;
+}
+
+.MainNav__list__item a::after,
+.MobileNav__list__item a::after {
+  content: "";
+  display: block;
+  margin-top: 3px;
+  width: 0%;
+  border-bottom: 2px solid var(--red);
+  transition: all 0.5s;
+}
+
+/* Mobile Navbar */
+.MobileMenu {
+  display: none;
+  color: #fff;
+  margin-left: auto;
+  font-size: 2rem;
+  transition: all 0.5s;
+  z-index: 5;
+}
+
+.MobileNav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 40vw;
+  height: 100vh;
+  background-color: #000;
+  padding: 50px 30px;
+  z-index: 10;
+  transition: all 0.5s;
+}
+
+.MobileNav .logo {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+}
+
+/* Tablet */
+@media only screen and (min-width: 768px) and (max-width: 1000px) {
+  .MainNav__list__item {
+    font-size: 1rem;
+    margin: 10px;
+  }
+}
+
+/* Mobile - L*/
+@media only screen and (max-width: 500px) {
+  .MainNav__list {
+    display: none;
+  }
+
+  .MobileMenu {
+    display: block;
+  }
+}
