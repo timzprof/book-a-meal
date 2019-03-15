@@ -1,0 +1,89 @@
+.Form_wrapper {
+  height: 100vh;
+}
+
+.Form_page {
+  padding: 50px 0;
+  overflow: scroll;
+  background-image: url("../../assets/img/banner.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0.7);
+  background-blend-mode: multiply;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.Page_form {
+  background: #fff;
+  padding: 40px 60px 60px 60px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.7);
+  width: 40%;
+  text-align: center;
+}
+
+.Form_group {
+  width: 100%;
+}
+.Form_field {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
+  margin: 5px;
+  outline: 0;
+  border: 1px solid #ef1f1f;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.Page_form button[type="submit"] {
+  margin-top: 20px;
+  padding: 0.8rem 1rem;
+}
+
+.Page_link {
+  font-size: 0.8rem;
+}
+
+.Page_link a {
+  color: #ef1f1f;
+}
+
+.Page_link a:hover {
+  text-decoration: underline;
+}
+
+/* General Responsive Styles */
+@media only screen and (max-width: 900px) {
+  .Page_form {
+    padding: 40px 40px 60px 40px;
+    width: 50%;
+  }
+}
+
+/* TV */
+@media only screen and (min-width: 2000px) {
+  .Page_form button[type="submit"] {
+    padding: 1rem;
+    font-size: 1.2rem;
+  }
+}
+
+/* Laptop - L*/
+@media only screen and (min-width: 1200px) and (max-width: 1800px) {
+  .Page_form button[type="submit"] {
+    padding: 1rem 1.2rem;
+    font-size: 1.2rem;
+  }
+}
+
+/* Mobile - L*/
+@media only screen and (max-width: 500px) {
+  .Page_form {
+    width: 60%;
+  }
+}
