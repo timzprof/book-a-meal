@@ -4,6 +4,11 @@
   letter-spacing: 1px;
 }
 
+.MobileLogo {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+}
+
 .Logo a {
   color: #fff;
 }

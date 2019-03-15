@@ -56,49 +56,40 @@
   top: 1em;
 }
 
-.Burger .BurgerSlip .BurgerLines:after,
-.Burger .BurgerSlip .BurgerLines:before {
+.Burger.BurgerSlip .BurgerLines:after,
+.Burger.BurgerSlip .BurgerLines:before {
   width: 2em;
 }
 
-.Burger .BurgerSlip .BurgerLines,
-.Burger .BurgerSlip .BurgerLines:after,
-.Burger .BurgerSlip .BurgerLines:before {
+.Burger.BurgerSlip .BurgerLines,
+.Burger.BurgerSlip .BurgerLines:after,
+.Burger.BurgerSlip .BurgerLines:before {
   -webkit-transition: all 0.2s;
   -o-transition: all 0.2s;
   transition: all 0.2s;
 }
 
-.Burger .BurgerSlip.open .BurgerLines {
+.Burger.BurgerSlip.Open .BurgerLines {
   -webkit-transform: translateX(-2em);
   -ms-transform: translateX(-2em);
   transform: translateX(-2em);
   background-color: transparent;
 }
 
-.Burger .BurgerSlip .open .BurgerLines:before,
-.Burger .BurgerSlip .open .BurgerLines:after {
+.Burger.BurgerSlip.Open .BurgerLines:before,
+.Burger.BurgerSlip.Open .BurgerLines:after {
   left: 0.5em;
   top: 0px;
 }
 
-.Burger .BurgerSlip .open .BurgerLines:before {
+.Burger.BurgerSlip.Open .BurgerLines:before {
   -webkit-transform: translateX(2em) rotate(135deg);
   -ms-transform: translateX(2em) rotate(135deg);
   transform: translateX(2em) rotate(135deg);
 }
 
-.Burger .BurgerSlip .open .BurgerLines:after {
+.Burger.BurgerSlip.Open .BurgerLines:after {
   -webkit-transform: translateX(2em) rotate(-135deg);
   -ms-transform: translateX(2em) rotate(-135deg);
   transform: translateX(2em) rotate(-135deg);
-}
-
-.MobileMenu {
-  display: none;
-  color: #fff;
-  margin-left: auto;
-  font-size: 2rem;
-  transition: all 0.5s;
-  z-index: 5;
 }

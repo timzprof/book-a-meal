@@ -61,7 +61,7 @@
 .MobileNav__list__item a:hover,
 .MobileNav__list__item a:focus,
 .MobileNav__list__item a:active {
-  color: var(--red);
+  color: #ef1f1f;
 }
 
 .MainNav__list__item a:hover::after,
@@ -79,7 +79,7 @@
   display: block;
   margin-top: 3px;
   width: 0%;
-  border-bottom: 2px solid var(--red);
+  border-bottom: 2px solid #ef1f1f;
   transition: all 0.5s;
 }
 
@@ -88,7 +88,6 @@
   display: none;
   color: #fff;
   margin-left: auto;
-  font-size: 2rem;
   transition: all 0.5s;
   z-index: 5;
 }
@@ -103,11 +102,6 @@
   padding: 50px 30px;
   z-index: 10;
   transition: all 0.5s;
-}
-
-.MobileNav .logo {
-  font-size: 1.2rem;
-  margin-bottom: 40px;
 }
 
 /* Tablet */
