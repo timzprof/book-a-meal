@@ -4,7 +4,6 @@
 
 .Form_page {
   padding: 50px 0;
-  overflow: scroll;
   background-image: url("../../assets/img/banner.jpg");
   background-size: cover;
   background-repeat: no-repeat;
