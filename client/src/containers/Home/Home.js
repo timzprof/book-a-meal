@@ -1,7 +1,6 @@
 import React , { Component } from 'react';
 import Aux from '../../hoc/auxiliary';
 import Header from '../../components/Header/Header';
-import HomeBanner from '../../components/HomeBanner/HomeBanner';
 import Footer from '../../components/Footer/Footer';
 
 class Home extends Component {
@@ -11,8 +10,7 @@ class Home extends Component {
   render() {
     return (
       <Aux>
-        <Header homepage/>
-        <HomeBanner />
+        <Header homepage />
         <Footer />
       </Aux>
     );

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import classes from './Header.module.css';
 import Aux from '../../hoc/auxiliary';
 import Logo from '../Logo/Logo';
 import BurgerMenu from '../BurgerMenu/BurgerMenu';
 import NavList from '../Header/NavList/NavList';
 import Overlay from '../UI/Overlay/Overlay';
-import classes from './Header.module.css';
+import HomeBanner from './HomeBanner/HomeBanner';
+import Banner from './Banner/Banner';
 
 class Header extends Component {
   state = {
@@ -44,6 +46,7 @@ class Header extends Component {
               authenticated={this.state.authenticated}
               show={this.state.mobileToggle} />
           </nav>
+          { this.props.homepage ? <HomeBanner /> : <Banner /> }
         </header>
       </Aux>
     );
