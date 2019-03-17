@@ -11,7 +11,7 @@ class Home extends Component {
   render() {
     return (
       <Aux>
-        <Header page='Home'/>
+        <Header homepage/>
         <HomeBanner />
         <Footer />
       </Aux>

@@ -8,7 +8,8 @@ import classes from './Header.module.css';
 
 class Header extends Component {
   state = {
-    mobileToggle: false
+    mobileToggle: false,
+    authenticated: false
   }
 
   toggleMobileMenu = () => {
@@ -20,7 +21,7 @@ class Header extends Component {
   }
   render() {
     const show = this.state.mobileToggle ? '' : 'Hide'; 
-    const extraStyles = this.props.page === 'Home' ? classes.HomeHeader : '';
+    const extraStyles = this.props.homepage ? classes.HomeHeader : '';
     return (
       <Aux>
         <Overlay show={this.state.mobileToggle} />
@@ -28,18 +29,19 @@ class Header extends Component {
           <nav className={classes.MainNav}>
             <Logo />
             <NavList
-              mobile={false}
-              classes={classes} />
+              classes={classes}
+              authenticated={this.state.authenticated} />
             <BurgerMenu
               show={this.state.mobileToggle}
               mobileMenuClass={classes.MobileMenu}
               toggle={this.toggleMobileMenu} />
           </nav>
           <nav className={[classes.MobileNav, show].join(' ')}>
-            <Logo mobile={true} />
+            <Logo mobile />
             <NavList
-              mobile={true}
+              mobile
               classes={classes}
+              authenticated={this.state.authenticated}
               show={this.state.mobileToggle} />
           </nav>
         </header>

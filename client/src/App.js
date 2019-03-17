@@ -6,7 +6,7 @@ import UserRegister from './components/Forms/UserRegister/UserRegister';
 class App extends Component {
   render() {
     return (
-      <UserRegister />
+      <Home />
     );
   }
 }
