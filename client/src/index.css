@@ -42,10 +42,18 @@ a {
   background: none;
 }
 
+.page-section {
+  margin: 80px 60px;
+}
+
 /* General Responsive Styles */
 @media only screen and (max-width: 900px) {
   .home-page {
     overflow: scroll;
+  }
+
+  .page-section {
+    margin: 80px 20px;
   }
 }
 

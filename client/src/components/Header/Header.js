@@ -46,7 +46,7 @@ class Header extends Component {
               authenticated={this.state.authenticated}
               show={this.state.mobileToggle} />
           </nav>
-          { this.props.homepage ? <HomeBanner /> : <Banner /> }
+          { this.props.homepage ? <HomeBanner /> : <Banner text={this.props.bannerText} /> }
         </header>
       </Aux>
     );
