@@ -1,7 +1,7 @@
 /* Root Variables*/
 :root {
   --red: #ef1f1f;
-  --nunito: "Nunito", sans-serif;
+  --nunito: 'Nunito', sans-serif;
 }
 
 /* General Styles & Classes*/
@@ -68,7 +68,7 @@ button {
 header {
   padding: 30px;
   color: #fff;
-  background-image: url("../images/banner.jpg");
+  background-image: url('../images/banner.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-color: rgba(0, 0, 0, 0.7);
@@ -148,7 +148,7 @@ header {
 
 .main-nav__list-item a::after,
 .mobile-nav__list-item a::after {
-  content: "";
+  content: '';
   display: block;
   margin-top: 3px;
   width: 0%;
@@ -311,7 +311,7 @@ footer {
 .form_page {
   padding: 50px 0;
   overflow: scroll;
-  background-image: url("../images/page-banner.jpg");
+  background-image: url('../images/page-banner.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-color: rgba(0, 0, 0, 0.7);
@@ -346,7 +346,7 @@ footer {
   font-family: inherit;
 }
 
-.page_form button[type="submit"] {
+.page_form button[type='submit'] {
   margin-top: 20px;
   padding: 0.8rem 1rem;
 }
@@ -366,7 +366,7 @@ footer {
 /* Homepage */
 .home-page {
   color: #fff;
-  background-image: url("../images/banner.jpg");
+  background-image: url('../images/banner.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-color: rgba(0, 0, 0, 0.7);
@@ -411,7 +411,7 @@ footer {
 .ribbon::after {
   position: absolute;
   z-index: -1;
-  content: "";
+  content: '';
   display: block;
   border: 10px solid var(--red);
 }
@@ -626,7 +626,7 @@ footer {
   top: 1em;
 }
 .burger:after {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   height: 150%;
@@ -643,7 +643,7 @@ footer {
 .burger .burger-lines:before {
   pointer-events: none;
   display: block;
-  content: "";
+  content: '';
   width: 100%;
   border-radius: 0.25em;
   background-color: white;
@@ -746,7 +746,7 @@ footer {
     width: 10%;
   }
 
-  .page_form button[type="submit"] {
+  .page_form button[type='submit'] {
     padding: 1rem;
     font-size: 1.2rem;
   }
@@ -758,7 +758,7 @@ footer {
     width: 15%;
   }
 
-  .page_form button[type="submit"] {
+  .page_form button[type='submit'] {
     padding: 1rem 1.2rem;
     font-size: 1.2rem;
   }

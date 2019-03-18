@@ -32,7 +32,7 @@ class Menu extends Component {
   render() {
     return (
       <Aux>
-        <Header bannerText="Today's Menus" />
+        <Header bannerText="Today's Menus" authenticated />
         <main>
           <CatererMenus catererData={this.state.catererData} />
         </main>

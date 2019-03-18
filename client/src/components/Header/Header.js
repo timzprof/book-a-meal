@@ -11,7 +11,6 @@ import Banner from './Banner/Banner';
 class Header extends Component {
   state = {
     mobileToggle: false,
-    authenticated: false
   }
 
   toggleMobileMenu = () => {
@@ -32,7 +31,7 @@ class Header extends Component {
             <Logo />
             <NavList
               classes={classes}
-              authenticated={this.state.authenticated} />
+              authenticated={this.props.authenticated} />
             <BurgerMenu
               show={this.state.mobileToggle}
               mobileMenuClass={classes.MobileMenu}
@@ -43,7 +42,7 @@ class Header extends Component {
             <NavList
               mobile
               classes={classes}
-              authenticated={this.state.authenticated}
+              authenticated={this.props.authenticated}
               show={this.state.mobileToggle} />
           </nav>
           { this.props.homepage ? <HomeBanner /> : <Banner text={this.props.bannerText} /> }
