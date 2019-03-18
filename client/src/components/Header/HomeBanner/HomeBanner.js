@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classes from './HomeBanner.module.css';
 
 const homeBanner = props => {
@@ -12,9 +13,9 @@ const homeBanner = props => {
         <p className={textClasses}>
           Always with the <span className="Red">Quality</span> you deserve ”
         </p>
-        <a href="#menu" className={['Btn', classes.Banner__button].join(' ')}>
+        <Link to="/menu" className={['Btn', classes.Banner__button].join(' ')}>
           View Today's Menu
-        </a>
+        </Link>
       </section>
     </main>
   );

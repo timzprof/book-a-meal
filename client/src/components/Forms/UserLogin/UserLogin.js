@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classes from '../Form.module.css';
 import FormWrapper from '../FormWrapper/FormWrapper';
 import FormHeadText from '../FormHeadText/FormHeadText';
@@ -15,8 +16,8 @@ const userLogin = (props) => {
           <input type="password" name="password" className={classes.Form_field} placeholder="Your Password" required />
         </div>
         <button type="submit">Login</button>
-        <p className={classes.Page_link}>No Account? <a href="/register">Register</a></p>
-        <p className={classes.Page_link}>Back to Home? <a href="/">Click Here</a></p>
+        <p className={classes.Page_link}>No Account? <Link to="/register">Register</Link></p>
+        <p className={classes.Page_link}>Back to Home? <Link to="/">Click Here</Link></p>
       </form>
     </FormWrapper>
   );

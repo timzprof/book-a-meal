@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classes from './Logo.module.css';
 
 const logo = props => {
@@ -8,10 +9,10 @@ const logo = props => {
   }
   return (
     <div className={logoClasses.join(' ')}>
-      <a href="/">
+      <Link to="/">
         <span className="Red">B</span>ook <span className="Red">A</span> Mea
         <span className="Red">l</span>
-      </a>
+      </Link>
     </div>
   );
 };

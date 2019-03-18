@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classes from '../Form.module.css';
 import FormWrapper from '../FormWrapper/FormWrapper';
 import FormHeadText from '../FormHeadText/FormHeadText';
@@ -55,10 +56,10 @@ const userRegister = (props) => {
         </div>
         <button type="submit">Register</button>
         <p className={classes.Page_link}>
-          Already Have an Account? <a href="/login">Login</a>
+          Already Have an Account? <Link to="/login">Login</Link>
         </p>
         <p className={classes.Page_link}>
-          Back to Home? <a href="/">Click Here</a>
+          Back to Home? <Link to="/">Click Here</Link>
         </p>
       </form>
     </FormWrapper>
