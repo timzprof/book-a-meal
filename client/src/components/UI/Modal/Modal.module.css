@@ -1,0 +1,84 @@
+.Modal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  text-align: center;
+  transition: all 0.5s ease-out;
+  z-index: 10;
+  overflow-y: scroll;
+}
+
+.Modal__header {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.Modal__title {
+  margin: 0;
+}
+
+.Modal__header .Close {
+  margin: -5px 0 0 auto;
+  height: fit-content;
+  font-size: 1rem;
+  padding: 10px;
+}
+
+.Modal__body {
+  border-bottom: 1px solid #ccc;
+  padding: 30px 0;
+}
+
+.Modal__content {
+  display: inline-block;
+  background-color: #fff;
+  width: 60vw;
+  padding: 30px;
+  text-align: left;
+  margin-top: 60px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.Modal__footer {
+  float: right;
+  padding: 10px 0;
+}
+
+.Hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Modal Meal Details */
+
+.Meal__Details__img img {
+  width: 200px;
+  height: 200px;
+}
+
+/* Mobile - M & S*/
+@media only screen and (max-width: 380px) {
+  .Modal__title {
+    font-size: 1rem;
+  }
+
+  .Modal__header .Close {
+    font-size: 0.8rem;
+  }
+}
+
+/* Mobile - S */
+@media only screen and (max-width: 320px) {
+  .Modal__title {
+    font-size: 0.9rem;
+  }
+
+  .Modal__header .Close {
+    font-size: 0.7rem;
+  }
+}

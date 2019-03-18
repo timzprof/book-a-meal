@@ -3,6 +3,7 @@ import Aux from '../../hoc/auxiliary';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import CatererMenus from '../../components/CatererMenus/CatererMenus';
+import QuantityModal from '../../components/UI/Modal/QuantityModal/QuantityModal';
 
 class Menu extends Component {
   state = {
@@ -26,16 +27,22 @@ class Menu extends Component {
         ],
         catering_service: 'Book A Meal Caterer'
       }
-    ]
+    ],
+    makeingOrder: false
   };
+
+  quantityModalHandler = () => {
+
+  }
 
   render() {
     return (
       <Aux>
-        <Header bannerText="Today's Menus" authenticated />
+        <Header bannerText="Today's Menus" authenticated overlay={this.state.makeingOrder} />
         <main>
           <CatererMenus catererData={this.state.catererData} />
         </main>
+        <QuantityModal />
         <Footer />
       </Aux>
     );
