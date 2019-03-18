@@ -3,7 +3,7 @@ import classes from './Footer.module.css';
 
 const footer = (props) => (
   <footer className={classes.Footer}>
-    <p>&copy; 2019 Copyright. <span className="red">Book A Meal</span>.</p>
+    <p>&copy; 2019 Copyright. <span className="Red">Book A Meal</span>.</p>
   </footer>
 );
 

@@ -1,0 +1,84 @@
+.Menu__food__item {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #ccc;
+  width: 25%;
+  border-radius: 4px;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
+  margin: 10px 0;
+  align-content: baseline;
+  height: fit-content;
+  min-height: 200px;
+  position: relative;
+  min-width: 170px;
+}
+
+.Menu__food__item__img {
+  width: 100%;
+  height: 150px;
+}
+
+.Menu__food__item__img img {
+  width: 100%;
+  height: 100%;
+}
+
+.Menu__food__item__details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 10px;
+  width: 100%;
+}
+.Meal__info {
+  width: 100%;
+}
+
+.Meal__info > * {
+  margin: 5px;
+}
+
+.Card__btn {
+  padding: 0.7rem;
+  margin: 5px;
+}
+
+/* General Responsive Styles */
+@media only screen and (max-width: 900px) {
+  .Menu__food__item {
+    height: auto;
+  }
+}
+
+/* TV */
+@media only screen and (min-width: 2000px) {
+  .Menu__food__item {
+    width: 10%;
+  }
+}
+
+/* Laptop - L*/
+@media only screen and (min-width: 1200px) and (max-width: 1800px) {
+  .Menu__food__item {
+    width: 15%;
+  }
+}
+
+/* Mobile - L*/
+@media only screen and (max-width: 500px) {
+  .Menu__food__item {
+    width: 40%;
+  }
+}
+
+/* Mobile - M & S*/
+@media only screen and (max-width: 380px) {
+  .Menu__food__item {
+    width: 50%;
+  }
+
+  .Meal__info > * {
+    font-size: 0.8rem;
+  }
+}

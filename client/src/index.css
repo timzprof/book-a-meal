@@ -1,3 +1,8 @@
+:root {
+  --red: #ef1f1f;
+  --nunito: "Nunito", sans-serif;
+}
+
 html {
   height: 100%;
   scroll-behavior: smooth;
@@ -95,7 +100,7 @@ a {
 
 /* Styles */
 .Red {
-  color: #ef1f1f;
+  color: var(--red);
 }
 
 .Hide { 
@@ -106,7 +111,7 @@ button {
   padding: 0.8rem;
   border: none;
   outline: none;
-  background-color: #ef1f1f;
+  background-color: var(--red);
   color: #fff;
   font-family: inherit;
   border-radius: 4px;
@@ -117,7 +122,7 @@ button {
   padding: 0.8rem;
   border: none;
   outline: none;
-  background-color: #ef1f1f;
+  background-color: var(--red);
   color: #fff;
   font-family: inherit;
   border-radius: 4px;
