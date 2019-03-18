@@ -61,7 +61,7 @@
 .MobileNav__list__item a:hover,
 .MobileNav__list__item a:focus,
 .MobileNav__list__item a:active {
-  color: #ef1f1f;
+  color: var(--red);
 }
 
 .MainNav__list__item a:hover::after,
@@ -79,7 +79,7 @@
   display: block;
   margin-top: 3px;
   width: 0%;
-  border-bottom: 2px solid #ef1f1f;
+  border-bottom: 2px solid var(--red);
   transition: all 0.5s;
 }
 
