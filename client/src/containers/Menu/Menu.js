@@ -21,28 +21,44 @@ class Menu extends Component {
             id: 2,
             name: 'Bread & Beans',
             price: 500,
-            imageUrl: 'https://thumbs.dreamstime.com/b/plate-ewa-agoyin-agege-bread-nigerian-staple-meal-consisting-baked-beans-red-palm-oil-stew-sauce-90622030.jpg',
+            imageUrl:
+              'https://thumbs.dreamstime.com/b/plate-ewa-agoyin-agege-bread-nigerian-staple-meal-consisting-baked-beans-red-palm-oil-stew-sauce-90622030.jpg',
             quantity: 5
           }
         ],
         catering_service: 'Book A Meal Caterer'
       }
     ],
-    makeingOrder: false
+    beingOrdered: null
   };
 
-  quantityModalHandler = () => {
+  handleQuantity = mealId => {
+    const menus = [...this.state.catererData];
+    menus.forEach(menu => {
+      const mealIndex = menu.meals.findIndex(meal => meal.id === mealId);
+      this.setState({ beingOrdered: menu.meals[mealIndex] });
+    });
+  };
 
-  }
+  closeModal = () => {
+    this.setState({ beingOrdered: null });
+  };
 
   render() {
     return (
       <Aux>
-        <Header bannerText="Today's Menus" authenticated overlay={this.state.makeingOrder} />
+        <Header
+          bannerText="Today's Menus"
+          authenticated
+          overlay={this.state.beingOrdered !== null}
+        />
         <main>
-          <CatererMenus catererData={this.state.catererData} />
+          <CatererMenus catererData={this.state.catererData} handleQuantity={this.handleQuantity} />
         </main>
-        <QuantityModal />
+        <QuantityModal
+          meal={this.state.beingOrdered}
+          closeModal={this.closeModal}
+        />
         <Footer />
       </Aux>
     );

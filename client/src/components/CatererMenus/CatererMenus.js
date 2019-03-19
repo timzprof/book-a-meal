@@ -5,7 +5,12 @@ const catererMenus = props => {
   const catererMenus = [...props.catererData];
   const menus = catererMenus.map(catererMenu => {
     return (
-      <CatererMenu key={catererMenu.catering_service} meals={catererMenu.meals} catering_service={catererMenu.catering_service} />
+      <CatererMenu
+        key={catererMenu.catering_service}
+        meals={catererMenu.meals}
+        catering_service={catererMenu.catering_service}
+        handleQuantity={props.handleQuantity}
+      />
     );
   });
   return menus;

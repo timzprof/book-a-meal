@@ -49,6 +49,10 @@
   padding: 10px 0;
 }
 
+.Modal__footer button {
+  margin-left: 20px;
+}
+
 .Hidden {
   visibility: hidden;
   opacity: 0;

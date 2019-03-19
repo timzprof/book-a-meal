@@ -25,7 +25,7 @@ class Header extends Component {
     const extraStyles = this.props.homepage ? classes.HomeHeader : '';
     return (
       <Aux>
-        <Overlay show={this.state.mobileToggle} />
+        <Overlay show={this.state.mobileToggle || this.props.overlay} />
         <header className={[classes.Header, extraStyles].join(' ')}>
           <nav className={classes.MainNav}>
             <Logo />

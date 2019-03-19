@@ -4,7 +4,7 @@ import Meal from '../../Meal/Meal';
 
 const catererMenu = props => {
   const meals = props.meals.map(meal => {
-    return <Meal key={meal.id} name={meal.name} price={meal.price} image={meal.imageUrl} />;
+    return <Meal key={meal.id} meal={meal} clicked={props.handleQuantity} />;
   });
   return (
     <section className={['page-section', classes.Menu].join(' ')}>
