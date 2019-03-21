@@ -48,11 +48,6 @@
   padding: 0.2rem 0.4rem;
 }
 
-.Right__Btn__lg {
-  float: right;
-  padding: 1.2rem;
-}
-
 
 /* General Responsive Styles */
 @media only screen and (max-width: 900px) {
