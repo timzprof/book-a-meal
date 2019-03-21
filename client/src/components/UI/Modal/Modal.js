@@ -14,7 +14,7 @@ class Modal extends Component {
 
   render() {
     const titles = {
-      quantity: 'Add to Orders',
+      quantity: 'Order',
       checkout: 'Checkout'
     };
     let jsx = null;
