@@ -62,42 +62,6 @@ a {
   }
 }
 
-/* Laptop */
-@media only screen and (min-width: 1000px) {
-  .home-page .banner__text {
-    font-size: 2rem;
-  }
-}
-
-/* Tablet */
-@media only screen and (min-width: 768px) and (max-width: 1000px) {
-  .home-page .banner {
-    padding: 80px 60px;
-  }
-
-  .home-page .banner__text {
-    font-size: 1.7rem;
-  }
-}
-
-/* Mobile - L*/
-@media only screen and (max-width: 500px) {
-  .home-page .banner {
-    padding: 60px 30px;
-  }
-
-  .home-page .banner__text {
-    font-size: 1.5rem;
-  }
-}
-
-/* Mobile - S */
-@media only screen and (max-width: 320px) {
-  .home-page .banner__text {
-    font-size: 1.3rem;
-  }
-}
-
 /* Styles */
 .Red {
   color: var(--red);

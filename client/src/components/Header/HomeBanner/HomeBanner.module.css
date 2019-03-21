@@ -33,3 +33,40 @@
 .Home__Banner__text {
     font-size: 2.5rem;
 }
+
+/* Laptop */
+@media only screen and (min-width: 1000px) {
+  .Home__Banner__text {
+    font-size: 2rem;
+  }
+}
+
+/* Tablet */
+@media only screen and (min-width: 768px) and (max-width: 1000px) {
+  .Banner {
+    padding: 80px 60px;
+  }
+
+  .Home__Banner__text {
+    font-size: 1.7rem;
+  }
+}
+
+
+/* Mobile - L*/
+@media only screen and (max-width: 500px) {
+  .Banner {
+    padding: 60px 30px;
+  }
+
+  .Home__Banner__text {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobile - S */
+@media only screen and (max-width: 320px) {
+  .Home__Banner__text {
+    font-size: 1.3rem;
+  }
+}

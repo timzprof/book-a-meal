@@ -6,7 +6,9 @@ class NavList extends Component {
   navListHandler(list, classes) {
     const keys = Object.keys(list);
     const navItems = keys.map(href => {
-      return <NavListItem key={href} content={list[href]} href={href} styles={classes.MNavListItem} />;
+      return (
+        <NavListItem key={href} content={list[href]} href={href} styles={classes.MNavListItem} />
+      );
     });
     return <ul className={classes.MNavList}>{navItems}</ul>;
   }
