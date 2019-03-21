@@ -3,6 +3,7 @@ import Aux from '../../hoc/auxiliary';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import MealList from '../../components/MealList/MealList';
+import Modal from '../../components/UI/Modal/Modal';
 
 class Orders extends Component {
   state = {
@@ -25,7 +26,8 @@ class Orders extends Component {
         }
       ],
       catering_service: 'Book A Meal Caterer'
-    }
+    },
+    checkingOut: false
   };
 
   decreaseQuantity = () => {
@@ -37,10 +39,19 @@ class Orders extends Component {
   deleteOrder = () => {
     console.log('Delete');
   };
+
+  showCheckoutModal = () => {
+    this.setState({ checkingOut: true });
+  }
+
+  hideCheckoutModal = () => {
+    this.setState({ checkingOut: false });
+  }
+
   render() {
     return (
       <Aux>
-        <Header bannerText="Your Order Summary" authenticated />
+        <Header bannerText="Your Order Summary" authenticated overlay={this.state.checkingOut} />
         <main>
           <MealList
             orders
@@ -48,9 +59,11 @@ class Orders extends Component {
             increaseQuantity={this.increaseQuantity}
             decreaseQuantity={this.decreaseQuantity}
             deleteOrder={this.deleteOrder}
+            checkout={this.showCheckoutModal}
           />
         </main>
         <Footer />
+        <Modal type="checkout" show={this.state.checkingOut} close={this.hideCheckoutModal} />
       </Aux>
     );
   }

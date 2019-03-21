@@ -16,57 +16,33 @@ class QuantityModal extends Component {
   render() {
     const jsx =
       this.props.meal !== null ? (
-        <div className={classes.Modal} id="orderQuantityModal" role="dialog">
-          <div className={classes.Modal__content}>
-            <div className={classes.Modal__header}>
-              <h3 className={classes.Modal__title}>
-                <span className="Red">B</span>ook
-                <span className="Red">A</span>
-                Mea<span className="Red">l</span> Add to Orders
-              </h3>
-              <button
-                type="button"
-                className={['Btn', classes.Close].join(' ')}
-                data-dismiss="modal"
-                onClick={this.props.closeModal}
-              >
-                &times;
-              </button>
+        <form method="post" id="addToOrders" ref={this.quantityForm} onSubmit={this.addToOrders}>
+          <div className={classes.Modal__body}>
+            <div>
+              <div className={classes.Meal__Details__img}>
+                <img src={this.props.meal.imageUrl} alt="Meal" />
+              </div>
+              <div>
+                <p>{this.props.meal.name}</p>
+                <p>${this.props.meal.price.toFixed(2)}</p>
+              </div>
             </div>
-            <form
-              method="post"
-              id="addToOrders"
-              ref={this.quantityForm}
-              onSubmit={this.addToOrders}
-            >
-              <div className={classes.Modal__body}>
-                <div>
-                  <div className={classes.Meal__Details__img}>
-                    <img src={this.props.meal.imageUrl} alt="Meal" />
-                  </div>
-                  <div>
-                    <p>{this.props.meal.name}</p>
-                    <p>${this.props.meal.price.toFixed(2)}</p>
-                  </div>
-                </div>
-                <div className={formClasses.Form_group}>
-                  <input
-                    type="number"
-                    className={formClasses.Form_field}
-                    placeholder="Quantity"
-                    required
-                  />
-                </div>
-              </div>
-              <div className={classes.Modal__footer}>
-                <button type="button" data-dismiss="modal" onClick={this.props.closeModal}>
-                  Close
-                </button>
-                <button type="submit">Add</button>
-              </div>
-            </form>
+            <div className={formClasses.Form_group}>
+              <input
+                type="number"
+                className={formClasses.Form_field}
+                placeholder="Quantity"
+                required
+              />
+            </div>
           </div>
-        </div>
+          <div className={classes.Modal__footer}>
+            <button type="button" data-dismiss="modal" onClick={this.props.closeModal}>
+              Close
+              </button>
+            <button type="submit">Add</button>
+          </div>
+        </form>
       ) : null;
     return jsx;
   }

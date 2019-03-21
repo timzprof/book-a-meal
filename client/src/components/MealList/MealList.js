@@ -29,6 +29,7 @@ const mealList = props => {
           id="makeOrder"
           data-toggle="modal"
           data-target="#checkoutModal"
+          onClick={props.checkout}
         >
           Make Order
         </button>

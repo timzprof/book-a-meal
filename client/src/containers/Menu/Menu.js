@@ -3,7 +3,7 @@ import Aux from '../../hoc/auxiliary';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import CatererMenus from '../../components/CatererMenus/CatererMenus';
-import QuantityModal from '../../components/UI/Modal/QuantityModal/QuantityModal';
+import Modal from '../../components/UI/Modal/Modal';
 
 class Menu extends Component {
   state = {
@@ -40,24 +40,22 @@ class Menu extends Component {
     });
   };
 
-  closeModal = () => {
+  hideQuantityModal = () => {
     this.setState({ beingOrdered: null });
-  };
+  }
 
   render() {
     return (
       <Aux>
-        <Header
-          bannerText="Today's Menus"
-          authenticated
-          overlay={this.state.beingOrdered !== null}
-        />
+        <Header bannerText="Today's Menus" authenticated overlay={this.state.beingOrdered} />
         <main>
           <CatererMenus catererData={this.state.catererData} handleQuantity={this.handleQuantity} />
         </main>
-        <QuantityModal
+        <Modal
           meal={this.state.beingOrdered}
-          closeModal={this.closeModal}
+          type="quantity"
+          show={this.state.beingOrdered !== null}
+          close={this.hideQuantityModal}
         />
         <Footer />
       </Aux>
