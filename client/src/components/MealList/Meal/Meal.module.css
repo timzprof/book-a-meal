@@ -44,6 +44,16 @@
   margin: 5px;
 }
 
+.Tiny__btn {
+  padding: 0.2rem 0.4rem;
+}
+
+.Right__Btn__lg {
+  float: right;
+  padding: 1.2rem;
+}
+
+
 /* General Responsive Styles */
 @media only screen and (max-width: 900px) {
   .Menu__food__item {
@@ -65,6 +75,14 @@
   }
 }
 
+
+/* Tablet */
+@media only screen and (min-width: 768px) and (max-width: 1000px) {
+  .Card__btn {
+    padding: 0.8rem;
+  }
+}
+
 /* Mobile - L*/
 @media only screen and (max-width: 500px) {
   .Menu__food__item {
@@ -80,5 +98,9 @@
 
   .Meal__info > * {
     font-size: 0.8rem;
+  }
+
+  .Cart__container .Meal__btn {
+    width: 100%;
   }
 }

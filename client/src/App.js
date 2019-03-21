@@ -5,6 +5,7 @@ import UserLogin from './components/Forms/UserLogin/UserLogin';
 import UserRegister from './components/Forms/UserRegister/UserRegister';
 import Menu from './containers/Menu/Menu';
 import OrderHistory from './containers/OrderHistory/OrderHistory';
+import Orders from './containers/Orders/Orders';
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
         <Route path="/register" component={UserRegister} />
         <Route path="/menu" component={Menu} />
         <Route path="/order-history" component={OrderHistory} />
+        <Route path="/orders" component={Orders} />
       </Switch>
     );
   }
