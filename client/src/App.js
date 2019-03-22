@@ -3,6 +3,8 @@ import { Route, Switch } from 'react-router-dom';
 import Home from './containers/Home/Home';
 import UserLogin from './components/Forms/UserLogin/UserLogin';
 import UserRegister from './components/Forms/UserRegister/UserRegister';
+import CatererLogin from './components/Forms/CatererLogin/CatererLogin';
+import CatererRegister from './components/Forms/CatererRegister/CatererRegister';
 import Menu from './containers/Menu/Menu';
 import OrderHistory from './containers/OrderHistory/OrderHistory';
 import Orders from './containers/Orders/Orders';
@@ -20,6 +22,8 @@ class App extends Component {
         <Route path="/order-history" component={OrderHistory} />
         <Route path="/orders" component={Orders} />
         <Route exact path="/admin/" component={CatererHome} />
+        <Route path="/admin/login" component={CatererLogin} />
+        <Route path="/admin/register" component={CatererRegister} />
         <Route path="/admin/meals" component={CatererMealOptions} />
       </Switch>
     );
