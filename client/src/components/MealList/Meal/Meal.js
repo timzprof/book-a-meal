@@ -29,12 +29,29 @@ const meal = props => {
       </div>
     </div>
   );
+  const catererMenuMeals = (
+    <div className={classes.Menu__food__item__details}>
+      <div className={classes.Meal__info}>
+        <p>{props.meal.name}</p>
+        <p>${props.meal.price.toFixed(2)}</p>
+        <p>Quantity: {props.meal.quantity}</p>
+      </div>
+      <div className={classes.Meal__btn}>
+        <button className={classes.Card__btn} onClick={props.remove}>Remove</button>
+      </div>
+    </div>
+  );
+  const mealTypes = {
+    menu: menuMealsDetails,
+    orders: ordersMealsDetails,
+    menuMeals: catererMenuMeals
+  };
   return (
     <article className={classes.Menu__food__item}>
       <div className={classes.Menu__food__item__img}>
         <img src={props.meal.imageUrl} alt="Meal" />
       </div>
-      { props.orders ? ordersMealsDetails : menuMealsDetails }
+      { mealTypes[props.type] }
     </article>
   );
 };

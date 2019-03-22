@@ -30,6 +30,7 @@ class Header extends Component {
           <nav className={classes.MainNav}>
             <Logo />
             <NavList
+              caterer={this.props.caterer}
               classes={classes}
               authenticated={this.props.authenticated} />
             <BurgerMenu
@@ -40,6 +41,7 @@ class Header extends Component {
           <nav className={[classes.MobileNav, show].join(' ')}>
             <Logo mobile />
             <NavList
+              caterer={this.props.caterer}
               mobile
               classes={classes}
               authenticated={this.props.authenticated}

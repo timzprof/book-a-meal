@@ -54,7 +54,7 @@ class Orders extends Component {
         <Header bannerText="Your Order Summary" authenticated overlay={this.state.checkingOut} />
         <main>
           <MealList
-            orders
+            type="orders"
             meals={this.state.orderData.meals}
             increaseQuantity={this.increaseQuantity}
             decreaseQuantity={this.decreaseQuantity}

@@ -1,27 +1,23 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classes from '../CatererMenus/CatererMenu/Menu.module.css';
 import Meal from './Meal/Meal';
 
 const mealList = props => {
-  let meals = null;
+  const meals = props.meals.map(meal => {
+    return <Meal key={meal.id} meal={meal} {...props} />;
+  });
   const sectionClasses = ['page-section'];
-  if (props.orders) {
+  if (props.type === 'orders') {
     sectionClasses.push(classes.Cart__container);
-    meals = props.meals.map(meal => {
-      return (
-        <Meal
-          key={meal.id}
-          meal={meal}
-          orders
-          increaseQuantity={props.increaseQuantity}
-          decreaseQuantity={props.decreaseQuantity}
-          deleteOrder={props.deleteOrder}
-        />
-      );
-    });
   }
   return (
     <section className={sectionClasses.join(' ')}>
+      {props.type === 'menuMeals' ? (
+        <Link to="/admin/menu" className={['Btn', classes.Right__Btn__lg].join(' ')}>
+          Manage Menu
+        </Link>
+      ) : null}
       <div className={classes.Menu__food}>{meals}</div>
       {props.orders ? (
         <button
