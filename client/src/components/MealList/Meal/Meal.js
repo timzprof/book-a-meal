@@ -41,10 +41,25 @@ const meal = props => {
       </div>
     </div>
   );
+  const mealOptions = (
+    <div className={classes.Menu__food__item__details}>
+      <div className={classes.Meal__info}>
+        <p>{props.meal.name}</p>
+        <p>${props.meal.price.toFixed(2)}</p>
+      </div>
+      <div className={classes.Meal__btn}>
+        <button className={classes.Card__btn} onClick={props.showEditMealModal}>Edit</button>
+      </div>
+      <div className={classes.Meal__btn}>
+        <button className={classes.Card__btn} onClick={props.removeMealFromMenu}>Delete</button>
+      </div>
+    </div>
+  );
   const mealTypes = {
     menu: menuMealsDetails,
     orders: ordersMealsDetails,
-    menuMeals: catererMenuMeals
+    menuMeals: catererMenuMeals,
+    mealOptions,
   };
   return (
     <article className={classes.Menu__food__item}>

@@ -18,6 +18,16 @@ const mealList = props => {
           Manage Menu
         </Link>
       ) : null}
+      {props.type === 'mealOptions' ? (
+        <button
+          className={['Btn', classes.Right__Btn__lg].join(' ')}
+          id="add-meal-option"
+          data-toggle="modal"
+          data-target="#mealOptionModal"
+        >
+          Add Meal Option
+        </button>
+      ) : null}
       <div className={classes.Menu__food}>{meals}</div>
       {props.orders ? (
         <button

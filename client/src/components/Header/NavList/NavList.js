@@ -24,14 +24,14 @@ class NavList extends Component {
     };
     const user = {
       '/': 'Welcome User',
-      '/menu': 'Today Menu',
+      '/menu': `Today's Menu`,
       '/orders': 'Orders',
       '/order-history': 'Order History',
       '#': 'Logout'
     };
     const caterer = {
-      '/admin': 'Today Menu',
-      '/admin/meal-options': 'Meal Options',
+      '/admin/': `Today's Menu`,
+      '/admin/meals': 'Meal Options',
       '/admin/todays-orders': 'Todays Orders',
       '/admin/order-history': 'Order History',
       '#': 'Logout'
