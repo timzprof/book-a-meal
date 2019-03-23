@@ -21,8 +21,7 @@ class Menu extends Component {
             id: 2,
             name: 'Bread & Beans',
             price: 500,
-            imageUrl:
-              'https://thumbs.dreamstime.com/b/plate-ewa-agoyin-agege-bread-nigerian-staple-meal-consisting-baked-beans-red-palm-oil-stew-sauce-90622030.jpg',
+            imageUrl:'https://thumbs.dreamstime.com/b/plate-ewa-agoyin-agege-bread-nigerian-staple-meal-consisting-baked-beans-red-palm-oil-stew-sauce-90622030.jpg',
             quantity: 5
           }
         ],

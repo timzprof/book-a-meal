@@ -1,5 +1,7 @@
 import '@babel/polyfill';
+import path from 'path';
 import express from 'express';
+import favicon from 'express-favicon';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import { config } from 'dotenv';
@@ -17,10 +19,32 @@ const PORT = process.env.PORT || 7000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
 app.use(fileUpload());
+app.use(favicon(path.resolve('client/build/favicon.ico')));
+app.use(express.static(path.resolve('client')));
+app.use(express.static(path.resolve('client/build')));
+
+// Enable CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  res.header(
+    'Access-Control-Request-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  next();
+});
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1', Routes);
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve('client/build', 'index.html'));
+});
 
 sequelize
   .sync()
