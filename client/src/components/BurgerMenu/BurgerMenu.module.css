@@ -1,0 +1,95 @@
+.Burger {
+  height: 3em;
+  width: 3em;
+  position: relative;
+  font-size: 0.8rem;
+  cursor: pointer;
+  -webkit-transition: 0.2s all;
+  -o-transition: 0.2s all;
+  transition: 0.2s all;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.Burger .BurgerLines:after {
+  left: 0;
+  top: -1em;
+}
+.Burger .BurgerLines:before {
+  left: 1em;
+  top: 1em;
+}
+.Burger:after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 150%;
+  width: 150%;
+  top: -25%;
+  left: -25%;
+}
+.Burger .BurgerLines {
+  top: 50%;
+  margin-top: -0.125em;
+}
+.Burger .BurgerLines,
+.Burger .BurgerLines:after,
+.Burger .BurgerLines:before {
+  pointer-events: none;
+  display: block;
+  content: "";
+  width: 100%;
+  border-radius: 0.25em;
+  background-color: white;
+  height: 0.25em;
+  position: absolute;
+  -webkit-transform: rotate(0);
+  -ms-transform: rotate(0);
+  transform: rotate(0);
+}
+.Burger .BurgerLines:after {
+  left: 0;
+  top: -1em;
+}
+
+.Burger .BurgerLines:before {
+  left: 1em;
+  top: 1em;
+}
+
+.Burger.BurgerSlip .BurgerLines:after,
+.Burger.BurgerSlip .BurgerLines:before {
+  width: 2em;
+}
+
+.Burger.BurgerSlip .BurgerLines,
+.Burger.BurgerSlip .BurgerLines:after,
+.Burger.BurgerSlip .BurgerLines:before {
+  -webkit-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.Burger.BurgerSlip.Open .BurgerLines {
+  -webkit-transform: translateX(-2em);
+  -ms-transform: translateX(-2em);
+  transform: translateX(-2em);
+  background-color: transparent;
+}
+
+.Burger.BurgerSlip.Open .BurgerLines:before,
+.Burger.BurgerSlip.Open .BurgerLines:after {
+  left: 0.5em;
+  top: 0px;
+}
+
+.Burger.BurgerSlip.Open .BurgerLines:before {
+  -webkit-transform: translateX(2em) rotate(135deg);
+  -ms-transform: translateX(2em) rotate(135deg);
+  transform: translateX(2em) rotate(135deg);
+}
+
+.Burger.BurgerSlip.Open .BurgerLines:after {
+  -webkit-transform: translateX(2em) rotate(-135deg);
+  -ms-transform: translateX(2em) rotate(-135deg);
+  transform: translateX(2em) rotate(-135deg);
+}
