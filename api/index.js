@@ -5,7 +5,6 @@ import favicon from 'express-favicon';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import { config } from 'dotenv';
-import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import Routes from './routes';
 import sequelize from './util/db';
