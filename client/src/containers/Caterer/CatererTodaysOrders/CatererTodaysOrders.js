@@ -4,7 +4,7 @@ import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import OrderTable from '../../../components/Table/OrderTable/OrderTable';
 
-class CatererOrderHistory extends Component {
+class CatererTodaysOrders extends Component {
   state = {
     orders: [
       {
@@ -22,7 +22,6 @@ class CatererOrderHistory extends Component {
             quantity: 2
           }
         ],
-        date: '24th Feb 2019',
         price: 1500
       },
       {
@@ -40,7 +39,6 @@ class CatererOrderHistory extends Component {
             quantity: 1
           }
         ],
-        date: '28th Feb 2019',
         price: 1000
       }
     ]
@@ -48,9 +46,9 @@ class CatererOrderHistory extends Component {
   render() {
     return (
       <Aux>
-        <Header bannerText="Your Order History" authenticated caterer />
+        <Header bannerText="Todays Order Summary" authenticated caterer />
         <main>
-          <OrderTable orders={this.state.orders} caterer />
+          <OrderTable orders={this.state.orders} caterer todaysOrders />
         </main>
         <Footer />
       </Aux>
@@ -58,4 +56,4 @@ class CatererOrderHistory extends Component {
   }
 }
 
-export default CatererOrderHistory;
+export default CatererTodaysOrders;
