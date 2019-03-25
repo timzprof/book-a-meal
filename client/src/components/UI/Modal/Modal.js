@@ -12,6 +12,10 @@ class Modal extends Component {
     };
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.show !== this.props.show;
+  }
+
   render() {
     const titles = {
       quantity: 'Order',
@@ -33,7 +37,7 @@ class Modal extends Component {
                 onClick={this.props.close}
               >
                 &times;
-            </button>
+              </button>
             </div>
             <ModalForm
               classes={classes}

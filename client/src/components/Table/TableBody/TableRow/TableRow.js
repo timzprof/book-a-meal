@@ -17,7 +17,7 @@ const tableRow = (props) => {
     <div className={props.classes.Table__row}>
       <ul className={props.classes.Table__row__list}>
         <li className={props.classes.Table__row__list__item}>{props.order.id}</li>
-        <li className={props.classes.Table__row__list__item}>{props.order.user}</li>
+        <li className={props.classes.Table__row__list__item}>{props.order.user || props.order.caterer}</li>
         <li className={props.classes.Table__row__list__item}>
           <ul className={props.classes.Order__summary__list}>
             { meals }
