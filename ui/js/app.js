@@ -5,6 +5,7 @@ const redirect = location => {
   window.location.href = `${location}.html`;
 };
 
+ */
 const toggleMobileNav = () => {
   const mobileNav = document.querySelector('.mobile-nav');
   if (mobileNav.classList.contains('hide')) {

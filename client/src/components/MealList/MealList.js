@@ -40,6 +40,11 @@ const mealList = props => {
           Make Order
         </button>
       ) : null}
+      {props.type === 'manageMenu' ? (
+        <button className={['Btn', classes.Right__Btn__lg].join(' ')} id="save-menu" onClick={props.saveMenu}>
+          Save
+        </button>
+      ) : null}
     </section>
   );
 };

@@ -10,6 +10,9 @@ import OrderHistory from './containers/OrderHistory/OrderHistory';
 import Orders from './containers/Orders/Orders';
 import CatererHome from './containers/Caterer/CatererHome/CatererHome';
 import CatererMealOptions from './containers/Caterer/CatererMealOptions/CatererMealOptions';
+import CatererOrderHistory from './containers/Caterer/CatererOrderHistory/CatererOrderHistory';
+import CatererTodaysOrders from './containers/Caterer/CatererTodaysOrders/CatererTodaysOrders';
+import CatererManageMenu from './containers/Caterer/CatererManageMenu/CatererMangeMenu';
 
 class App extends Component {
   render() {
@@ -25,6 +28,9 @@ class App extends Component {
         <Route path="/admin/login" component={CatererLogin} />
         <Route path="/admin/register" component={CatererRegister} />
         <Route path="/admin/meals" component={CatererMealOptions} />
+        <Route path="/admin/order-history" component={CatererOrderHistory} />
+        <Route path="/admin/todays-orders" component={CatererTodaysOrders} />
+        <Route path="/admin/menu" component={CatererManageMenu} />
       </Switch>
     );
   }
