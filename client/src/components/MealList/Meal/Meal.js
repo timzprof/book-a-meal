@@ -36,9 +36,6 @@ const meal = props => {
         <p>${props.meal.price.toFixed(2)}</p>
         <p>Quantity: {props.meal.quantity}</p>
       </div>
-      <div className={classes.Meal__btn}>
-        <button className={classes.Card__btn} onClick={props.remove}>Remove</button>
-      </div>
     </div>
   );
   const mealOptions = (
@@ -55,14 +52,27 @@ const meal = props => {
       </div>
     </div>
   );
+  const manageMenu = (
+    <div className={classes.Menu__food__item__details}>
+      <div className={classes.Meal__info}>
+        <p>{props.meal.name}</p>
+        <p>${props.meal.price.toFixed(2)}</p>
+        <p>
+          <button className={classes.Tiny__btn} onClick={() => props.decrease(props.meal.id)}>-</button> {props.meal.quantity || 0} <button className={classes.Tiny__btn} onClick={() => props.increase(props.meal.id)}>+</button>
+        </p>
+      </div>
+    </div>
+  );
   const mealTypes = {
     menu: menuMealsDetails,
     orders: ordersMealsDetails,
     menuMeals: catererMenuMeals,
     mealOptions,
+    manageMenu,
   };
   return (
     <article className={classes.Menu__food__item}>
+      {props.meal.quantity > 0 && props.type === 'manageMenu' ? <div className="ribbon ribbon-top-left"><span>Selected</span></div> : null}
       <div className={classes.Menu__food__item__img}>
         <img src={props.meal.imageUrl} alt="Meal" />
       </div>

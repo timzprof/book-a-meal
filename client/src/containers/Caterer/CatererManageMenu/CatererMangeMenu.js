@@ -4,7 +4,7 @@ import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import MealList from '../../../components/MealList/MealList';
 
-class CatererHome extends Component {
+class CatererManageMenu extends Component {
   state = {
     data: {
       meals: [
@@ -27,13 +27,41 @@ class CatererHome extends Component {
       catering_service: 'Book A Meal Caterer'
     }
   }
+  increaseQuantity = (mealId) => {
+    this.setState((prevState) => {
+      const data = {...prevState.data};
+      const mealIndex = data.meals.findIndex(meal => meal.id === mealId);
+      data.meals[mealIndex].quantity += 1;
+      return { data };
+    });
+  };
+
+  decreaseQuantity = (mealId) => {
+    this.setState((prevState) => {
+      const data = { ...prevState.data };
+      const mealIndex = data.meals.findIndex(meal => meal.id === mealId);
+      data.meals[mealIndex].quantity -= 1;
+      return { data };
+    });
+  };
+
+  saveMenu = () => {};
 
   render() {
     return (
       <Aux>
-        <Header bannerText="Your Menu for Today" authenticated caterer />
+        <Header
+          bannerText="Increase Food Options Quantity to add them to menu"
+          authenticated
+          caterer
+        />
         <main>
-          <MealList type="menuMeals" meals={this.state.data.meals} />
+          <MealList
+            type="manageMenu"
+            meals={this.state.data.meals}
+            increase={this.increaseQuantity}
+            decrease={this.decreaseQuantity}
+          />
         </main>
         <Footer />
       </Aux>
@@ -41,4 +69,4 @@ class CatererHome extends Component {
   }
 }
 
-export default CatererHome;
+export default CatererManageMenu;

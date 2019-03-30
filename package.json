@@ -5,6 +5,7 @@
   "main": "api/index.js",
   "scripts": {
     "start": "node ./build/index.js",
+    "client": "cd client && npm start",
     "dev": "nodemon --exec babel-node api/index.js",
     "test": "nyc mocha -r esm --recursive -t 5000 --exit",
     "build-server": "npm run clean && npm run build-babel && npm audit fix",
