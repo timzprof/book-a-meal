@@ -4,7 +4,8 @@ import { config } from 'dotenv';
 config();
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  logging: false
+  logging: false,
+  operatorsAliases: false
 });
 
 export default sequelize;

@@ -18,10 +18,6 @@ const OrderItem = sequelize.define('orderItem', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  userId: {
-    type: Sequelize.INTEGER,
-    allowNull: false
-  },
   createdAt: Sequelize.DATEONLY,
   updatedAt: Sequelize.DATEONLY
 });

@@ -6,9 +6,13 @@ class MealController {
     try {
       const { name, price } = req.body;
       const { image } = req.files;
-      const imageUrl = `/api/images/${image.name}`;
-      const meal = await Meal.create({ name, price, imageUrl, catererId: req.caterer.id });
-      await image.mv(`.${imageUrl}`);
+      const meal = await Meal.create({
+        name,
+        price,
+        imageUrl: image.name,
+        catererId: req.caterer.id
+      });
+      await image.mv(`./api/images/${image.name}`);
       return res.status(201).json({
         status: 'success',
         message: 'Meal Option Added',
@@ -43,12 +47,12 @@ class MealController {
       };
       if (req.files !== null) {
         const { image } = req.files;
-        const imageUrl = `/api/images/${image.name}`;
-        fs.unlink(`.${meal.imageUrl}`, err => {
+        const imageUrl = `${image.name}`;
+        fs.unlink(`./api/images/${meal.imageUrl}`, err => {
           if (err) throw new Error(err.message);
         });
         mealUpdate.imageUrl = imageUrl;
-        await image.mv(`.${imageUrl}`);
+        await image.mv(`./api/images/${imageUrl}`);
       } else {
         mealUpdate.imageUrl = meal.imageUrl;
       }
@@ -74,7 +78,7 @@ class MealController {
       if (!meal) {
         throw new Error(`Meal with ID ${id} does not exist`);
       }
-      fs.unlink(`.${meal.imageUrl}`, err => {
+      fs.unlink(`./api/images/${meal.imageUrl}`, err => {
         if (err) throw new Error(err.message);
       });
       await meal.destroy();
