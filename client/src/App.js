@@ -13,6 +13,7 @@ import CatererMealOptions from './containers/Caterer/CatererMealOptions/CatererM
 import CatererOrderHistory from './containers/Caterer/CatererOrderHistory/CatererOrderHistory';
 import CatererTodaysOrders from './containers/Caterer/CatererTodaysOrders/CatererTodaysOrders';
 import CatererManageMenu from './containers/Caterer/CatererManageMenu/CatererMangeMenu';
+import './iziToast.min.css';
 
 class App extends Component {
   render() {
