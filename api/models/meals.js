@@ -24,10 +24,6 @@ const Meal = sequelize.define('meal', {
     type: Sequelize.STRING,
     allowNull: false
   },
-  catererId: {
-    type: Sequelize.INTEGER,
-    allowNull: false
-  },
   createdAt: Sequelize.DATEONLY,
   updatedAt: Sequelize.DATEONLY
 });

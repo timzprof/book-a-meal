@@ -1,5 +1,6 @@
 import Menu from '../models/menu';
 import Meal from '../models/meals';
+import Caterer from '../models/caterer';
 
 class MenuController {
   static generateDate() {
@@ -10,13 +11,29 @@ class MenuController {
   }
 
   static async getMenus(req, res) {
-    const today = MenuController.generateDate();
-    const menus = await Menu.findAll({ where: { createdAt: today } });
-    return res.status(200).json({
-      status: 'success',
-      message: 'Menus Retrieved',
-      data: menus
-    });
+    try {
+      const today = MenuController.generateDate();
+      const menus = await Menu.findAll({
+        where: { createdAt: today },
+        include: [
+          {
+            model: Caterer,
+            attributes: ['catering_service']
+          }
+        ]
+      });
+      return res.status(200).json({
+        status: 'success',
+        message: 'Menus Retrieved',
+        data: menus
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Failed To Fetch Menus',
+        error: error.message
+      });
+    }
   }
 
   static async getSingleMenu(req, res) {

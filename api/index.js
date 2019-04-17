@@ -1,6 +1,7 @@
 import '@babel/polyfill';
 import path from 'path';
 import express from 'express';
+import logger from 'morgan';
 import favicon from 'express-favicon';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
@@ -16,12 +17,14 @@ const app = express();
 
 const PORT = process.env.PORT || 7000;
 
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 app.use(favicon(path.resolve('client/build/favicon.ico')));
 app.use(express.static(path.resolve('client')));
 app.use(express.static(path.resolve('client/build')));
+app.use(express.static(path.resolve('api/images')));
 
 // Enable CORS
 app.use((req, res, next) => {
@@ -41,10 +44,11 @@ app.use((req, res, next) => {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1', Routes);
 
-app.get('/*', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.resolve('client/build', 'index.html'));
 });
 
+// Connect and Migrate Database
 sequelize
   .sync()
   .then(() => {

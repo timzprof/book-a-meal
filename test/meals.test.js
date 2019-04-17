@@ -239,7 +239,7 @@ describe('Meals Endpoints', () => {
           return Meal.create({
             name: 'Fake Meal',
             price: 1000,
-            imageUrl: '/api/images/fake.png',
+            imageUrl: 'fake.png',
             catererId: caterer.id
           }).then(meal => {
             it(`PUT ${API_PREFIX}/meals/:mealId - Modify Meal Option (Unauthorized)`, done => {
@@ -344,7 +344,7 @@ describe('Meals Endpoints', () => {
             return Meal.create({
               name: 'Fake Meal',
               price: 1000,
-              imageUrl: '/api/images/fake2.png',
+              imageUrl: 'fake2.png',
               catererId: caterer.id
             });
           })
