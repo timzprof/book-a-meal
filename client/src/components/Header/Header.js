@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import classes from './Header.module.css';
 import Aux from '../../hoc/auxiliary';
 import Logo from '../Logo/Logo';
@@ -8,50 +8,49 @@ import Overlay from '../UI/Overlay/Overlay';
 import HomeBanner from './HomeBanner/HomeBanner';
 import Banner from './Banner/Banner';
 
-class Header extends Component {
-  state = {
-    mobileToggle: false,
-  }
+const header = props => {
+  const [state, setState] = useState({ mobileToggle: false });
 
-  toggleMobileMenu = () => {
-    this.setState((prevState, props) => {
+  const toggleMobileMenu = () => {
+    setState((prevState, props) => {
       return {
         mobileToggle: !prevState.mobileToggle
-      }
+      };
     });
-  }
-  render() {
-    const show = this.state.mobileToggle ? '' : 'Hide'; 
-    const extraStyles = this.props.homepage ? classes.HomeHeader : '';
-    return (
-      <Aux>
-        <Overlay show={this.state.mobileToggle || this.props.overlay} />
-        <header className={[classes.Header, extraStyles].join(' ')}>
-          <nav className={classes.MainNav}>
-            <Logo />
-            <NavList
-              caterer={this.props.caterer}
-              classes={classes}
-              authenticated={this.props.authenticated} />
-            <BurgerMenu
-              show={this.state.mobileToggle}
-              mobileMenuClass={classes.MobileMenu}
-              toggle={this.toggleMobileMenu} />
-          </nav>
-          <nav className={[classes.MobileNav, show].join(' ')}>
-            <Logo mobile />
-            <NavList
-              caterer={this.props.caterer}
-              mobile
-              classes={classes}
-              authenticated={this.props.authenticated}
-              show={this.state.mobileToggle} />
-          </nav>
-          { this.props.homepage ? <HomeBanner /> : <Banner text={this.props.bannerText} /> }
-        </header>
-      </Aux>
-    );
-  }
-}
+  };
+  const show = state.mobileToggle ? '' : 'Hide';
+  const extraStyles = props.homepage ? classes.HomeHeader : '';
+  return (
+    <Aux>
+      <Overlay show={state.mobileToggle || props.overlay} />
+      <header className={[classes.Header, extraStyles].join(' ')}>
+        <nav className={classes.MainNav}>
+          <Logo />
+          <NavList
+            caterer={props.caterer}
+            classes={classes}
+            authenticated={props.authenticated}
+          />
+          <BurgerMenu
+            show={state.mobileToggle}
+            mobileMenuClass={classes.MobileMenu}
+            toggle={toggleMobileMenu}
+          />
+        </nav>
+        <nav className={[classes.MobileNav, show].join(' ')}>
+          <Logo mobile />
+          <NavList
+            caterer={props.caterer}
+            mobile
+            classes={classes}
+            authenticated={props.authenticated}
+            show={state.mobileToggle}
+          />
+        </nav>
+        {props.homepage ? <HomeBanner /> : <Banner text={props.bannerText} />}
+      </header>
+    </Aux>
+  );
+};
 
-export default Header;
+export default header;

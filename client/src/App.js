@@ -20,6 +20,8 @@ import useGlobal from './store';
 const App = () => {
   const [globalState] = useGlobal();
 
+  console.log(globalState.userAuthenticated);
+
   const ProtectedUserRoute = ({ component: Component, ...rest }) => (
     <Route
       {...rest}
