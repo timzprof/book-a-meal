@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Home from './containers/Home/Home';
 import UserLogin from './components/Forms/UserLogin/UserLogin';
 import UserRegister from './components/Forms/UserRegister/UserRegister';
@@ -14,27 +14,46 @@ import CatererOrderHistory from './containers/Caterer/CatererOrderHistory/Catere
 import CatererTodaysOrders from './containers/Caterer/CatererTodaysOrders/CatererTodaysOrders';
 import CatererManageMenu from './containers/Caterer/CatererManageMenu/CatererMangeMenu';
 import './iziToast.min.css';
+import useGlobal from './store';
 
-class App extends Component {
-  render() {
-    return (
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/login" component={UserLogin} />
-        <Route path="/register" component={UserRegister} />
-        <Route path="/menu" component={Menu} />
-        <Route path="/order-history" component={OrderHistory} />
-        <Route path="/orders" component={Orders} />
-        <Route exact path="/admin/" component={CatererHome} />
-        <Route path="/admin/login" component={CatererLogin} />
-        <Route path="/admin/register" component={CatererRegister} />
-        <Route path="/admin/meals" component={CatererMealOptions} />
-        <Route path="/admin/order-history" component={CatererOrderHistory} />
-        <Route path="/admin/todays-orders" component={CatererTodaysOrders} />
-        <Route path="/admin/menu" component={CatererManageMenu} />
-      </Switch>
-    );
-  }
-}
+
+const App = () => {
+  const [globalState] = useGlobal();
+
+  const ProtectedUserRoute = ({ component: Component, ...rest }) => (
+    <Route
+      {...rest}
+      render={props =>
+        globalState.userAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
+      }
+    />
+  );
+
+  const ProtectedCatererRoute = ({ component: Component, ...rest }) => (
+    <Route
+      {...rest}
+      render={props =>
+        globalState.catererAuthenticated ? <Component {...props} /> : <Redirect to="/admin/login" />
+      }
+    />
+  );
+  return (
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route path="/login" component={UserLogin} />
+      <Route path="/register" component={UserRegister} />
+      <ProtectedUserRoute path="/menu" component={Menu} />
+      <ProtectedUserRoute path="/order-history" component={OrderHistory} />
+      <ProtectedUserRoute path="/orders" component={Orders} />
+      <ProtectedCatererRoute exact path="/admin/" component={CatererHome} />
+      <Route path="/admin/login" component={CatererLogin} />
+      <Route path="/admin/register" component={CatererRegister} />
+      <ProtectedCatererRoute path="/admin/meals" component={CatererMealOptions} />
+      <ProtectedCatererRoute path="/admin/order-history" component={CatererOrderHistory} />
+      <ProtectedCatererRoute path="/admin/todays-orders" component={CatererTodaysOrders} />
+      <ProtectedCatererRoute path="/admin/menu" component={CatererManageMenu} />
+    </Switch>
+  );
+};
 
 export default App;

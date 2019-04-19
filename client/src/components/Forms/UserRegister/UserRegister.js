@@ -1,32 +1,46 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import classes from '../Form.module.css';
 import FormWrapper from '../FormWrapper/FormWrapper';
 import FormHeadText from '../FormHeadText/FormHeadText';
-import { success , warning} from '../../../actions/toast';
+import Aux from '../../../hoc/auxiliary';
+import Overlay from '../../UI/Overlay/Overlay';
+import useGlobal from '../../../store';
 
-class UserRegister extends Component {
-  state = {}
-  handleUserRegister = e => {
+const userRegister = props => {
+  const [globalState, globalActions] = useGlobal();
+  const [state, setState] = useState();
+
+  const handleUserRegister = async e => {
     e.preventDefault();
-    if(this.state.confirm_password !== this.state.password) {
-      warning('Passwords Do not match');
+    console.log(state);
+    if (state.confirm_password !== state.password) {
+      globalActions.toast.toast('warning', 'Passwords Do not match');
+      return;
     }
-    console.log(this.state);
+    const res = await globalActions.auth.signUserUp({ ...state });
+    globalActions.toast.toast(res.status, res.message);
+    if (res.status === 'success') {
+      props.history.push('/menu');
+    }
   };
 
-  handleInputChange = e => { 
+  const handleInputChange = e => {
     const { name, value } = e.target;
-    this.setState({
-      [name]: value
+    setState(state => {
+      return {
+        ...state,
+        [name]: value
+      };
     });
-  }
+  };
 
-  render() {
-    return (
+  return (
+    <Aux>
+      <Overlay show={globalState.overlay} />
       <FormWrapper>
         <form
-          onSubmit={this.handleUserRegister}
+          onSubmit={handleUserRegister}
           action="#"
           method="post"
           className={classes.Page_form}
@@ -40,7 +54,7 @@ class UserRegister extends Component {
               className={classes.Form_field}
               placeholder="Your Name"
               required
-              onChange={this.handleInputChange}
+              onChange={handleInputChange}
             />
           </div>
           <div className={classes.Form_group}>
@@ -50,7 +64,7 @@ class UserRegister extends Component {
               className={classes.Form_field}
               placeholder="Your Email"
               required
-              onChange={this.handleInputChange}
+              onChange={handleInputChange}
             />
           </div>
           <div className={classes.Form_group}>
@@ -60,7 +74,7 @@ class UserRegister extends Component {
               className={classes.Form_field}
               placeholder="Your Phone Number"
               required
-              onChange={this.handleInputChange}
+              onChange={handleInputChange}
             />
           </div>
           <div className={classes.Form_group}>
@@ -70,7 +84,7 @@ class UserRegister extends Component {
               className={classes.Form_field}
               placeholder="Your Password"
               required
-              onChange={this.handleInputChange}
+              onChange={handleInputChange}
             />
           </div>
           <div className={classes.Form_group}>
@@ -80,7 +94,7 @@ class UserRegister extends Component {
               className={classes.Form_field}
               placeholder="Confirm Password"
               required
-              onChange={this.handleInputChange}
+              onChange={handleInputChange}
             />
           </div>
           <button type="submit">Register</button>
@@ -92,8 +106,8 @@ class UserRegister extends Component {
           </p>
         </form>
       </FormWrapper>
-    );
-  }
-}
+    </Aux>
+  );
+};
 
-export default UserRegister;
+export default userRegister;

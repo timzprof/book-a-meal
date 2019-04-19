@@ -2,7 +2,9 @@ import 'unfetch/polyfill';
 
 const TOKEN_STRING = 'token';
 
-const { API_ROOT } = process.env;
+const { REACT_APP_API_URL: API_URL } = process.env;
+
+console.log(process.env);
 
 const toJSON = res => res.json();
 const token = () => localStorage.getItem(TOKEN_STRING) || '';
@@ -13,17 +15,18 @@ const requestOptions = (method, body, options) => {
   if (tokenString) {
     headers = { ...headers, Authorization: `Bearer ${tokenString}` };
   }
+  console.log(method);
   return {
     method, ...options, headers, body: JSON.stringify(body),
   };
 };
 
 export default {
-  get: url => fetch(API_ROOT + url, requestOptions('GET')).then(toJSON),
-  post: (url, body) => fetch(API_ROOT + url, requestOptions('POST', body)).then(toJSON),
-  patch: (url, body) => fetch(API_ROOT + url, requestOptions('PATCH', body)).then(toJSON),
-  put: (url, body) => fetch(API_ROOT + url, requestOptions('PUT', body)).then(toJSON),
-  delete: (url, body) => fetch(API_ROOT + url, requestOptions('DELETE', body)).then(toJSON),
+  get: url => fetch(API_URL + url, requestOptions('GET')).then(toJSON),
+  post: (url, body) => fetch(API_URL + url, requestOptions('POST', body)).then(toJSON),
+  patch: (url, body) => fetch(API_URL + url, requestOptions('PATCH', body)).then(toJSON),
+  put: (url, body) => fetch(API_URL + url, requestOptions('PUT', body)).then(toJSON),
+  delete: (url, body) => fetch(API_URL + url, requestOptions('DELETE', body)).then(toJSON),
   request: (request, requestOpt) => fetch(request, requestOpt).then(toJSON),
 };
 

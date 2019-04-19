@@ -1,37 +1,23 @@
 import izitoast from 'izitoast';
 
 izitoast.settings({
-  timeout: 2000,
+  timeout: 1500,
   resetOnHover: true,
   position: 'center'
 });
 
-export const success = (message, redirect) => {
+export const toast = (store,type, message) => {
+  let color = type === 'success' ? 'green' : 'red';
+  if (type === 'warning') color = 'yellow';
+  if (type === 'info') color = 'blue';
+  store.setState({ overlay: true });
   izitoast.show({
-    color: 'green',
-    icon: 'ico-success',
-    title: 'Success',
+    color,
+    icon: `ico-${type}`,
+    title: `${type.charAt(0).toUpperCase() + type.slice(1)}`,
     message: message,
-    onClosing: () => {}
-  });
-};
-
-export const warning = (message, redirect) => {
-  izitoast.show({
-    color: 'yellow',
-    icon: 'ico-warning',
-    title: 'Warning',
-    message: message,
-    onClosing: () => {}
-  });
-};
-
-export const error = message => {
-  izitoast.show({
-    color: 'red',
-    icon: 'ico-error',
-    title: 'Error',
-    message: message,
-    onClosing: () => {}
+    onClosing: () => {
+        store.setState({ overlay: false });
+    }
   });
 };
