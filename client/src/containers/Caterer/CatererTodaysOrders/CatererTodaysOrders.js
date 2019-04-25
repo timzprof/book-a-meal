@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from '../../../hoc/auxiliary';
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import OrderTable from '../../../components/Table/OrderTable/OrderTable';
@@ -45,13 +44,13 @@ class CatererTodaysOrders extends Component {
   };
   render() {
     return (
-      <Aux>
+      <React.Fragment>
         <Header bannerText="Todays Order Summary" authenticated caterer />
         <main>
           <OrderTable orders={this.state.orders} caterer todaysOrders />
         </main>
         <Footer />
-      </Aux>
+      </React.Fragment>
     );
   }
 }

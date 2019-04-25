@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from '../../../hoc/auxiliary';
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import MealList from '../../../components/MealList/MealList';
@@ -33,7 +32,7 @@ class CatererMealOptions extends Component {
   showEditMealModal = () => {};
   render() {
     return (
-      <Aux>
+      <React.Fragment>
         <Header bannerText="Your Meal Options" authenticated caterer />
         <main>
           <MealList
@@ -44,7 +43,7 @@ class CatererMealOptions extends Component {
           />
         </main>
         <Footer />
-      </Aux>
+      </React.Fragment>
     );
   }
 }

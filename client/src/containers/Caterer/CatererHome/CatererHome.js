@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from '../../../hoc/auxiliary';
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import MealList from '../../../components/MealList/MealList';
@@ -30,13 +29,13 @@ class CatererHome extends Component {
 
   render() {
     return (
-      <Aux>
+      <React.Fragment>
         <Header bannerText="Your Menu for Today" authenticated caterer />
         <main>
           <MealList type="menuMeals" meals={this.state.data.meals} />
         </main>
         <Footer />
-      </Aux>
+      </React.Fragment>
     );
   }
 }

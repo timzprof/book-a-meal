@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import classes from '../Form.module.css';
 import FormWrapper from '../FormWrapper/FormWrapper';
 import FormHeadText from '../FormHeadText/FormHeadText';
-import Aux from '../../../hoc/auxiliary';
 import Overlay from '../../UI/Overlay/Overlay';
 import useGlobal from '../../../store';
 
@@ -36,7 +35,7 @@ const userRegister = props => {
   };
 
   return (
-    <Aux>
+    <React.Fragment>
       <Overlay show={globalState.overlay} />
       <FormWrapper>
         <form
@@ -106,7 +105,7 @@ const userRegister = props => {
           </p>
         </form>
       </FormWrapper>
-    </Aux>
+    </React.Fragment>
   );
 };
 

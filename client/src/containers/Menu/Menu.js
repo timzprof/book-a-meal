@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from '../../hoc/auxiliary';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import CatererMenus from '../../components/CatererMenus/CatererMenus';
@@ -9,7 +8,7 @@ import useGlobal from '../../store';
 const menu = props => {
   const [globalState, globalActions] = useGlobal();
   return (
-    <Aux>
+    <React.Fragment>
       <Header bannerText="Today's Menus" authenticated={globalState.userAuthenticated} overlay={globalState.beingOrdered} />
       <main>
         <CatererMenus catererData={globalState.menu} handleQuantity={globalActions.menu.handleQuantity} />
@@ -21,7 +20,7 @@ const menu = props => {
         close={globalActions.menu.hideQuantityModal}
       />
       <Footer />
-    </Aux>
+    </React.Fragment>
   );
 };
 

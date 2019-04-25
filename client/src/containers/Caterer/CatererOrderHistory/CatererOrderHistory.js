@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from '../../../hoc/auxiliary';
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import OrderTable from '../../../components/Table/OrderTable/OrderTable';
@@ -47,13 +46,13 @@ class CatererOrderHistory extends Component {
   };
   render() {
     return (
-      <Aux>
+      <React.Fragment>
         <Header bannerText="Your Order History" authenticated caterer />
         <main>
           <OrderTable orders={this.state.orders} caterer />
         </main>
         <Footer />
-      </Aux>
+      </React.Fragment>
     );
   }
 }

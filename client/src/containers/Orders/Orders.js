@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from '../../hoc/auxiliary';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import MealList from '../../components/MealList/MealList';
@@ -50,7 +49,7 @@ class Orders extends Component {
 
   render() {
     return (
-      <Aux>
+      <React.Fragment>
         <Header bannerText="Your Order Summary" authenticated overlay={this.state.checkingOut} />
         <main>
           <MealList
@@ -64,7 +63,7 @@ class Orders extends Component {
         </main>
         <Footer />
         <Modal type="checkout" show={this.state.checkingOut} close={this.hideCheckoutModal} />
-      </Aux>
+      </React.Fragment>
     );
   }
 }

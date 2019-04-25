@@ -1,5 +1,4 @@
 import React from 'react';
-import Aux from '../../../hoc/auxiliary';
 import NavListItem from './NavListItem/NavListItem';
 
 const navList = props => {
@@ -42,7 +41,7 @@ const navList = props => {
   const list = !props.authenticated
     ? navListHandler(unauth, classes)
     : navListHandler(actualList, classes);
-  return <Aux>{props.mobile && !props.show ? null : list}</Aux>;
+  return <React.Fragment>{props.mobile && !props.show ? null : list}</React.Fragment>;
 };
 
 export default navList;

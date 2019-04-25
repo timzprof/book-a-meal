@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import classes from './Header.module.css';
-import Aux from '../../hoc/auxiliary';
 import Logo from '../Logo/Logo';
 import BurgerMenu from '../BurgerMenu/BurgerMenu';
 import NavList from '../Header/NavList/NavList';
@@ -21,7 +20,7 @@ const header = props => {
   const show = state.mobileToggle ? '' : 'Hide';
   const extraStyles = props.homepage ? classes.HomeHeader : '';
   return (
-    <Aux>
+    <React.Fragment>
       <Overlay show={state.mobileToggle || props.overlay} />
       <header className={[classes.Header, extraStyles].join(' ')}>
         <nav className={classes.MainNav}>
@@ -49,7 +48,7 @@ const header = props => {
         </nav>
         {props.homepage ? <HomeBanner /> : <Banner text={props.bannerText} />}
       </header>
-    </Aux>
+    </React.Fragment>
   );
 };
 
