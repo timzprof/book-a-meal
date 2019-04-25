@@ -18,6 +18,7 @@ const CatererMealOptions = lazy(() => import('./containers/Caterer/CatererMealOp
 const CatererOrderHistory = lazy(() => import('./containers/Caterer/CatererOrderHistory/CatererOrderHistory'));
 const CatererTodaysOrders = lazy(() => import('./containers/Caterer/CatererTodaysOrders/CatererTodaysOrders'));
 const CatererManageMenu = lazy(() => import('./containers/Caterer/CatererManageMenu/CatererMangeMenu'));
+const NotFound = lazy(() => import('./components/UI/NotFound/Notfound'));
 
 
 const App = () => {
@@ -78,6 +79,7 @@ const App = () => {
       <ProtectedCatererRoute path="/admin/order-history" component={CatererOrderHistory} />
       <ProtectedCatererRoute path="/admin/todays-orders" component={CatererTodaysOrders} />
       <ProtectedCatererRoute path="/admin/menu" component={CatererManageMenu} />
+      <LazyRoute component={NotFound} />
     </Switch>
   );
 };
