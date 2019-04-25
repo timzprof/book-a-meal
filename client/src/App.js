@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
+
 import Home from './containers/Home/Home';
-import UserLogin from './components/Forms/UserLogin/UserLogin';
-import UserRegister from './components/Forms/UserRegister/UserRegister';
-import CatererLogin from './components/Forms/CatererLogin/CatererLogin';
-import CatererRegister from './components/Forms/CatererRegister/CatererRegister';
-import Menu from './containers/Menu/Menu';
-import OrderHistory from './containers/OrderHistory/OrderHistory';
-import Orders from './containers/Orders/Orders';
-import CatererHome from './containers/Caterer/CatererHome/CatererHome';
-import CatererMealOptions from './containers/Caterer/CatererMealOptions/CatererMealOptions';
-import CatererOrderHistory from './containers/Caterer/CatererOrderHistory/CatererOrderHistory';
-import CatererTodaysOrders from './containers/Caterer/CatererTodaysOrders/CatererTodaysOrders';
-import CatererManageMenu from './containers/Caterer/CatererManageMenu/CatererMangeMenu';
+import Loading from './components/UI/Loading/Loading';
 import './iziToast.min.css';
 import useGlobal from './store';
+
+const UserLogin = lazy(() => import('./components/Forms/UserLogin/UserLogin'));
+const UserRegister = lazy(() => import('./components/Forms/UserRegister/UserRegister'));
+const CatererLogin = lazy(() => import('./components/Forms/CatererLogin/CatererLogin'));
+const CatererRegister = lazy(() => import('./components/Forms/CatererRegister/CatererRegister'));
+const Menu = lazy(() => import('./containers/Menu/Menu'));
+const OrderHistory = lazy(() => import('./containers/OrderHistory/OrderHistory'));
+const Orders = lazy(() => import('./containers/Orders/Orders'));
+const CatererHome = lazy(() => import('./containers/Caterer/CatererHome/CatererHome'));
+const CatererMealOptions = lazy(() => import('./containers/Caterer/CatererMealOptions/CatererMealOptions'));
+const CatererOrderHistory = lazy(() => import('./containers/Caterer/CatererOrderHistory/CatererOrderHistory'));
+const CatererTodaysOrders = lazy(() => import('./containers/Caterer/CatererTodaysOrders/CatererTodaysOrders'));
+const CatererManageMenu = lazy(() => import('./containers/Caterer/CatererManageMenu/CatererMangeMenu'));
 
 
 const App = () => {
@@ -24,7 +27,13 @@ const App = () => {
     <Route
       {...rest}
       render={props =>
-        globalState.userAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
+        globalState.userAuthenticated ? (
+          <Suspense fallback={<Loading />}>
+            <Component {...props} />
+          </Suspense>
+        ) : (
+          <Redirect to="/login" />
+        )
       }
     />
   );
@@ -33,21 +42,38 @@ const App = () => {
     <Route
       {...rest}
       render={props =>
-        globalState.catererAuthenticated ? <Component {...props} /> : <Redirect to="/admin/login" />
+        globalState.catererAuthenticated ? (
+          <Suspense fallback={<Loading />}>
+            <Component {...props} />
+          </Suspense>
+        ) : (
+          <Redirect to="/admin/login" />
+        )
       }
+    />
+  );
+
+  const LazyRoute = ({ component: Component, ...rest }) => (
+    <Route
+      {...rest}
+      render={props => (
+        <Suspense fallback={<Loading />}>
+          <Component {...props} />
+        </Suspense>
+      )}
     />
   );
   return (
     <Switch>
       <Route exact path="/" component={Home} />
-      <Route path="/login" component={UserLogin} />
-      <Route path="/register" component={UserRegister} />
+      <LazyRoute path="/login" component={UserLogin} />
+      <LazyRoute path="/register" component={UserRegister} />
       <ProtectedUserRoute path="/menu" component={Menu} />
       <ProtectedUserRoute path="/order-history" component={OrderHistory} />
       <ProtectedUserRoute path="/orders" component={Orders} />
       <ProtectedCatererRoute exact path="/admin/" component={CatererHome} />
-      <Route path="/admin/login" component={CatererLogin} />
-      <Route path="/admin/register" component={CatererRegister} />
+      <LazyRoute path="/admin/login" component={CatererLogin} />
+      <LazyRoute path="/admin/register" component={CatererRegister} />
       <ProtectedCatererRoute path="/admin/meals" component={CatererMealOptions} />
       <ProtectedCatererRoute path="/admin/order-history" component={CatererOrderHistory} />
       <ProtectedCatererRoute path="/admin/todays-orders" component={CatererTodaysOrders} />

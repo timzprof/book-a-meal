@@ -1,16 +1,15 @@
 import React from 'react';
-import Aux from '../../../../hoc/auxiliary';
 
 const tableRow = (props) => {
   const meals = props.order.meals.map(meal => {
     return (
-      <Aux key={meal.id}>
+      <React.Fragment key={meal.id}>
         <li className={props.classes.Order__summary__list__item}>
           <p>{meal.name}</p>
           <span className={props.classes.Dash}>-</span>
           <p>{meal.quantity}</p>
         </li>
-      </Aux>
+      </React.Fragment>
     );
   });
   return (
