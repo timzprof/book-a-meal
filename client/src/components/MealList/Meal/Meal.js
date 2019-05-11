@@ -70,11 +70,13 @@ const meal = props => {
     mealOptions,
     manageMenu,
   };
+  const { REACT_APP_ROOT: ROOT } = process.env;
+  const imgUrl = `${ROOT}${props.meal.imageUrl}`; 
   return (
     <article className={classes.Menu__food__item}>
       {props.meal.quantity > 0 && props.type === 'manageMenu' ? <div className="ribbon ribbon-top-left"><span>Selected</span></div> : null}
       <div className={classes.Menu__food__item__img}>
-        <img src={props.meal.imageUrl} alt="Meal" />
+        <img src={imgUrl} alt="Meal" />
       </div>
       { mealTypes[props.type] }
     </article>

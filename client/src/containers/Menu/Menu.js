@@ -7,12 +7,16 @@ import Modal from '../../components/UI/Modal/Modal';
 import * as actions from '../../store/action/index';
 
 class Menu extends Component {
+  componentDidMount() {
+    this.props.onFetchMenus();
+  }
+
   render(){
   return (
     <React.Fragment>
       <Header bannerText="Today's Menus" authenticated={this.props.userAuthenticated} overlay={this.props.beingOrdered} />
       <main>
-        <CatererMenus catererData={this.props.menu} handleQuantity={this.props.onHandleQuantity} />
+        <CatererMenus catererData={this.props.menus} handleQuantity={this.props.onHandleQuantity} />
       </main>
       <Modal
         meal={this.props.beingOrdered}
@@ -27,17 +31,28 @@ class Menu extends Component {
 };
 
 const mapStateToProps = state => {
+  const menus = [];
+  state.menu.menus.forEach(menu => {
+    menus.push({
+      id: menu.id,
+      catererId: menu.catererId,
+      catering_service: menu.caterer.catering_service,
+      meals: JSON.parse(menu.meals)
+    });
+  });
   return {
     userAuthenticated: state.auth.userAuthenticated,
     beingOrdered: state.menu.beingOrdered,
-    menu: state.menu.meals
+    token: state.auth.token,
+    menus,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onHandleQuantity: (mealId) => dispatch(actions.handleQuantity(mealId)),
-    onHideQuantityModal: () => dispatch(actions.hideQuantityModal())
+    onHideQuantityModal: () => dispatch(actions.hideQuantityModal()),
+    onFetchMenus: () => dispatch(actions.menuFetchMenus())
   };
 };
 

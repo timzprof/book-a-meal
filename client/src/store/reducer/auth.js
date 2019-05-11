@@ -9,13 +9,13 @@ const initialState = {
   catererAuthenticated: false,
   loading: false,
   error: null,
-  authRedirect: '/',
+  authRedirectPath: '/',
   errorMessage: null
 };
 
 const setAuthRedirect = (state, action) => {
   return updateObject(state, {
-    authRedirect: action.path
+    authRedirectPath: action.path
   });
 };
 

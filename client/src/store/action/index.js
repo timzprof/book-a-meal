@@ -1,3 +1,3 @@
 export { userSignIn, userSignUp, setAuthRedirect, userAuthCheckState, userLogout } from './auth';
 
-export { hideQuantityModal, handleQuantity } from './menu';
+export { hideQuantityModal, handleQuantity, menuFetchMenus } from './menu';

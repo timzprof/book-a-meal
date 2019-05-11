@@ -138,7 +138,8 @@ class UserLogin extends Component {
 const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
-    userAuthenticated: state.auth.userAuthenticated
+    userAuthenticated: state.auth.userAuthenticated,
+    authRedirectPath: state.auth.authRedirectPath
   };
 };
 
