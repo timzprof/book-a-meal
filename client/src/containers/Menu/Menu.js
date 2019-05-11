@@ -1,27 +1,44 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import CatererMenus from '../../components/CatererMenus/CatererMenus';
 import Modal from '../../components/UI/Modal/Modal';
-import useGlobal from '../../store';
+import * as actions from '../../store/action/index';
 
-const menu = props => {
-  const [globalState, globalActions] = useGlobal();
+class Menu extends Component {
+  render(){
   return (
     <React.Fragment>
-      <Header bannerText="Today's Menus" authenticated={globalState.userAuthenticated} overlay={globalState.beingOrdered} />
+      <Header bannerText="Today's Menus" authenticated={this.props.userAuthenticated} overlay={this.props.beingOrdered} />
       <main>
-        <CatererMenus catererData={globalState.menu} handleQuantity={globalActions.menu.handleQuantity} />
+        <CatererMenus catererData={this.props.menu} handleQuantity={this.props.onHandleQuantity} />
       </main>
       <Modal
-        meal={globalState.beingOrdered}
+        meal={this.props.beingOrdered}
         type="quantity"
-        show={globalState.beingOrdered !== null}
-        close={globalActions.menu.hideQuantityModal}
+        show={this.props.beingOrdered !== null}
+        close={this.props.onHideQuantityModal}
       />
       <Footer />
     </React.Fragment>
   );
+  }
 };
 
-export default menu;
+const mapStateToProps = state => {
+  return {
+    userAuthenticated: state.auth.userAuthenticated,
+    beingOrdered: state.menu.beingOrdered,
+    menu: state.menu.meals
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onHandleQuantity: (mealId) => dispatch(actions.handleQuantity(mealId)),
+    onHideQuantityModal: () => dispatch(actions.hideQuantityModal())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);

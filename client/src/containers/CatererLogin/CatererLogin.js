@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import classes from '../Form.module.css';
-import FormWrapper from '../FormWrapper/FormWrapper';
-import FormHeadText from '../FormHeadText/FormHeadText';
+import classes from '../../components/Forms/Form.module.css';
+import FormWrapper from '../../components/Forms/FormWrapper/FormWrapper';
+import FormHeadText from '../../components/Forms/FormHeadText/FormHeadText';
 
 const catererLogin = (props) => {
   return (

@@ -22,14 +22,14 @@ const navList = props => {
     '/menu': `Today's Menu`,
     '/orders': 'Orders',
     '/order-history': 'Order History',
-    '#': 'Logout'
+    '/logout': 'Logout'
   };
   const caterer = {
     '/admin/': `Today's Menu`,
     '/admin/meals': 'Meal Options',
     '/admin/todays-orders': 'Todays Orders',
     '/admin/order-history': 'Order History',
-    '#': 'Logout'
+    '/admin/logout': 'Logout'
   };
   const unauth = {
     '/login': 'Login',
