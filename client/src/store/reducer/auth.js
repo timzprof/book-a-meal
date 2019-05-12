@@ -37,8 +37,10 @@ const userSignInSuccess = (state, action) => {
 const userSignInFailed = (state, action) => {
   return updateObject(state, {
     loading: false,
-    error: action.error,
-    errorMessage: action.error.message
+    error: action.error.response ? action.error.response : action.error,
+    errorMessage: action.error.response.data.message
+      ? action.error.response.data.message
+      : action.error.message
   });
 };
 const userSignUpStart = (state, action) => {
@@ -57,18 +59,20 @@ const userSignUpSuccess = (state, action) => {
 const userSignUpFailed = (state, action) => {
   return updateObject(state, {
     loading: false,
-    error: action.error,
-    errorMessage: action.error.message
+    error: action.error.response ? action.error.response : action.error,
+    errorMessage: action.error.response.data.message
+      ? action.error.response.data.message
+      : action.error.message
   });
 };
 
 const userLogout = (state, action) => {
-    return updateObject(state, {
-        token: null,
-        userAuthenticated: false,
-        user: null
-    });
-}
+  return updateObject(state, {
+    token: null,
+    userAuthenticated: false,
+    user: null
+  });
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -87,7 +91,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.USER_SIGN_UP_FAILED:
       return userSignUpFailed(state, action);
     case actionTypes.USER_LOGOUT:
-        return userLogout(state, action);
+      return userLogout(state, action);
     default:
       return state;
   }

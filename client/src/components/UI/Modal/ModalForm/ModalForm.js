@@ -39,12 +39,14 @@ class ModalForm extends Component {
       </div>
     </form>
   );
+  const { REACT_APP_ROOT: ROOT } = process.env;
+  const imgUrl = this.props.meal ? `${ROOT}${this.props.meal.imageUrl}` : null; 
   const quantityForm = this.props.meal ? (
     <form method="post" id="addToOrders" ref={this.quantityForm} onSubmit={this.addToOrders}>
       <div className={classes.Modal__body}>
         <div>
           <div className={classes.Meal__Details__img}>
-            <img src={this.props.meal.imageUrl} alt="Meal" />
+            <img src={imgUrl} alt="Meal" />
           </div>
           <div>
             <p>{this.props.meal.name}</p>

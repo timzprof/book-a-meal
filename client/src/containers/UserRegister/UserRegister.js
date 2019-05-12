@@ -65,7 +65,8 @@ class UserRegister extends Component {
         },
         value: '',
         validation: {
-          required: true
+          required: true,
+          minLength: 7
         },
         valid: false,
         touched: false
@@ -79,7 +80,8 @@ class UserRegister extends Component {
         },
         value: '',
         validation: {
-          required: true
+          required: true,
+          minLength: 7
         },
         valid: false,
         touched: false

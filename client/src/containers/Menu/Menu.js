@@ -4,6 +4,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import CatererMenus from '../../components/CatererMenus/CatererMenus';
 import Modal from '../../components/UI/Modal/Modal';
+import Loading from '../../components/UI/Loading/Loading';
 import * as actions from '../../store/action/index';
 
 class Menu extends Component {
@@ -11,24 +12,35 @@ class Menu extends Component {
     this.props.onFetchMenus();
   }
 
-  render(){
-  return (
-    <React.Fragment>
-      <Header bannerText="Today's Menus" authenticated={this.props.userAuthenticated} overlay={this.props.beingOrdered} />
-      <main>
-        <CatererMenus catererData={this.props.menus} handleQuantity={this.props.onHandleQuantity} />
-      </main>
-      <Modal
-        meal={this.props.beingOrdered}
-        type="quantity"
-        show={this.props.beingOrdered !== null}
-        close={this.props.onHideQuantityModal}
-      />
-      <Footer />
-    </React.Fragment>
-  );
+  render() {
+    return (
+      <React.Fragment>
+        <Header
+          bannerText="Today's Menus"
+          authenticated={this.props.userAuthenticated}
+          overlay={this.props.beingOrdered}
+        />
+        <main>
+          {!this.props.loading ? (
+            <CatererMenus
+              catererData={this.props.menus}
+              handleQuantity={this.props.onHandleQuantity}
+            />
+          ) : (
+            <Loading />
+          )}
+        </main>
+        <Modal
+          meal={this.props.beingOrdered}
+          type="quantity"
+          show={this.props.beingOrdered !== null}
+          close={this.props.onHideQuantityModal}
+        />
+        <Footer />
+      </React.Fragment>
+    );
   }
-};
+}
 
 const mapStateToProps = state => {
   const menus = [];
@@ -44,16 +56,20 @@ const mapStateToProps = state => {
     userAuthenticated: state.auth.userAuthenticated,
     beingOrdered: state.menu.beingOrdered,
     token: state.auth.token,
-    menus,
+    loading: state.menu.loading,
+    menus
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onHandleQuantity: (mealId) => dispatch(actions.handleQuantity(mealId)),
+    onHandleQuantity: mealId => dispatch(actions.handleQuantity(mealId)),
     onHideQuantityModal: () => dispatch(actions.hideQuantityModal()),
     onFetchMenus: () => dispatch(actions.menuFetchMenus())
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Menu);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Menu);

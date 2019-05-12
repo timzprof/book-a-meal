@@ -10,9 +10,25 @@ const initialState = {
 };
 
 const menuHandleQuantity = (state, action) => {
-  const mealIndex = state.meals.findIndex(meal => meal.id === Number(action.mealId));
+  const menus = [];
+  state.menus.forEach(menu => {
+    menus.push({
+      id: menu.id,
+      catererId: menu.catererId,
+      catering_service: menu.caterer.catering_service,
+      meals: JSON.parse(menu.meals)
+    });
+  });
+  let menuMeal = [];
+  menus.forEach((menu, i) => {
+    const mealIndex = menu.meals.findIndex(meal => Number(meal.id) === Number(action.mealId));
+    if (mealIndex >= 0) {
+      menuMeal[0] = i;
+      menuMeal[1] = mealIndex;
+    }
+  });
   return updateObject(state, {
-    beingOrdered: state.meals[mealIndex]
+    beingOrdered: menus[menuMeal[0]].meals[menuMeal[1]]
   });
 };
 

@@ -36,7 +36,8 @@ class UserLogin extends Component {
         },
         value: '',
         validation: {
-          required: true
+          required: true,
+          minLength: 7
         },
         valid: false,
         touched: false
