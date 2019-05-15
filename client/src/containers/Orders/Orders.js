@@ -8,7 +8,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import Loading from '../../components/UI/Loading/Loading';
 
 class Orders extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.onFetchOrders();
   }
 
@@ -35,7 +35,7 @@ class Orders extends Component {
       <React.Fragment>
         <Header bannerText="Your Order Summary" authenticated overlay={this.props.checkingOut} />
         <main>
-          {!this.props.loading ? (
+          {!this.props.loading || this.props.orderMeals.length !== 0 ? (
             <MealList
               type="orders"
               meals={this.props.orderMeals}

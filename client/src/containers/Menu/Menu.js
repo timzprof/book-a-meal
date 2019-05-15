@@ -12,14 +12,14 @@ class Menu extends Component {
     this.props.onFetchMenus();
   }
 
-  addMealToOrders = (orderData) => {
+  addMealToOrders = orderData => {
     this.props.onAddToOrders(orderData);
     console.log(this.props.orderResCode);
-    if(this.props.orderResCode === 200){
+    if (this.props.orderResCode === 200) {
       this.props.onResetOrderResCode();
       this.props.history.push('/orders');
     }
-  }
+  };
 
   render() {
     return (
@@ -30,7 +30,7 @@ class Menu extends Component {
           overlay={this.props.beingOrdered}
         />
         <main>
-          {!this.props.loading ? (
+          {!this.props.loading || this.props.menus.length !== 0 ? (
             <CatererMenus
               catererData={this.props.menus}
               handleQuantity={this.props.onHandleQuantity}
