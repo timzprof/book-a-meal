@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import classes from './Modal.module.css';
-import formClasses from '../../Forms/Form.module.css';
 import ModalTitle from './ModalTitle/ModalTitle';
 import ModalForm from './ModalForm/ModalForm';
 
@@ -41,10 +40,10 @@ class Modal extends Component {
             </div>
             <ModalForm
               classes={classes}
-              formClasses={formClasses}
               type={this.props.type}
               closeModal={this.props.close}
               meal={this.props.meal !== null ? this.props.meal : false}
+              addMealToOrders={this.props.orderMeal}
             />
           </div>
         </div>

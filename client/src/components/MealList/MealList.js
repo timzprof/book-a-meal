@@ -4,6 +4,7 @@ import classes from '../CatererMenus/CatererMenu/Menu.module.css';
 import Meal from './Meal/Meal';
 
 const mealList = props => {
+  console.log(props);
   const meals = props.meals.map(meal => {
     return <Meal key={meal.id} meal={meal} {...props} />;
   });
@@ -41,7 +42,11 @@ const mealList = props => {
         </button>
       ) : null}
       {props.type === 'manageMenu' ? (
-        <button className={['Btn', classes.Right__Btn__lg].join(' ')} id="save-menu" onClick={props.saveMenu}>
+        <button
+          className={['Btn', classes.Right__Btn__lg].join(' ')}
+          id="save-menu"
+          onClick={props.saveMenu}
+        >
           Save
         </button>
       ) : null}

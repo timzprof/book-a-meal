@@ -9,6 +9,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import authReducer from './store/reducer/auth';
 import menuReducer from './store/reducer/menu';
+import ordersReducer from './store/reducer/orders';
 
 const composeEnhancers =
   process.env.NODE_ENV === 'development'
@@ -17,7 +18,8 @@ const composeEnhancers =
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  menu: menuReducer
+  menu: menuReducer,
+  orders: ordersReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

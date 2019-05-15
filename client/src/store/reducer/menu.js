@@ -54,8 +54,8 @@ const menuFetchMenusSuccess = (state, action) => {
 const menuFetchMenusFailed = (state, action) => {
   return updateObject(state, {
     loading: false,
-    error: action.error,
-    errorMessage: action.error.message
+    error: action.error.response ? action.error.response : action.error,
+    errorMessage: action.error.response ? action.error.response.data.message : action.error.message
   });
 };
 

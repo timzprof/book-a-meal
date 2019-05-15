@@ -1,33 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../store/action/index';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import MealList from '../../components/MealList/MealList';
 import Modal from '../../components/UI/Modal/Modal';
+import Loading from '../../components/UI/Loading/Loading';
 
 class Orders extends Component {
-  state = {
-    orderData: {
-      meals: [
-        {
-          id: 1,
-          name: 'Jollof Rice',
-          price: 500,
-          imageUrl: 'http://foodhub.ng/wp-content/uploads/2018/12/jollof-rice-cooking.jpg',
-          quantity: 1
-        },
-        {
-          id: 2,
-          name: 'Bread & Beans',
-          price: 500,
-          imageUrl:
-            'https://thumbs.dreamstime.com/b/plate-ewa-agoyin-agege-bread-nigerian-staple-meal-consisting-baked-beans-red-palm-oil-stew-sauce-90622030.jpg',
-          quantity: 1
-        }
-      ],
-      catering_service: 'Book A Meal Caterer'
-    },
-    checkingOut: false
-  };
+  componentWillMount() {
+    this.props.onFetchOrders();
+  }
 
   decreaseQuantity = () => {
     console.log('Decrease');
@@ -41,31 +24,52 @@ class Orders extends Component {
 
   showCheckoutModal = () => {
     this.setState({ checkingOut: true });
-  }
+  };
 
   hideCheckoutModal = () => {
     this.setState({ checkingOut: false });
-  }
+  };
 
   render() {
     return (
       <React.Fragment>
-        <Header bannerText="Your Order Summary" authenticated overlay={this.state.checkingOut} />
+        <Header bannerText="Your Order Summary" authenticated overlay={this.props.checkingOut} />
         <main>
-          <MealList
-            type="orders"
-            meals={this.state.orderData.meals}
-            increaseQuantity={this.increaseQuantity}
-            decreaseQuantity={this.decreaseQuantity}
-            deleteOrder={this.deleteOrder}
-            checkout={this.showCheckoutModal}
-          />
+          {!this.props.loading ? (
+            <MealList
+              type="orders"
+              meals={this.props.orderMeals}
+              increaseQuantity={this.increaseQuantity}
+              decreaseQuantity={this.decreaseQuantity}
+              deleteOrder={this.deleteOrder}
+              checkout={this.showCheckoutModal}
+            />
+          ) : (
+            <Loading />
+          )}
         </main>
         <Footer />
-        <Modal type="checkout" show={this.state.checkingOut} close={this.hideCheckoutModal} />
+        <Modal type="checkout" show={this.props.checkingOut} close={this.hideCheckoutModal} />
       </React.Fragment>
     );
   }
 }
 
-export default Orders;
+const mapStateToProps = state => {
+  return {
+    orderMeals: state.orders.orderMeals,
+    checkingOut: state.orders.checkingOut,
+    loading: state.orders.loading
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onFetchOrders: () => dispatch(actions.orderFetchUserOrders())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Orders);

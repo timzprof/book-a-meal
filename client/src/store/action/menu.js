@@ -36,6 +36,7 @@ export const menuFetchMenusFailed = error => {
 
 export const menuFetchMenus = () => {
   return dispatch => {
+    dispatch(menuFetchMenusStart());
     client
       .get('/menu/')
       .then(response => {
