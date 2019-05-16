@@ -36,6 +36,7 @@
     "@babel/preset-env": "^7.3.1",
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
+    "cron": "^1.7.1",
     "dotenv": "^6.2.0",
     "esm": "^3.2.4",
     "express": "^4.16.4",
