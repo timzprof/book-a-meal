@@ -10,6 +10,10 @@ import swaggerUi from 'swagger-ui-express';
 import Routes from './routes';
 import sequelize from './util/db';
 import swaggerDocument from './swagger.json';
+import Menu from './models/menu';
+import OrderItem from './models/orderItem';
+
+const { CronJob } = require('cron');
 
 config();
 
@@ -25,6 +29,16 @@ app.use(favicon(path.resolve('client/build/favicon.ico')));
 app.use(express.static(path.resolve('client')));
 app.use(express.static(path.resolve('client/build')));
 app.use(express.static(path.resolve('api/images')));
+
+const wipeDbTrash = async () => {
+  try {
+    await Menu.truncate();
+    await OrderItem.truncate();
+    console.log('Wiped DB Trash');
+  } catch (err) {
+    console.log('Error while wiping DB:', err.message);
+  }
+};
 
 // Enable CORS
 app.use((req, res, next) => {
@@ -55,6 +69,8 @@ sequelize
     console.log('DB Connection has been established');
     app.listen(PORT, null, null, () => {
       app.emit('dbConnected');
+      const job = new CronJob('0 0 * * *', wipeDbTrash);
+      job.start();
     });
   })
   .catch(err => {
