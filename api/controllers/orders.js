@@ -61,7 +61,7 @@ class OrderController {
       orderItems.forEach(orderItem => {
         const orderMeal = { ...orderItem };
         orderMeal.meal.quantity = orderItem.quantity;
-        meals.push(orderMeal.meal);
+        meals.push({ ...orderMeal.meal.dataValues, orderId: orderItem.id });
         total += orderItem.quantity * orderMeal.meal.price;
       });
       const order = { meals, total };
