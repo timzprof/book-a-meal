@@ -26,7 +26,6 @@ export const orderAddToOrders = order => {
     client
       .post('/orders', order)
       .then(response => {
-        console.log(response.data);
         dispatch(orderAddToOrdersSuccess());
       })
       .catch(error => {
@@ -102,6 +101,7 @@ export const orderIncrement = (orderItemId) => {
       action: 'increase'
     })
       .then(() => {
+        dispatch(orderFetchUserOrders());
         dispatch(orderIncrementSuccess());
       })
       .catch(error => {
@@ -137,6 +137,7 @@ export const orderDecrement = (orderItemId) => {
       action: 'decrease'
     })
       .then(() => {
+        dispatch(orderFetchUserOrders());
         dispatch(orderDecrementSuccess());
       })
       .catch(error => {
@@ -144,3 +145,38 @@ export const orderDecrement = (orderItemId) => {
       });
   }
 }
+
+export const orderDeleteStart = () => {
+  return {
+    type: actionTypes.ORDER_DELETE_START
+  }
+}
+
+export const orderDeleteSuccess = () => {
+  return {
+    type: actionTypes.ORDER_DELETE_SUCCESS
+  }
+}
+
+export const orderDeleteFailed = error => {
+  return {
+    type: actionTypes.ORDER_DELETE_FAILED,
+    error
+  }
+}
+
+export const orderDelete = orderItemId => {
+  return dispatch => {
+    dispatch(orderDeleteStart());
+    client.put(`/orders/${orderItemId}`, {
+      action: 'delete'
+    })
+      .then(() => {
+        dispatch(orderFetchUserOrders());
+        dispatch(orderDeleteSuccess());
+      })
+      .catch(error => {
+        dispatch(orderDeleteFailed(error));
+      });
+  }
+} 

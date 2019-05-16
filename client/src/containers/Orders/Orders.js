@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { isEqual } from 'lodash';
 import * as actions from '../../store/action/index';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -8,13 +9,27 @@ import Modal from '../../components/UI/Modal/Modal';
 import Loading from '../../components/UI/Loading/Loading';
 import client from '../../shared/axios-client';
 import withHttpHandler from '../../hoc/withHttpHandler/withHttpHandler';
+import Empty from '../../components/UI/Empty/Empty';
 
 class Orders extends Component {
   componentDidMount() {
     this.props.onFetchOrders();
   }
-  deleteOrder = () => {
-    console.log('Delete');
+
+  shouldComponentUpdate(nextProps) {
+    return !isEqual(nextProps.orderMeals,this.props.orderMeals);
+  }
+
+  handleOrderDelete = orderItemId => {
+    this.props.onOrderDelete(orderItemId);
+  };
+
+  handleOrderIncrement = orderItemId => {
+    this.props.onOrderIncrement(orderItemId);
+  };
+
+  handleOrderDecrement = orderItemId => {
+    this.props.onOrderDecrement(orderItemId);
   };
 
   showCheckoutModal = () => {
@@ -26,23 +41,26 @@ class Orders extends Component {
   };
 
   render() {
+    let orders = (
+      <MealList
+        type="orders"
+        meals={this.props.orderMeals}
+        increaseQuantity={this.handleOrderIncrement}
+        decreaseQuantity={this.handleOrderDecrement}
+        deleteOrder={this.handleOrderDelete}
+        checkout={this.showCheckoutModal}
+      />
+    );
+    if (this.props.loading) {
+      orders = <Loading />;
+    }
+    if (!this.props.loading && this.props.orderMeals.length === 0) {
+      orders = <Empty orders />;
+    }
     return (
       <React.Fragment>
         <Header bannerText="Your Order Summary" authenticated overlay={this.props.checkingOut} />
-        <main>
-          {!this.props.loading || this.props.orderMeals.length !== 0 ? (
-            <MealList
-              type="orders"
-              meals={this.props.orderMeals}
-              increaseQuantity={this.props.onOrderIncrement}
-              decreaseQuantity={this.props.onOrderDecrement}
-              deleteOrder={this.deleteOrder}
-              checkout={this.showCheckoutModal}
-            />
-          ) : (
-            <Loading />
-          )}
-        </main>
+        <main>{orders}</main>
         <Footer />
         <Modal type="checkout" show={this.props.checkingOut} close={this.hideCheckoutModal} />
       </React.Fragment>
@@ -62,7 +80,8 @@ const mapDispatchToProps = dispatch => {
   return {
     onFetchOrders: () => dispatch(actions.orderFetchUserOrders()),
     onOrderIncrement: orderItemId => dispatch(actions.orderIncrement(orderItemId)),
-    onOrderDecrement: orderItemId => dispatch(actions.orderDecrement(orderItemId))
+    onOrderDecrement: orderItemId => dispatch(actions.orderDecrement(orderItemId)),
+    onOrderDelete: orderItemId => dispatch(actions.orderDelete(orderItemId))
   };
 };
 

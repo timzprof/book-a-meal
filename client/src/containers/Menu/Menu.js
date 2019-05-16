@@ -28,10 +28,10 @@ class Menu extends Component {
     let mealList = (
       <CatererMenus catererData={this.props.menus} handleQuantity={this.props.onHandleQuantity} />
     );
-    if(this.props.loading) {
+    if (this.props.loading) {
       mealList = <Loading />;
     }
-    if(!this.props.loading && this.props.menus.length === 0) {
+    if (!this.props.loading && this.props.menus.length === 0) {
       mealList = <Empty menu />;
     }
     return (
@@ -41,9 +41,7 @@ class Menu extends Component {
           authenticated={this.props.userAuthenticated}
           overlay={this.props.beingOrdered}
         />
-        <main>
-          {mealList}
-        </main>
+        <main>{mealList}</main>
         <Modal
           meal={this.props.beingOrdered}
           type="quantity"

@@ -4,7 +4,6 @@ import classes from '../CatererMenus/CatererMenu/Menu.module.css';
 import Meal from './Meal/Meal';
 
 const mealList = props => {
-  console.log(props);
   const meals = props.meals.map(meal => {
     return <Meal key={meal.id} meal={meal} {...props} />;
   });

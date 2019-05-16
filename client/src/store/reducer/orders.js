@@ -57,7 +57,7 @@ const orderFetchUserOrdersFailed = (state, action) => {
   return updateObject(state, {
     loading: false,
     error: action.error,
-    errorMessage: action.error.response.data ? action.error.response.data : action.error.message
+    errorMessage: action.error.response ? action.error.response.data : action.error.message
   });
 };
 
@@ -101,6 +101,24 @@ const orderDecrementFailed = (state, action) => {
   });
 };
 
+const orderDeleteStart = (state, action) => {
+  return updateObject(state, {
+    loading: true
+  });
+}
+
+const orderDeleteSuccess = (state, action) => {
+  return updateObject(state, {
+    loading: false
+  });
+}
+
+const orderDeleteFailed = (state, action) => {
+  return updateObject(state, {
+    loading: false
+  });
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.ORDER_ADD_TO_ORDERS_START:
@@ -129,6 +147,12 @@ const reducer = (state = initialState, action) => {
       return orderDecrementSuccess(state, action);
     case actionTypes.ORDER_DECREMENT_FAILED:
       return orderDecrementFailed(state, action);
+    case actionTypes.ORDER_DELETE_START:
+      return orderDeleteStart(state, action);
+    case actionTypes.ORDER_DELETE_SUCCESS:
+      return orderDeleteSuccess(state, action);
+    case actionTypes.ORDER_DELETE_FAILED:
+      return orderDeleteFailed(state, action);
     default:
       return state;
   }

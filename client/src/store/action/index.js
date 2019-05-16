@@ -7,5 +7,6 @@ export {
   resetOrderResCode,
   orderFetchUserOrders,
   orderDecrement,
-  orderIncrement
+  orderIncrement,
+  orderDelete
 } from './orders';
