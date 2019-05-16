@@ -1,4 +1,4 @@
-.notFound {
+.NotFound {
   width: 100vw;
   display: flex;
   height: 100vh;
@@ -6,7 +6,7 @@
   align-items: center;
 }
 
-.notFound img {
-    width: 70%;
-    height: 80%;
+.NotFound img {
+  width: 70%;
+  height: 80%;
 }

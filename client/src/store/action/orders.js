@@ -74,3 +74,73 @@ export const orderFetchUserOrders = () => {
       });
   };
 };
+
+export const orderIncrementStart = () => {
+  return {
+    type: actionTypes.ORDER_INCREMENT_START
+  }
+}
+
+export const orderIncrementSuccess = () => {
+  return {
+    type: actionTypes.ORDER_INCREMENT_SUCCESS
+  }
+}
+
+export const orderIncrementFailed = (error) => {
+  return {
+    type: actionTypes.ORDER_INCREMENT_FAILED,
+    error
+  }
+}
+
+
+export const orderIncrement = (orderItemId) => {
+  return dispatch => {
+    dispatch(orderIncrementStart());
+    client.put(`/orders/${orderItemId}`, {
+      action: 'increase'
+    })
+      .then(() => {
+        dispatch(orderIncrementSuccess());
+      })
+      .catch(error => {
+        dispatch(orderIncrementFailed(error));
+      });
+  }
+}
+
+
+export const orderDecrementStart = () => {
+  return {
+    type: actionTypes.ORDER_DECREMENT_START
+  }
+}
+
+export const orderDecrementSuccess = () => {
+  return {
+    type: actionTypes.ORDER_DECREMENT_SUCCESS
+  }
+}
+
+export const orderDecrementFailed = (error) => {
+  return {
+    type: actionTypes.ORDER_DECREMENT_FAILED,
+    error
+  }
+}
+
+export const orderDecrement = (orderItemId) => {
+  return dispatch => {
+    dispatch(orderDecrementStart());
+    client.put(`/orders/${orderItemId}`, {
+      action: 'decrease'
+    })
+      .then(() => {
+        dispatch(orderDecrementSuccess());
+      })
+      .catch(error => {
+        dispatch(orderDecrementFailed(error));
+      });
+  }
+}

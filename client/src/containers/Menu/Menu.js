@@ -6,6 +6,9 @@ import CatererMenus from '../../components/CatererMenus/CatererMenus';
 import Modal from '../../components/UI/Modal/Modal';
 import Loading from '../../components/UI/Loading/Loading';
 import * as actions from '../../store/action/index';
+import client from '../../shared/axios-client';
+import withHttpHandler from '../../hoc/withHttpHandler/withHttpHandler';
+import Empty from '../../components/UI/Empty/Empty';
 
 class Menu extends Component {
   componentDidMount() {
@@ -22,6 +25,15 @@ class Menu extends Component {
   };
 
   render() {
+    let mealList = (
+      <CatererMenus catererData={this.props.menus} handleQuantity={this.props.onHandleQuantity} />
+    );
+    if(this.props.loading) {
+      mealList = <Loading />;
+    }
+    if(!this.props.loading && this.props.menus.length === 0) {
+      mealList = <Empty menu />;
+    }
     return (
       <React.Fragment>
         <Header
@@ -30,14 +42,7 @@ class Menu extends Component {
           overlay={this.props.beingOrdered}
         />
         <main>
-          {!this.props.loading || this.props.menus.length !== 0 ? (
-            <CatererMenus
-              catererData={this.props.menus}
-              handleQuantity={this.props.onHandleQuantity}
-            />
-          ) : (
-            <Loading />
-          )}
+          {mealList}
         </main>
         <Modal
           meal={this.props.beingOrdered}
@@ -85,4 +90,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Menu);
+)(withHttpHandler(Menu, client));

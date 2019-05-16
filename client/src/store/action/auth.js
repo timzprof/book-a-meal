@@ -14,12 +14,11 @@ export const userSignInStart = () => {
   };
 };
 
-export const userSignInSuccess = (token, user) => {
+export const userSignInSuccess = (token) => {
   return {
     type: actionTypes.USER_SIGN_IN_SUCCESS,
     data: {
-      token,
-      user
+      token
     }
   };
 };
@@ -42,8 +41,7 @@ export const userSignIn = ({ email, password }) => {
         const expirationDate = new Date(new Date().getTime() + 86400 * 1000);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('expirationDate', expirationDate);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        dispatch(userSignInSuccess(response.data.token, response.data.user));
+        dispatch(userSignInSuccess(response.data.token));
       })
       .catch(error => {
         dispatch(userSignInFailed(error));
@@ -57,12 +55,11 @@ export const userSignUpStart = () => {
   };
 };
 
-export const userSignUpSuccess = (token, user) => {
+export const userSignUpSuccess = (token) => {
   return {
     type: actionTypes.USER_SIGN_UP_SUCCESS,
     data: {
-      token,
-      user
+      token
     }
   };
 };
@@ -87,8 +84,7 @@ export const userSignUp = ({ name, email, phone, password }) => {
         const expirationDate = new Date(new Date().getTime() + 86400 * 1000);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('expirationDate', expirationDate);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        dispatch(userSignUpSuccess(response.data.token, response.data.user));
+        dispatch(userSignUpSuccess(response.data.token));
       })
       .catch(error => {
         dispatch(userSignUpFailed(error));
@@ -120,8 +116,7 @@ export const userAuthCheckState = () => {
       } else {
           const expirationDate = new Date(localStorage.getItem('expirationDate'));
           if(expirationDate > new Date()){
-              const user = JSON.parse(localStorage.getItem('user'));
-              dispatch(userSignInSuccess(token, user));
+              dispatch(userSignInSuccess(token));
               dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000))
           }else {
               dispatch(userLogout());

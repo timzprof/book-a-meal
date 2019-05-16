@@ -61,6 +61,46 @@ const orderFetchUserOrdersFailed = (state, action) => {
   });
 };
 
+const orderIncrementStart = (state, action) => {
+  return updateObject(state, {
+    loading: true
+  });
+};
+
+const orderIncrementSuccess = (state, action) => {
+  return updateObject(state, {
+    loading: false
+  });
+};
+
+const orderIncrementFailed = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    error: action.error.response ? action.error.response : action.error,
+    errorMessage: action.error.response ? action.error.response.data.message : action.error.message
+  });
+};
+
+const orderDecrementStart = (state, action) => {
+  return updateObject(state, {
+    loading: true
+  });
+};
+
+const orderDecrementSuccess = (state, action) => {
+  return updateObject(state, {
+    loading: false
+  });
+};
+
+const orderDecrementFailed = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    error: action.error.response ? action.error.response : action.error,
+    errorMessage: action.error.response ? action.error.response.data.message : action.error.message
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.ORDER_ADD_TO_ORDERS_START:
@@ -77,6 +117,18 @@ const reducer = (state = initialState, action) => {
       return orderFetchUserOrdersSuccess(state, action);
     case actionTypes.ORDER_FETCH_USER_ORDERS_FAILED:
       return orderFetchUserOrdersFailed(state, action);
+    case actionTypes.ORDER_INCREMENT_START:
+      return orderIncrementStart(state, action);
+    case actionTypes.ORDER_INCREMENT_SUCCESS:
+      return orderIncrementSuccess(state, action);
+    case actionTypes.ORDER_INCREMENT_FAILED:
+      return orderIncrementFailed(state, action);
+    case actionTypes.ORDER_DECREMENT_START:
+      return orderDecrementStart(state, action);
+    case actionTypes.ORDER_DECREMENT_SUCCESS:
+      return orderDecrementSuccess(state, action);
+    case actionTypes.ORDER_DECREMENT_FAILED:
+      return orderDecrementFailed(state, action);
     default:
       return state;
   }

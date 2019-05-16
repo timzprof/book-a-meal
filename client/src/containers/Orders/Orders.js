@@ -6,18 +6,13 @@ import Footer from '../../components/Footer/Footer';
 import MealList from '../../components/MealList/MealList';
 import Modal from '../../components/UI/Modal/Modal';
 import Loading from '../../components/UI/Loading/Loading';
+import client from '../../shared/axios-client';
+import withHttpHandler from '../../hoc/withHttpHandler/withHttpHandler';
 
 class Orders extends Component {
   componentDidMount() {
     this.props.onFetchOrders();
   }
-
-  decreaseQuantity = () => {
-    console.log('Decrease');
-  };
-  increaseQuantity = () => {
-    console.log('Increase');
-  };
   deleteOrder = () => {
     console.log('Delete');
   };
@@ -39,8 +34,8 @@ class Orders extends Component {
             <MealList
               type="orders"
               meals={this.props.orderMeals}
-              increaseQuantity={this.increaseQuantity}
-              decreaseQuantity={this.decreaseQuantity}
+              increaseQuantity={this.props.onOrderIncrement}
+              decreaseQuantity={this.props.onOrderDecrement}
               deleteOrder={this.deleteOrder}
               checkout={this.showCheckoutModal}
             />
@@ -65,11 +60,13 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchOrders: () => dispatch(actions.orderFetchUserOrders())
+    onFetchOrders: () => dispatch(actions.orderFetchUserOrders()),
+    onOrderIncrement: orderItemId => dispatch(actions.orderIncrement(orderItemId)),
+    onOrderDecrement: orderItemId => dispatch(actions.orderDecrement(orderItemId))
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Orders);
+)(withHttpHandler(Orders, client));

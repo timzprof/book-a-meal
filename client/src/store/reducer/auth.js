@@ -2,8 +2,6 @@ import * as actionTypes from '../action/actionTypes';
 import { updateObject } from '../../shared/utility';
 
 const initialState = {
-  user: null,
-  caterer: null,
   token: null,
   userAuthenticated: false,
   catererAuthenticated: false,
@@ -28,7 +26,6 @@ const userSignInStart = (state, action) => {
 const userSignInSuccess = (state, action) => {
   return updateObject(state, {
     userAuthenticated: true,
-    user: action.data.user,
     token: action.data.token,
     loading: false
   });
@@ -51,7 +48,6 @@ const userSignUpStart = (state, action) => {
 const userSignUpSuccess = (state, action) => {
   return updateObject(state, {
     userAuthenticated: true,
-    user: action.data.user,
     token: action.data.token,
     loading: false
   });
@@ -69,8 +65,7 @@ const userSignUpFailed = (state, action) => {
 const userLogout = (state, action) => {
   return updateObject(state, {
     token: null,
-    userAuthenticated: false,
-    user: null
+    userAuthenticated: false
   });
 };
 

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import OrderTable from '../../components/Table/OrderTable/OrderTable';
+import client from '../../shared/axios-client';
+import withHttpHandler from '../../hoc/withHttpHandler/withHttpHandler';
 
 class OrderHistory extends Component {
   state = {
@@ -57,4 +59,4 @@ class OrderHistory extends Component {
   }
 }
 
-export default OrderHistory;
+export default withHttpHandler(OrderHistory, client);

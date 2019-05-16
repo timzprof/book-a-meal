@@ -2,4 +2,10 @@ export { userSignIn, userSignUp, setAuthRedirect, userAuthCheckState, userLogout
 
 export { hideQuantityModal, handleQuantity, menuFetchMenus } from './menu';
 
-export { orderAddToOrders, resetOrderResCode, orderFetchUserOrders } from './orders';
+export {
+  orderAddToOrders,
+  resetOrderResCode,
+  orderFetchUserOrders,
+  orderDecrement,
+  orderIncrement
+} from './orders';

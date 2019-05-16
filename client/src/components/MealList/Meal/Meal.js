@@ -21,7 +21,7 @@ const meal = props => {
         <p>{props.meal.name}</p>
         <p>${props.meal.price.toFixed(2)}</p>
         <p>
-          <button className={classes.Tiny__btn} onClick={props.decreaseQuantity}>-</button> {props.meal.quantity} <button className={classes.Tiny__btn} onClick={props.increaseQuantity}>+</button>
+          <button className={classes.Tiny__btn} onClick={() => props.decreaseQuantity(props.meal.id)}>-</button> {props.meal.quantity} <button className={classes.Tiny__btn} onClick={() => props.increaseQuantity(props.meal.id)}>+</button>
         </p>
       </div>
       <div className={classes.Meal__btn}>
