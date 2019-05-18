@@ -40,10 +40,12 @@ const wipeDbTrash = async () => {
   }
 };
 
+const ORIGIN = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '*';
+
 // Enable CORS
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Origin', ORIGIN);
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
@@ -58,7 +60,7 @@ app.use((req, res, next) => {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1', Routes);
 
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.resolve('client/build', 'index.html'));
 });
 
