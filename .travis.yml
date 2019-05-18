@@ -6,6 +6,8 @@ cache:
     - "node_modules"
 services:
   - postgresql
+before_install:
+  - npm cache verify
 env:
   global:
   - CODECLIMATE_REPO_TOKEN=096eba8d4801fa3d74634b4f237045a7c15239d0e6c454d992689cab00ab7593
