@@ -19,7 +19,6 @@ export const toast = (type, message) => {
     color: color[type],
     icon: `ico-${type}`,
     title: `${type.charAt(0).toUpperCase() + type.slice(1)}`,
-    message: message,
-    onClosing: () => {}
+    message
   });
 };
