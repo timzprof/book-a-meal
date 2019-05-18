@@ -9,13 +9,14 @@ import './iziToast.min.css';
 
 const UserLogin = lazy(() => import('./containers/UserLogin/UserLogin'));
 const UserRegister = lazy(() => import('./containers/UserRegister/UserRegister'));
-const CatererLogin = lazy(() => import('./containers/CatererLogin/CatererLogin'));
-const CatererRegister = lazy(() => import('./containers/CatererRegister/CatererRegister'));
 const Menu = lazy(() => import('./containers/Menu/Menu'));
 const OrderHistory = lazy(() => import('./containers/OrderHistory/OrderHistory'));
 const Orders = lazy(() => import('./containers/Orders/Orders'));
 const UserLogout = lazy(() => import('./containers/UserLogout/UserLogout'));
 const CatererHome = lazy(() => import('./containers/Caterer/CatererHome/CatererHome'));
+const CatererLogin = lazy(() => import('./containers/Caterer/CatererLogin/CatererLogin'));
+const CatererRegister = lazy(() => import('./containers/Caterer/CatererRegister/CatererRegister'));
+const CatererLogout = lazy(() => import('./containers/Caterer/CatererLogout/CatererLogout'));
 const CatererMealOptions = lazy(() =>
   import('./containers/Caterer/CatererMealOptions/CatererMealOptions')
 );
@@ -91,6 +92,7 @@ class App extends Component {
         <ProtectedCatererRoute path="/admin/order-history" component={CatererOrderHistory} />
         <ProtectedCatererRoute path="/admin/todays-orders" component={CatererTodaysOrders} />
         <ProtectedCatererRoute path="/admin/menu" component={CatererManageMenu} />
+        <LazyRoute path="/admin/logout" component={CatererLogout} />
         <LazyRoute component={NotFound} />
       </Switch>
     );

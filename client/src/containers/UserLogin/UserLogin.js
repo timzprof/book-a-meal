@@ -93,38 +93,38 @@ class UserLogin extends Component {
     }
     let form = (
       <FormWrapper>
-          <form
-            action="#"
-            method="post"
-            className={classes.Page_form}
-            id="loginForm"
-            onSubmit={this.handleUserLogin}
-          >
-            <FormHeadText user="user" type="login" />
-            {formElements.map(formElement => (
-              <Input
-                key={formElement.id}
-                elementType={formElement.config.elementType}
-                elementConfig={formElement.config.elementConfig}
-                value={formElement.config.value}
-                invalid={!formElement.config.valid}
-                touched={formElement.config.touched}
-                shouldValidate={formElement.config.validation}
-                changed={e => this.inputChangeHandler(e, formElement.id)}
-              />
-            ))}
-            <button type="submit">Login</button>
-            <p className={classes.Page_link}>
-              No Account? <Link to="/register">Register</Link>
-            </p>
-            <p className={classes.Page_link}>
-              Back to Home? <Link to="/">Click Here</Link>
-            </p>
-          </form>
-        </FormWrapper>
+        <form
+          action="#"
+          method="post"
+          className={classes.Page_form}
+          id="loginForm"
+          onSubmit={this.handleUserLogin}
+        >
+          <FormHeadText user="user" type="login" />
+          {formElements.map(formElement => (
+            <Input
+              key={formElement.id}
+              elementType={formElement.config.elementType}
+              elementConfig={formElement.config.elementConfig}
+              value={formElement.config.value}
+              invalid={!formElement.config.valid}
+              touched={formElement.config.touched}
+              shouldValidate={formElement.config.validation}
+              changed={e => this.inputChangeHandler(e, formElement.id)}
+            />
+          ))}
+          <button type="submit">Login</button>
+          <p className={classes.Page_link}>
+            No Account? <Link to="/register">Register</Link>
+          </p>
+          <p className={classes.Page_link}>
+            Back to Home? <Link to="/">Click Here</Link>
+          </p>
+        </form>
+      </FormWrapper>
     );
 
-    if(this.props.loading){
+    if (this.props.loading) {
       form = <Loading />;
     }
     return (

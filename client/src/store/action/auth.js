@@ -33,6 +33,7 @@ export const userSignInFailed = error => {
 
 export const userSignIn = ({ email, password }) => {
   return dispatch => {
+    dispatch(userSignInStart());
     client
       .post('/auth/login', {
         email,
@@ -77,6 +78,7 @@ export const userSignUpFailed = error => {
 
 export const userSignUp = ({ name, email, phone, password }) => {
   return dispatch => {
+    dispatch(userSignUpStart());
     client
       .post('/auth/signup', {
         name,
@@ -108,16 +110,31 @@ export const logout = () => {
   };
 };
 
+export const clogout = () => {
+  return dispatch => {
+    localStorage.removeItem('c_token');
+    localStorage.removeItem('c_expirationDate');
+    toast('success', 'Logging Out...');
+    dispatch(catererLogout());
+  };
+};
+
 export const userLogout = () => {
   return {
     type: actionTypes.USER_LOGOUT
   };
 };
 
-export const checkAuthTimeout = expirationTime => {
+export const catererLogout = () => {
+  return {
+    type: actionTypes.CATERER_LOGOUT
+  };
+};
+
+export const checkAuthTimeout = (expirationTime, logoutFn) => {
   return dispatch => {
     setTimeout(() => {
-      dispatch(userLogout());
+      dispatch(logoutFn());
     }, expirationTime * 1000);
   };
 };
@@ -126,15 +143,125 @@ export const userAuthCheckState = () => {
   return dispatch => {
     const token = localStorage.getItem('token');
     if (!token) {
-      dispatch(userLogout());
+      dispatch(logout());
     } else {
       const expirationDate = new Date(localStorage.getItem('expirationDate'));
       if (expirationDate > new Date()) {
         dispatch(userSignInSuccess(token));
-        dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
+        dispatch(
+          checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000, logout)
+        );
       } else {
-        dispatch(userLogout());
+        dispatch(logout());
       }
+    }
+  };
+};
+
+export const catererAuthCheckState = () => {
+  return dispatch => {
+    const token = localStorage.getItem('c_token');
+    if (!token) {
+      dispatch(clogout());
+    } else {
+      const expirationDate = new Date(localStorage.getItem('c_expirationDate'));
+      if (expirationDate > new Date()) {
+        dispatch(catererSignInSuccess(token));
+        dispatch(
+          checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000, clogout)
+        );
+      } else {
+        dispatch(clogout());
+      }
+    }
+  };
+};
+
+export const catererSignInStart = () => {
+  return {
+    type: actionTypes.CATERER_SIGN_IN_START
+  };
+};
+
+export const catererSignInSuccess = token => {
+  return {
+    type: actionTypes.CATERER_SIGN_IN_SUCCESS,
+    data: {
+      token
+    }
+  };
+};
+
+export const catererSignInFailed = error => {
+  return {
+    type: actionTypes.CATERER_SIGN_IN_FAILED,
+    error
+  };
+};
+
+export const catererSignIn = ({ email, password }) => {
+  return async dispatch => {
+    dispatch(catererSignInStart());
+    try {
+      const response = await client.post(
+        '/auth/caterer/login',
+        { email, password },
+        { headers: { 'X-REQ': 'yes' } }
+      );
+      const expirationDate = new Date(new Date().getTime() + 86400 * 1000);
+      localStorage.setItem('c_token', response.data.token);
+      localStorage.setItem('c_expirationDate', expirationDate);
+      toast(response.data.status, response.data.message);
+      dispatch(catererSignInSuccess(response.data.token));
+    } catch (error) {
+      console.log(error);
+      const msg = error.response ? error.response.data.message : 'Internal Server Error';
+      toast('error', msg);
+      dispatch(catererSignInFailed(error));
+    }
+  };
+};
+
+export const catererSignUpStart = () => {
+  return {
+    type: actionTypes.CATERER_SIGN_UP_START
+  };
+};
+
+export const catererSignUpSuccess = token => {
+  return {
+    type: actionTypes.CATERER_SIGN_UP_SUCCESS,
+    data: {
+      token
+    }
+  };
+};
+
+export const catererSignUpFailed = error => {
+  return {
+    type: actionTypes.CATERER_SIGN_UP_FAILED,
+    error
+  };
+};
+
+export const catererSignUp = ({ name, email, phone, password, catering_service }) => {
+  return async dispatch => {
+    dispatch(catererSignUpStart());
+    try {
+      const response = await client.post(
+        '/auth/caterer/signup',
+        { name, email, phone, password, catering_service },
+        { headers: { 'X-REQ': 'yes' } }
+      );
+      const expirationDate = new Date(new Date().getTime() + 86400 * 1000);
+      localStorage.setItem('c_token', response.data.token);
+      localStorage.setItem('c_expirationDate', expirationDate);
+      toast(response.data.status, response.data.message);
+      dispatch(catererSignUpSuccess(response.data.token));
+    } catch (error) {
+      const msg = error.response ? error.response.data.message : 'Internal Server Error';
+      toast('error', msg);
+      dispatch(catererSignUpFailed(error));
     }
   };
 };

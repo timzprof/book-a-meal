@@ -1,4 +1,13 @@
-export { userSignIn, userSignUp, setAuthRedirect, userAuthCheckState, logout } from './auth';
+export {
+  userSignIn,
+  userSignUp,
+  setAuthRedirect,
+  userAuthCheckState,
+  logout,
+  clogout,
+  catererSignIn,
+  catererSignUp
+} from './auth';
 
 export { hideQuantityModal, handleQuantity, menuFetchMenus } from './menu';
 

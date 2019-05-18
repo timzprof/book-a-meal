@@ -1,31 +1,17 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import classes from '../../components/Forms/Form.module.css';
-import FormWrapper from '../../components/Forms/FormWrapper/FormWrapper';
-import FormHeadText from '../../components/Forms/FormHeadText/FormHeadText';
-import Loading from '../../components/UI/Loading/Loading';
-import Input from '../../components/Forms/Input/Input';
-import { updateObject, checkValidity } from '../../shared/utility';
-import * as actions from '../../store/action/index';
+import classes from '../../../components/Forms/Form.module.css';
+import FormWrapper from '../../../components/Forms/FormWrapper/FormWrapper';
+import FormHeadText from '../../../components/Forms/FormHeadText/FormHeadText';
+import Loading from '../../../components/UI/Loading/Loading';
+import Input from '../../../components/Forms/Input/Input';
+import { updateObject, checkValidity } from '../../../shared/utility';
+import * as actions from '../../../store/action/index';
 
-class UserRegister extends Component {
+class CatererLogin extends Component {
   state = {
     controls: {
-      name: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'text',
-          name: 'name',
-          placeholder: 'Your Name'
-        },
-        value: '',
-        validation: {
-          required: true
-        },
-        valid: false,
-        touched: false
-      },
       email: {
         elementType: 'input',
         elementConfig: {
@@ -37,21 +23,6 @@ class UserRegister extends Component {
         validation: {
           required: true,
           isEmail: true
-        },
-        valid: false,
-        touched: false
-      },
-      phone: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'tel',
-          name: 'phone',
-          placeholder: 'Your Phone Number'
-        },
-        value: '',
-        validation: {
-          required: true,
-          isNumeric: true
         },
         valid: false,
         touched: false
@@ -70,33 +41,17 @@ class UserRegister extends Component {
         },
         valid: false,
         touched: false
-      },
-      confirm_password: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'password',
-          name: 'confirm_password',
-          placeholder: 'Confirm Password'
-        },
-        value: '',
-        validation: {
-          required: true,
-          minLength: 7
-        },
-        valid: false,
-        touched: false
       }
     },
     formIsValid: false
   };
-
-  handleUserRegister = e => {
+  handleCatererLogin = e => {
     e.preventDefault();
     const formData = {};
     for (let formElementId in this.state.controls) {
       formData[formElementId] = this.state.controls[formElementId].value;
     }
-    this.props.onUserSignUp(formData);
+    this.props.onCatererSignIn(formData);
   };
 
   inputChangeHandler = (e, inputId) => {
@@ -120,10 +75,9 @@ class UserRegister extends Component {
 
   componentDidMount() {
     if (!this.props.loading) {
-      this.props.onSetAuthRedirect('/menu');
+      this.props.onSetAuthRedirect('/admin/meals');
     }
   }
-
   render() {
     const formElements = Object.keys(this.state.controls).map(key => {
       return {
@@ -133,20 +87,20 @@ class UserRegister extends Component {
     });
     let authRedirect = null;
 
-    if (this.props.userAuthenticated) {
+    if (this.props.catererAuthenticated) {
       authRedirect = <Redirect to={this.props.authRedirectPath} />;
     }
 
     let form = (
       <FormWrapper>
         <form
-          onSubmit={this.handleUserRegister}
           action="#"
           method="post"
           className={classes.Page_form}
-          id="registerForm"
+          id="catererLoginForm"
+          onSubmit={this.handleCatererLogin}
         >
-          <FormHeadText user="user" type="register" />
+          <FormHeadText user="caterer" type="login" />
           {formElements.map(formElement => (
             <Input
               key={formElement.id}
@@ -159,9 +113,9 @@ class UserRegister extends Component {
               changed={e => this.inputChangeHandler(e, formElement.id)}
             />
           ))}
-          <button type="submit">Register</button>
+          <button type="submit">Login</button>
           <p className={classes.Page_link}>
-            Already Have an Account? <Link to="/login">Login</Link>
+            No Account? <Link to="/admin/register">Register</Link>
           </p>
           <p className={classes.Page_link}>
             Back to Home? <Link to="/">Click Here</Link>
@@ -169,7 +123,6 @@ class UserRegister extends Component {
         </form>
       </FormWrapper>
     );
-
     if (this.props.loading) {
       form = <Loading />;
     }
@@ -185,14 +138,14 @@ class UserRegister extends Component {
 const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
-    userAuthenticated: state.auth.userAuthenticated,
+    catererAuthenticated: state.auth.catererAuthenticated,
     authRedirectPath: state.auth.authRedirectPath
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onUserSignUp: data => dispatch(actions.userSignUp(data)),
+    onCatererSignIn: formData => dispatch(actions.catererSignIn(formData)),
     onSetAuthRedirect: path => dispatch(actions.setAuthRedirect(path))
   };
 };
@@ -200,4 +153,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UserRegister);
+)(CatererLogin);

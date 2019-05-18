@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import classes from '../../components/Forms/Form.module.css';
-import FormWrapper from '../../components/Forms/FormWrapper/FormWrapper';
-import FormHeadText from '../../components/Forms/FormHeadText/FormHeadText';
-import Loading from '../../components/UI/Loading/Loading';
-import Input from '../../components/Forms/Input/Input';
-import { updateObject, checkValidity } from '../../shared/utility';
-import * as actions from '../../store/action/index';
+import classes from '../../../components/Forms/Form.module.css';
+import FormWrapper from '../../../components/Forms/FormWrapper/FormWrapper';
+import FormHeadText from '../../../components/Forms/FormHeadText/FormHeadText';
+import Loading from '../../../components/UI/Loading/Loading';
+import Input from '../../../components/Forms/Input/Input';
+import { updateObject, checkValidity } from '../../../shared/utility';
+import * as actions from '../../../store/action/index';
 
-class UserRegister extends Component {
+class CatererRegister extends Component {
   state = {
     controls: {
       name: {
@@ -56,6 +56,20 @@ class UserRegister extends Component {
         valid: false,
         touched: false
       },
+      catering_service: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          name: 'catering_service',
+          placeholder: 'Catering Service Name'
+        },
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
+      },
       password: {
         elementType: 'input',
         elementConfig: {
@@ -90,13 +104,13 @@ class UserRegister extends Component {
     formIsValid: false
   };
 
-  handleUserRegister = e => {
+  handleCatererRegister = e => {
     e.preventDefault();
     const formData = {};
     for (let formElementId in this.state.controls) {
       formData[formElementId] = this.state.controls[formElementId].value;
     }
-    this.props.onUserSignUp(formData);
+    this.props.onCatererSignup(formData);
   };
 
   inputChangeHandler = (e, inputId) => {
@@ -120,7 +134,7 @@ class UserRegister extends Component {
 
   componentDidMount() {
     if (!this.props.loading) {
-      this.props.onSetAuthRedirect('/menu');
+      this.props.onSetAuthRedirect('/admin/meals');
     }
   }
 
@@ -133,20 +147,20 @@ class UserRegister extends Component {
     });
     let authRedirect = null;
 
-    if (this.props.userAuthenticated) {
+    if (this.props.catererAuthenticated) {
       authRedirect = <Redirect to={this.props.authRedirectPath} />;
     }
 
     let form = (
       <FormWrapper>
         <form
-          onSubmit={this.handleUserRegister}
           action="#"
           method="post"
           className={classes.Page_form}
-          id="registerForm"
+          id="catererRegisterForm"
+          onSubmit={this.handleCatererRegister}
         >
-          <FormHeadText user="user" type="register" />
+          <FormHeadText user="caterer" type="register" />
           {formElements.map(formElement => (
             <Input
               key={formElement.id}
@@ -161,7 +175,7 @@ class UserRegister extends Component {
           ))}
           <button type="submit">Register</button>
           <p className={classes.Page_link}>
-            Already Have an Account? <Link to="/login">Login</Link>
+            Already Have an Account? <Link to="/admin/login">Login</Link>
           </p>
           <p className={classes.Page_link}>
             Back to Home? <Link to="/">Click Here</Link>
@@ -169,7 +183,6 @@ class UserRegister extends Component {
         </form>
       </FormWrapper>
     );
-
     if (this.props.loading) {
       form = <Loading />;
     }
@@ -185,14 +198,13 @@ class UserRegister extends Component {
 const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
-    userAuthenticated: state.auth.userAuthenticated,
-    authRedirectPath: state.auth.authRedirectPath
+    catererAuthenticated: state.auth.catererAuthenticated
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onUserSignUp: data => dispatch(actions.userSignUp(data)),
+    onCatererSignup: formData => dispatch(actions.catererSignUp(formData)),
     onSetAuthRedirect: path => dispatch(actions.setAuthRedirect(path))
   };
 };
@@ -200,4 +212,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UserRegister);
+)(CatererRegister);

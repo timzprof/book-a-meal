@@ -12,7 +12,9 @@ const withHttpHandler = (WrappedComponent, client) => {
       this.reqInterceptor = client.interceptors.request.use(req => {
         this.setState({ error: null });
         if (req.baseURL === API_URL && !req.headers.Authorization) {
-          const token = localStorage.getItem('token');
+          const token = !req.headers['X-Req']
+            ? localStorage.getItem('token')
+            : localStorage.getItem('c_token');
           if (token) {
             req.headers.Authorization = token;
           }
