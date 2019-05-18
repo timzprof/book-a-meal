@@ -9,7 +9,7 @@
     "dev": "nodemon --exec babel-node api/index.js",
     "test": "nyc mocha -r esm --recursive -t 5000 --exit",
     "build-server": "npm run clean && npm run build-babel && npm audit fix",
-    "build-client": "cd client && npm install && npm run build",
+    "build-client": "cd client && npm install && cat .env.heroku >> .env && npm run build",
     "build": "npm run build-server && npm run build-client",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./api -s --copy-files",
