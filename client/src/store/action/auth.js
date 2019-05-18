@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import client from '../../shared/axios-client';
+import { toast } from '../../shared/toast';
 
 export const setAuthRedirect = path => {
   return {
@@ -14,7 +15,7 @@ export const userSignInStart = () => {
   };
 };
 
-export const userSignInSuccess = (token) => {
+export const userSignInSuccess = token => {
   return {
     type: actionTypes.USER_SIGN_IN_SUCCESS,
     data: {
@@ -41,9 +42,12 @@ export const userSignIn = ({ email, password }) => {
         const expirationDate = new Date(new Date().getTime() + 86400 * 1000);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('expirationDate', expirationDate);
+        toast(response.data.status, response.data.message);
         dispatch(userSignInSuccess(response.data.token));
       })
       .catch(error => {
+        const msg = error.response ? error.response.data.message : 'Internal Server Error';
+        toast('error', msg);
         dispatch(userSignInFailed(error));
       });
   };
@@ -55,7 +59,7 @@ export const userSignUpStart = () => {
   };
 };
 
-export const userSignUpSuccess = (token) => {
+export const userSignUpSuccess = token => {
   return {
     type: actionTypes.USER_SIGN_UP_SUCCESS,
     data: {
@@ -84,17 +88,27 @@ export const userSignUp = ({ name, email, phone, password }) => {
         const expirationDate = new Date(new Date().getTime() + 86400 * 1000);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('expirationDate', expirationDate);
+        toast(response.data.status, response.data.message);
         dispatch(userSignUpSuccess(response.data.token));
       })
       .catch(error => {
+        const msg = error.response ? error.response.data.message : 'Internal Server Error';
+        toast('error', msg);
         dispatch(userSignUpFailed(error));
       });
   };
 };
 
+export const logout = () => {
+  return dispatch => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('expirationDate');
+    toast('success', 'Logging Out...');
+    dispatch(userLogout());
+  };
+};
+
 export const userLogout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('expirationDate');
   return {
     type: actionTypes.USER_LOGOUT
   };
@@ -110,17 +124,17 @@ export const checkAuthTimeout = expirationTime => {
 
 export const userAuthCheckState = () => {
   return dispatch => {
-      const token = localStorage.getItem('token');
-      if(!token) {
-          dispatch(userLogout())
+    const token = localStorage.getItem('token');
+    if (!token) {
+      dispatch(userLogout());
+    } else {
+      const expirationDate = new Date(localStorage.getItem('expirationDate'));
+      if (expirationDate > new Date()) {
+        dispatch(userSignInSuccess(token));
+        dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
       } else {
-          const expirationDate = new Date(localStorage.getItem('expirationDate'));
-          if(expirationDate > new Date()){
-              dispatch(userSignInSuccess(token));
-              dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000))
-          }else {
-              dispatch(userLogout());
-          }
+        dispatch(userLogout());
       }
-  }
-}
+    }
+  };
+};
