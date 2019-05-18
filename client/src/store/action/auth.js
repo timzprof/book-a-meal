@@ -32,25 +32,20 @@ export const userSignInFailed = error => {
 };
 
 export const userSignIn = ({ email, password }) => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(userSignInStart());
-    client
-      .post('/auth/login', {
-        email,
-        password
-      })
-      .then(response => {
-        const expirationDate = new Date(new Date().getTime() + 86400 * 1000);
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('expirationDate', expirationDate);
-        toast(response.data.status, response.data.message);
-        dispatch(userSignInSuccess(response.data.token));
-      })
-      .catch(error => {
-        const msg = error.response ? error.response.data.message : 'Internal Server Error';
-        toast('error', msg);
-        dispatch(userSignInFailed(error));
-      });
+    try {
+      const response = await client.post('/auth/login', { email, password });
+      const expirationDate = new Date(new Date().getTime() + 86400 * 1000);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('expirationDate', expirationDate);
+      toast(response.data.status, response.data.message);
+      dispatch(userSignInSuccess(response.data.token));
+    } catch (error) {
+      const msg = error.response ? error.response.data.message : 'Internal Server Error';
+      toast('error', msg);
+      dispatch(userSignInFailed(error));
+    }
   };
 };
 
@@ -77,27 +72,20 @@ export const userSignUpFailed = error => {
 };
 
 export const userSignUp = ({ name, email, phone, password }) => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(userSignUpStart());
-    client
-      .post('/auth/signup', {
-        name,
-        email,
-        phone,
-        password
-      })
-      .then(response => {
-        const expirationDate = new Date(new Date().getTime() + 86400 * 1000);
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('expirationDate', expirationDate);
-        toast(response.data.status, response.data.message);
-        dispatch(userSignUpSuccess(response.data.token));
-      })
-      .catch(error => {
-        const msg = error.response ? error.response.data.message : 'Internal Server Error';
-        toast('error', msg);
-        dispatch(userSignUpFailed(error));
-      });
+    try {
+      const response = await client.post('/auth/signup', { name, email, phone, password });
+      const expirationDate = new Date(new Date().getTime() + 86400 * 1000);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('expirationDate', expirationDate);
+      toast(response.data.status, response.data.message);
+      dispatch(userSignUpSuccess(response.data.token));
+    } catch (error) {
+      const msg = error.response ? error.response.data.message : 'Internal Server Error';
+      toast('error', msg);
+      dispatch(userSignUpFailed(error));
+    }
   };
 };
 

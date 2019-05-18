@@ -55,7 +55,7 @@ class Orders extends Component {
       orders = <Loading />;
     }
     if (!this.props.loading && this.props.orderMeals.length === 0) {
-      orders = <Empty orders />;
+      orders = <Empty text="Orders" />;
     }
     return (
       <React.Fragment>

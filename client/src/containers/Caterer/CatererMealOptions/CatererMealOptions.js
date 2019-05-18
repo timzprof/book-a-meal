@@ -1,51 +1,67 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../../store/action/index';
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import MealList from '../../../components/MealList/MealList';
+import Loading from '../../../components/UI/Loading/Loading';
+import Empty from '../../../components/UI/Empty/Empty';
+import client from '../../../shared/axios-client';
+import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
 
 class CatererMealOptions extends Component {
-  state = {
-    data: {
-      meals: [
-        {
-          id: 1,
-          name: 'Jollof Rice',
-          price: 500,
-          imageUrl: 'http://foodhub.ng/wp-content/uploads/2018/12/jollof-rice-cooking.jpg',
-          quantity: 5
-        },
-        {
-          id: 2,
-          name: 'Bread & Beans',
-          price: 500,
-          imageUrl:
-            'https://thumbs.dreamstime.com/b/plate-ewa-agoyin-agege-bread-nigerian-staple-meal-consisting-baked-beans-red-palm-oil-stew-sauce-90622030.jpg',
-          quantity: 5
-        }
-      ],
-      catering_service: 'Book A Meal Caterer'
-    }
+  componentDidMount() {
+    this.props.onFetchMeals();
   }
-  
+
   removeMealFromMenu = () => {};
 
   showEditMealModal = () => {};
+
   render() {
+    let meals = (
+      <MealList
+        type="mealOptions"
+        meals={this.props.meals}
+        remove={this.removeMealFromMenu}
+        showEditMealModal={this.showEditMealModal}
+      />
+    );
+    if (this.props.loading) {
+      meals = <Loading />;
+    }
+    if (!this.props.loading && this.props.meals.length === 0) {
+      meals = <Empty text="Meal Options" />;
+    }
     return (
       <React.Fragment>
-        <Header bannerText="Your Meal Options" authenticated caterer />
-        <main>
-          <MealList
-            type="mealOptions"
-            meals={this.state.data.meals}
-            remove={this.removeMealFromMenu}
-            showEditMealModal={this.showEditMealModal}
-          />
-        </main>
+        <Header
+          bannerText="Your Meal Options"
+          authenticated={this.props.catererAuthenticated}
+          caterer
+        />
+        <main>{meals}</main>
         <Footer />
       </React.Fragment>
     );
   }
 }
 
-export default CatererMealOptions;
+const mapStateToProps = state => {
+  return {
+    loading: state.meal.loading,
+    catererAuthenticated: state.auth.catererAuthenticated,
+    meals: state.meal.meals
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onFetchMeals: () => dispatch(actions.mealFetchMeals())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withHttpHandler(CatererMealOptions, client));

@@ -35,15 +35,13 @@ export const menuFetchMenusFailed = error => {
 };
 
 export const menuFetchMenus = () => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(menuFetchMenusStart());
-    client
-      .get('/menu/')
-      .then(response => {
-        dispatch(menuFetchMenusSuccess(response.data.data));
-      })
-      .catch(error => {
-        dispatch(menuFetchMenusFailed(error));
-      });
+    try {
+      const response = await client.get('/menu/');
+      dispatch(menuFetchMenusSuccess(response.data.data));
+    } catch (error) {
+      dispatch(menuFetchMenusFailed(error));
+    }
   };
 };

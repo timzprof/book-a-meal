@@ -32,9 +32,27 @@ const CatererManageMenu = lazy(() =>
 const NotFound = lazy(() => import('./components/UI/NotFound/Notfound'));
 
 class App extends Component {
-  componentDidMount() {
-    this.props.onTryAutoLogin();
+  state = {
+    loginType: 'user'
+  };
+  componentWillMount() {
+    if (window.location.pathname.includes('admin')) {
+      this.setState({ loginType: 'caterer' });
+    }
   }
+  componentDidMount() {
+    this.autoLogin();
+  }
+
+  autoLogin = () => {
+    if (this.state.loginType === 'user') {
+      this.props.onTryAutoLogin();
+    } else if (this.state.loginType === 'caterer') {
+      this.props.onCatererAutoLogin();
+    } else {
+      return null;
+    }
+  };
   render() {
     const ProtectedUserRoute = ({ component: Component, ...rest }) => (
       <Route
@@ -108,7 +126,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTryAutoLogin: () => dispatch(actions.userAuthCheckState())
+    onTryAutoLogin: () => dispatch(actions.userAuthCheckState()),
+    onCatererAutoLogin: () => dispatch(actions.catererAuthCheckState())
   };
 };
 

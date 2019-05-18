@@ -7,9 +7,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 import authReducer from './store/reducer/auth';
 import menuReducer from './store/reducer/menu';
 import ordersReducer from './store/reducer/orders';
+import mealReducer from './store/reducer/meal';
 
 const composeEnhancers =
   process.env.NODE_ENV === 'development'
@@ -19,10 +21,11 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   auth: authReducer,
   menu: menuReducer,
-  orders: ordersReducer
+  orders: ordersReducer,
+  meal: mealReducer
 });
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk, logger)));
 
 const app = (
   <Provider store={store}>

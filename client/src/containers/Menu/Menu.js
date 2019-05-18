@@ -32,7 +32,7 @@ class Menu extends Component {
       mealList = <Loading />;
     }
     if (!this.props.loading && this.props.menus.length === 0) {
-      mealList = <Empty menu />;
+      mealList = <Empty text="Menu" />;
     }
     return (
       <React.Fragment>

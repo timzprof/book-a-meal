@@ -21,16 +21,14 @@ export const orderAddToOrdersFailed = error => {
 };
 
 export const orderAddToOrders = order => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(orderAddToOrdersStart());
-    client
-      .post('/orders', order)
-      .then(response => {
-        dispatch(orderAddToOrdersSuccess());
-      })
-      .catch(error => {
-        dispatch(orderAddToOrdersFailed(error));
-      });
+    try {
+      await client.post('/orders', order);
+      dispatch(orderAddToOrdersSuccess());
+    } catch (error) {
+      dispatch(orderAddToOrdersFailed(error));
+    }
   };
 };
 
@@ -61,122 +59,109 @@ export const orderFetchUserOrdersFailed = error => {
 };
 
 export const orderFetchUserOrders = () => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(orderFetchUserOrdersStart());
-    client
-      .get('/orders/user')
-      .then(response => {
-        dispatch(orderFetchUserOrdersSuccess(response.data.data));
-      })
-      .catch(error => {
-        dispatch(orderFetchUserOrdersFailed(error));
-      });
+    try {
+      const response = await client.get('/orders/user');
+      dispatch(orderFetchUserOrdersSuccess(response.data.data));
+    } catch (error) {
+      dispatch(orderFetchUserOrdersFailed(error));
+    }
   };
 };
 
 export const orderIncrementStart = () => {
   return {
     type: actionTypes.ORDER_INCREMENT_START
-  }
-}
+  };
+};
 
 export const orderIncrementSuccess = () => {
   return {
     type: actionTypes.ORDER_INCREMENT_SUCCESS
-  }
-}
+  };
+};
 
-export const orderIncrementFailed = (error) => {
+export const orderIncrementFailed = error => {
   return {
     type: actionTypes.ORDER_INCREMENT_FAILED,
     error
-  }
-}
+  };
+};
 
-
-export const orderIncrement = (orderItemId) => {
-  return dispatch => {
+export const orderIncrement = orderItemId => {
+  return async dispatch => {
     dispatch(orderIncrementStart());
-    client.put(`/orders/${orderItemId}`, {
-      action: 'increase'
-    })
-      .then(() => {
-        dispatch(orderFetchUserOrders());
-        dispatch(orderIncrementSuccess());
-      })
-      .catch(error => {
-        dispatch(orderIncrementFailed(error));
-      });
-  }
-}
-
+    try {
+      await client.put(`/orders/${orderItemId}`, { action: 'increase' });
+      dispatch(orderFetchUserOrders());
+      dispatch(orderIncrementSuccess());
+    } catch (error) {
+      dispatch(orderIncrementFailed(error));
+    }
+  };
+};
 
 export const orderDecrementStart = () => {
   return {
     type: actionTypes.ORDER_DECREMENT_START
-  }
-}
+  };
+};
 
 export const orderDecrementSuccess = () => {
   return {
     type: actionTypes.ORDER_DECREMENT_SUCCESS
-  }
-}
+  };
+};
 
-export const orderDecrementFailed = (error) => {
+export const orderDecrementFailed = error => {
   return {
     type: actionTypes.ORDER_DECREMENT_FAILED,
     error
-  }
-}
+  };
+};
 
-export const orderDecrement = (orderItemId) => {
-  return dispatch => {
+export const orderDecrement = orderItemId => {
+  return async dispatch => {
     dispatch(orderDecrementStart());
-    client.put(`/orders/${orderItemId}`, {
-      action: 'decrease'
-    })
-      .then(() => {
-        dispatch(orderFetchUserOrders());
-        dispatch(orderDecrementSuccess());
-      })
-      .catch(error => {
-        dispatch(orderDecrementFailed(error));
-      });
-  }
-}
+    try {
+      await client.put(`/orders/${orderItemId}`, { action: 'decrease' });
+      dispatch(orderFetchUserOrders());
+      dispatch(orderDecrementSuccess());
+    } catch (error) {
+      dispatch(orderDecrementFailed(error));
+    }
+  };
+};
 
 export const orderDeleteStart = () => {
   return {
     type: actionTypes.ORDER_DELETE_START
-  }
-}
+  };
+};
 
 export const orderDeleteSuccess = () => {
   return {
     type: actionTypes.ORDER_DELETE_SUCCESS
-  }
-}
+  };
+};
 
 export const orderDeleteFailed = error => {
   return {
     type: actionTypes.ORDER_DELETE_FAILED,
     error
-  }
-}
+  };
+};
 
 export const orderDelete = orderItemId => {
-  return dispatch => {
+  return async dispatch => {
     dispatch(orderDeleteStart());
-    client.put(`/orders/${orderItemId}`, {
-      action: 'delete'
-    })
-      .then(() => {
-        dispatch(orderFetchUserOrders());
-        dispatch(orderDeleteSuccess());
-      })
-      .catch(error => {
-        dispatch(orderDeleteFailed(error));
-      });
-  }
-} 
+    try {
+      await client.put(`/orders/${orderItemId}`, { action: 'delete' });
+      dispatch(orderFetchUserOrders());
+      dispatch(orderDeleteSuccess());
+    } catch (error) {
+      dispatch(orderDeleteFailed(error));
+    }
+  };
+};

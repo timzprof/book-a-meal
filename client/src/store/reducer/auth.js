@@ -28,7 +28,8 @@ const userSignInSuccess = (state, action) => {
   return updateObject(state, {
     userAuthenticated: true,
     token: action.data.token,
-    loading: false
+    loading: false,
+    authRedirectPath: '/menu'
   });
 };
 
@@ -78,7 +79,8 @@ const catererSignInSuccess = (state, action) => {
   return updateObject(state, {
     catererAuthenticated: true,
     cToken: action.data.token,
-    loading: false
+    loading: false,
+    authRedirectPath: '/admin/meals'
   });
 };
 

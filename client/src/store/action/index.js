@@ -6,7 +6,8 @@ export {
   logout,
   clogout,
   catererSignIn,
-  catererSignUp
+  catererSignUp,
+  catererAuthCheckState
 } from './auth';
 
 export { hideQuantityModal, handleQuantity, menuFetchMenus } from './menu';
@@ -19,3 +20,5 @@ export {
   orderIncrement,
   orderDelete
 } from './orders';
+
+export { mealFetchMeals } from './meal';
