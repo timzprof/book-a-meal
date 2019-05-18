@@ -3,6 +3,7 @@ import { updateObject } from '../../shared/utility';
 
 const initialState = {
   menus: [],
+  catererMenu: [],
   beingOrdered: null,
   loading: false,
   error: null,
@@ -59,6 +60,27 @@ const menuFetchMenusFailed = (state, action) => {
   });
 };
 
+const menuFetchSingleMenuStart = (state, action) => {
+  return updateObject(state, {
+    loading: true
+  });
+};
+
+const menuFetchSingleMenuSuccess = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    catererMenu: action.data
+  });
+};
+
+const menuFetchSingleMenuFailed = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    error: action.error.response ? action.error.response : action.error,
+    errorMessage: action.error.response ? action.error.response.data.message : action.error.message
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.MENU_HANDLE_QUANTITY:
@@ -71,6 +93,12 @@ const reducer = (state = initialState, action) => {
       return menuFetchMenusSuccess(state, action);
     case actionTypes.MENU_FETCH_MENUS_FAILED:
       return menuFetchMenusFailed(state, action);
+    case actionTypes.MENU_FETCH_SINGLE_MENU_START:
+      return menuFetchSingleMenuStart(state, action);
+    case actionTypes.MENU_FETCH_SINGLE_MENU_SUCCESS:
+      return menuFetchSingleMenuSuccess(state, action);
+    case actionTypes.MENU_FETCH_SINGLE_MENU_FAILED:
+      return menuFetchSingleMenuFailed(state, action);
     default:
       return state;
   }

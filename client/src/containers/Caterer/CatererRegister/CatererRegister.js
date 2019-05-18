@@ -134,7 +134,7 @@ class CatererRegister extends Component {
 
   componentDidMount() {
     if (!this.props.loading) {
-      this.props.onSetAuthRedirect('/admin/meals');
+      this.props.onSetAuthRedirect('/admin/');
     }
   }
 

@@ -80,7 +80,7 @@ const catererSignInSuccess = (state, action) => {
     catererAuthenticated: true,
     cToken: action.data.token,
     loading: false,
-    authRedirectPath: '/admin/meals'
+    authRedirectPath: '/admin/'
   });
 };
 

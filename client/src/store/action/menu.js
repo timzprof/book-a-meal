@@ -45,3 +45,35 @@ export const menuFetchMenus = () => {
     }
   };
 };
+
+export const menuFetchSingleMenuStart = () => {
+  return {
+    type: actionTypes.MENU_FETCH_SINGLE_MENU_START
+  };
+};
+
+export const menuFetchSingleMenuSuccess = data => {
+  return {
+    type: actionTypes.MENU_FETCH_SINGLE_MENU_SUCCESS,
+    data
+  };
+};
+
+export const menuFetchSingleMenuFailed = error => {
+  return {
+    type: actionTypes.MENU_FETCH_SINGLE_MENU_FAILED,
+    error
+  };
+};
+
+export const menuFetchSingleMenu = () => {
+  return async dispatch => {
+    dispatch(menuFetchSingleMenuStart());
+    try {
+      const response = await client.get('/menu/caterer', { headers: { 'X-Req': true } });
+      dispatch(menuFetchSingleMenuSuccess(response.data.data));
+    } catch (error) {
+      dispatch(menuFetchSingleMenuFailed(error));
+    }
+  };
+};

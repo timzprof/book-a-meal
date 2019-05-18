@@ -1,42 +1,30 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import MealList from '../../../components/MealList/MealList';
+import Loading from '../../../components/UI/Loading/Loading';
+import Empty from '../../../components/UI/Empty/Empty';
+import client from '../../../shared/axios-client';
+import * as actions from '../../../store/action/index';
+import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
 
 class CatererManageMenu extends Component {
-  state = {
-    data: {
-      meals: [
-        {
-          id: 1,
-          name: 'Jollof Rice',
-          price: 500,
-          imageUrl: 'http://foodhub.ng/wp-content/uploads/2018/12/jollof-rice-cooking.jpg',
-          quantity: 5
-        },
-        {
-          id: 2,
-          name: 'Bread & Beans',
-          price: 500,
-          imageUrl:
-            'https://thumbs.dreamstime.com/b/plate-ewa-agoyin-agege-bread-nigerian-staple-meal-consisting-baked-beans-red-palm-oil-stew-sauce-90622030.jpg',
-          quantity: 5
-        }
-      ],
-      catering_service: 'Book A Meal Caterer'
-    }
+  componentDidMount(){
+    this.props.onFetchCatererMenu();
   }
-  increaseQuantity = (mealId) => {
-    this.setState((prevState) => {
-      const data = {...prevState.data};
+
+  increaseQuantity = mealId => {
+    this.setState(prevState => {
+      const data = { ...prevState.data };
       const mealIndex = data.meals.findIndex(meal => meal.id === mealId);
       data.meals[mealIndex].quantity += 1;
       return { data };
     });
   };
 
-  decreaseQuantity = (mealId) => {
-    this.setState((prevState) => {
+  decreaseQuantity = mealId => {
+    this.setState(prevState => {
       const data = { ...prevState.data };
       const mealIndex = data.meals.findIndex(meal => meal.id === mealId);
       data.meals[mealIndex].quantity -= 1;
@@ -47,20 +35,29 @@ class CatererManageMenu extends Component {
   saveMenu = () => {};
 
   render() {
+    let menu = (
+      <MealList
+            type="manageMenu"
+            meals={this.props.menuMeals}
+            increase={this.increaseQuantity}
+            decrease={this.decreaseQuantity}
+          />
+    );
+    if (this.props.loading) {
+      menu = <Loading />;
+    }
+    if (!this.props.loading && !this.props.menuMeals) {
+      menu = <Empty text="Menu" />;
+    }
     return (
       <React.Fragment>
         <Header
           bannerText="Increase Food Options Quantity to add them to menu"
-          authenticated
+          authenticated={this.props.catererAuthenticated}
           caterer
         />
         <main>
-          <MealList
-            type="manageMenu"
-            meals={this.state.data.meals}
-            increase={this.increaseQuantity}
-            decrease={this.decreaseQuantity}
-          />
+          {menu}
         </main>
         <Footer />
       </React.Fragment>
@@ -68,4 +65,21 @@ class CatererManageMenu extends Component {
   }
 }
 
-export default CatererManageMenu;
+const mapStateToProps = state => {
+  return {
+    loading: state.menu.loading,
+    menuMeals: state.menu.catererMenu,
+    catererAuthenticated: state.auth.catererAuthenticated
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onFetchCatererMenu: () => dispatch(actions.menuFetchSingleMenu())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withHttpHandler(CatererManageMenu, client));
