@@ -5,6 +5,7 @@ import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import MealList from '../../../components/MealList/MealList';
 import Loading from '../../../components/UI/Loading/Loading';
+import Modal from '../../../components/UI/Modal/Modal';
 import Empty from '../../../components/UI/Empty/Empty';
 import client from '../../../shared/axios-client';
 import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
@@ -14,7 +15,19 @@ class CatererMealOptions extends Component {
     this.props.onFetchMeals();
   }
 
-  removeMealFromMenu = () => {};
+  handleAddToMeal = formData => {
+    this.props.onAddMeal(formData);
+    if (this.props.resCode === 'success') {
+      this.props.onResetResCode();
+      this.props.onToggleModal();
+      window.location.reload();
+    }
+  }
+
+  deleteMealOption = mealId => {
+    this.props.onDeleteMeal(mealId);
+    window.location.reload();
+  };
 
   showEditMealModal = () => {};
 
@@ -23,7 +36,8 @@ class CatererMealOptions extends Component {
       <MealList
         type="mealOptions"
         meals={this.props.meals}
-        remove={this.removeMealFromMenu}
+        toggleMealModal={this.props.onToggleModal}
+        removeMeal={this.deleteMealOption}
         showEditMealModal={this.showEditMealModal}
       />
     );
@@ -38,9 +52,16 @@ class CatererMealOptions extends Component {
         <Header
           bannerText="Your Meal Options"
           authenticated={this.props.catererAuthenticated}
+          overlay={this.props.showModal}
           caterer
         />
         <main>{meals}</main>
+        <Modal
+          type="meal"
+          show={this.props.showModal}
+          addMeal={this.handleAddToMeal}
+          close={this.props.onToggleModal}
+        />
         <Footer />
       </React.Fragment>
     );
@@ -51,13 +72,19 @@ const mapStateToProps = state => {
   return {
     loading: state.meal.loading,
     catererAuthenticated: state.auth.catererAuthenticated,
-    meals: state.meal.meals
+    meals: state.meal.meals,
+    showModal: state.meal.showMealModal,
+    resCode: state.global.lastReq
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchMeals: () => dispatch(actions.mealFetchMeals())
+    onFetchMeals: () => dispatch(actions.mealFetchMeals()),
+    onToggleModal: () => dispatch(actions.toggleMealModal()),
+    onAddMeal: formData => dispatch(actions.mealAddMeal(formData)),
+    onResetResCode: () => dispatch(actions.resetResCode()),
+    onDeleteMeal: mealId => dispatch(actions.mealDeleteMeal(mealId))
   };
 };
 

@@ -21,9 +21,7 @@ const mealList = props => {
       {props.type === 'mealOptions' ? (
         <button
           className={['Btn', classes.Right__Btn__lg].join(' ')}
-          id="add-meal-option"
-          data-toggle="modal"
-          data-target="#mealOptionModal"
+          onClick={props.toggleMealModal}
         >
           Add Meal Option
         </button>

@@ -43,6 +43,7 @@ class Modal extends Component {
               type={this.props.type}
               closeModal={this.props.close}
               meal={this.props.meal !== null ? this.props.meal : false}
+              addMeal={this.props.addMeal}
               addMealToOrders={this.props.orderMeal}
             />
           </div>

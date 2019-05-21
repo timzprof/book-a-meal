@@ -1,5 +1,7 @@
 import * as actionTypes from './actionTypes';
 import client from '../../shared/axios-client';
+import { toast } from '../../shared/toast';
+import { setResCode } from './index';
 
 export const orderAddToOrdersStart = () => {
   return {
@@ -24,17 +26,14 @@ export const orderAddToOrders = order => {
   return async dispatch => {
     dispatch(orderAddToOrdersStart());
     try {
-      await client.post('/orders', order);
+      const response = await client.post('/orders', order);
+      toast(response.data.status, response.data.message);
+      dispatch(setResCode(response.data.status));
       dispatch(orderAddToOrdersSuccess());
     } catch (error) {
+      toast('error', 'Failed to Add Meal to Orders');
       dispatch(orderAddToOrdersFailed(error));
     }
-  };
-};
-
-export const resetOrderResCode = () => {
-  return {
-    type: actionTypes.RESET_ORDER_RES_CODE
   };
 };
 
@@ -157,10 +156,12 @@ export const orderDelete = orderItemId => {
   return async dispatch => {
     dispatch(orderDeleteStart());
     try {
-      await client.put(`/orders/${orderItemId}`, { action: 'delete' });
+      const response = await client.put(`/orders/${orderItemId}`, { action: 'delete' });
+      toast(response.data.status, response.data.message);
       dispatch(orderFetchUserOrders());
       dispatch(orderDeleteSuccess());
     } catch (error) {
+      toast('error', 'Failed to Delete Meal Order');
       dispatch(orderDeleteFailed(error));
     }
   };

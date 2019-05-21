@@ -18,8 +18,8 @@ class Menu extends Component {
   addMealToOrders = orderData => {
     this.props.onAddToOrders(orderData);
     console.log(this.props.orderResCode);
-    if (this.props.orderResCode === 200) {
-      this.props.onResetOrderResCode();
+    if (this.props.resCode === 'success') {
+      this.props.onResetResCode();
       this.props.history.push('/orders');
     }
   };
@@ -71,7 +71,7 @@ const mapStateToProps = state => {
     token: state.auth.token,
     loading: state.menu.loading,
     menus,
-    orderResCode: state.orders.lastReq
+    resCode: state.global.lastReq
   };
 };
 
@@ -81,7 +81,7 @@ const mapDispatchToProps = dispatch => {
     onHideQuantityModal: () => dispatch(actions.hideQuantityModal()),
     onFetchMenus: () => dispatch(actions.menuFetchMenus()),
     onAddToOrders: order => dispatch(actions.orderAddToOrders(order)),
-    onResetOrderResCode: () => dispatch(actions.resetOrderResCode())
+    onResetResCode: () => dispatch(actions.resetResCode())
   };
 };
 

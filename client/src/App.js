@@ -45,9 +45,9 @@ class App extends Component {
   }
 
   autoLogin = () => {
-    if (this.state.loginType === 'user') {
+    if (this.state.loginType === 'user' && !this.props.userAuthenticated) {
       this.props.onTryAutoLogin();
-    } else if (this.state.loginType === 'caterer') {
+    } else if (this.state.loginType === 'caterer' && !this.props.catererAuthenticated) {
       this.props.onCatererAutoLogin();
     } else {
       return null;

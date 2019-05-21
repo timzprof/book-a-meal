@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import globalReducer from './store/reducer/global';
 import authReducer from './store/reducer/auth';
 import menuReducer from './store/reducer/menu';
 import ordersReducer from './store/reducer/orders';
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
   auth: authReducer,
   menu: menuReducer,
   orders: ordersReducer,
-  meal: mealReducer
+  meal: mealReducer,
+  global: globalReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk, logger)));

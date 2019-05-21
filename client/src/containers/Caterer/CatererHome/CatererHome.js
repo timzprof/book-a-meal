@@ -13,6 +13,7 @@ import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
 class CatererHome extends Component {
   componentDidMount() {
     this.props.onFetchCatererMenu();
+    this.props.onSetAuthRedirect();
   }
   render() {
     let menu = <MealList type="menuMeals" meals={this.props.menuMeals} />;
@@ -53,7 +54,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchCatererMenu: () => dispatch(actions.menuFetchSingleMenu())
+    onFetchCatererMenu: () => dispatch(actions.menuFetchSingleMenu()),
+    onSetAuthRedirect: () => dispatch(actions.setAuthRedirect(null))
   };
 };
 

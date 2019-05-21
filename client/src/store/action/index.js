@@ -14,11 +14,12 @@ export { hideQuantityModal, handleQuantity, menuFetchMenus, menuFetchSingleMenu 
 
 export {
   orderAddToOrders,
-  resetOrderResCode,
   orderFetchUserOrders,
   orderDecrement,
   orderIncrement,
   orderDelete
 } from './orders';
 
-export { mealFetchMeals } from './meal';
+export { mealFetchMeals, toggleMealModal, mealAddMeal, mealDeleteMeal } from './meal';
+
+export { setResCode, resetResCode } from './global';

@@ -48,7 +48,7 @@ const meal = props => {
         <button className={classes.Card__btn} onClick={props.showEditMealModal}>Edit</button>
       </div>
       <div className={classes.Meal__btn}>
-        <button className={classes.Card__btn} onClick={props.removeMealFromMenu}>Delete</button>
+        <button className={classes.Card__btn} onClick={() => props.removeMeal(props.meal.id)}>Delete</button>
       </div>
     </div>
   );

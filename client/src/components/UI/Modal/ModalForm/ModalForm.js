@@ -63,16 +63,72 @@ class ModalForm extends Component {
         touched: false
       }
     },
+    mealControls: {
+      name: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          name: 'name',
+          placeholder: 'Meal Name'
+        },
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
+      },
+      price: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'number',
+          name: 'price',
+          placeholder: 'Meal Price',
+          min: 10
+        },
+        value: '',
+        validation: {
+          required: true,
+          isNumeric: true
+        },
+        valid: false,
+        touched: false
+      },
+      image: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'file',
+          name: 'image',
+          placeholder: 'Meal Image'
+        },
+        value: '',
+        files: [],
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
+      }
+    },
     formIsValid: false
   };
 
   inputChangeHandler = (e, inputId, controlType) => {
-    const controls = controlType === 'checkout' ? 'checkoutControls' : 'quantityControls';
+    const controlTypes = {
+      checkout: 'checkoutControls',
+      quantity: 'quantityControls',
+      meal: 'mealControls'
+    };
+    const controls = controlTypes[controlType];
     const formElement = updateObject(this.state[controls][inputId], {
       value: e.target.value,
       valid: checkValidity(e.target.value, this.state[controls][inputId].validation),
       touched: true
     });
+
+    if (formElement.files) {
+      formElement.files = [...e.target.files];
+    }
 
     const form = updateObject(this.state[controls], {
       [inputId]: formElement
@@ -86,16 +142,40 @@ class ModalForm extends Component {
     this.setState({ [controls]: form, formIsValid });
   };
 
-  addToOrders = (e) => {
+  addToOrders = e => {
     e.preventDefault();
     const formData = {};
     for (let formElementId in this.state.quantityControls) {
       formData[formElementId] = this.state.quantityControls[formElementId].value;
-      if(this.state.quantityControls[formElementId].elementConfig.type === 'number'){
+      if (this.state.quantityControls[formElementId].elementConfig.type === 'number') {
         formData[formElementId] = Number(this.state.quantityControls[formElementId].value);
       }
     }
     this.props.addMealToOrders(formData);
+  };
+
+  addMealOption = e => {
+    e.preventDefault();
+    const formData = new FormData();
+    for (let formElementId in this.state.mealControls) {
+      let data = null;
+      switch (this.state.mealControls[formElementId].elementConfig.type) {
+        case 'text':
+          data = this.state.mealControls[formElementId].value;
+          break;
+        case 'number':
+          data = Number(this.state.mealControls[formElementId].value);
+          break;
+        case 'file':
+          data = this.state.mealControls[formElementId].files[0];
+          break;
+        default:
+          data = this.state.mealControls[formElementId].value;
+          break;
+      }
+      formData.append(formElementId, data);
+    }
+    this.props.addMeal(formData);
   };
 
   render() {
@@ -109,6 +189,12 @@ class ModalForm extends Component {
       return {
         id: key,
         config: this.state.checkoutControls[key]
+      };
+    });
+    const mealFormElements = Object.keys(this.state.mealControls).map(key => {
+      return {
+        id: key,
+        config: this.state.mealControls[key]
       };
     });
     const { classes } = this.props;
@@ -171,9 +257,34 @@ class ModalForm extends Component {
         </div>
       </form>
     ) : null;
+    const mealForm = (
+      <form action="#" method="post" id="mealForm" onSubmit={this.addMealOption}>
+        <div className={classes.Modal__body}>
+          {mealFormElements.map(formElement => (
+            <Input
+              key={formElement.id}
+              elementType={formElement.config.elementType}
+              elementConfig={formElement.config.elementConfig}
+              value={formElement.config.value}
+              invalid={!formElement.config.valid}
+              touched={formElement.config.touched}
+              shouldValidate={formElement.config.validation}
+              changed={e => this.inputChangeHandler(e, formElement.id, 'meal')}
+            />
+          ))}
+        </div>
+        <div className={classes.Modal__footer}>
+          <button type="button" data-dismiss="modal" onClick={this.props.closeModal}>
+            Close
+          </button>
+          <button type="submit">Add</button>
+        </div>
+      </form>
+    );
     const forms = {
       quantity: quantityForm,
-      checkout: checkoutForm
+      checkout: checkoutForm,
+      meal: mealForm
     };
     return forms[this.props.type];
   }
