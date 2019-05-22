@@ -5,9 +5,11 @@ import morgan from 'morgan';
 import favicon from 'express-favicon';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
+import helmet from 'helmet';
+import compression from 'compression';
 import { config } from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
-import { logger, prettyStringify } from './util/logger';
+import { logger } from './util/logger';
 import Routes from './routes';
 import sequelize from './util/db';
 import swaggerDocument from './swagger.json';
@@ -22,6 +24,8 @@ const app = express();
 
 const PORT = process.env.PORT || 7000;
 
+app.use(helmet());
+app.use(compression());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
