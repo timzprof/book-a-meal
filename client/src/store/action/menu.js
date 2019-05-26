@@ -77,3 +77,41 @@ export const menuFetchSingleMenu = () => {
     }
   };
 };
+
+export const menuAddMealsToMenuStart = () => {
+  return {
+    type: actionTypes.MENU_ADD_MEALS_TO_MENU_START
+  };
+};
+
+export const menuAddMealsToMenuSuccess = () => {
+  return {
+    type: actionTypes.MENU_ADD_MEALS_TO_MENU_SUCCESS
+  };
+};
+
+export const menuAddMealsToMenuFailed = error => {
+  return {
+    type: actionTypes.MENU_ADD_MEALS_TO_MENU_FAILED,
+    error
+  };
+};
+
+export const menuAddMealsToMenu = mealsData => {
+  return async dispatch => {
+    dispatch(menuAddMealsToMenuStart());
+    try {
+      const token = localStorage.getItem('c_token');
+      for await (let mealData of mealsData) {
+        await client.post('/menu/', mealData, {
+          headers: {
+            Authorization: token
+          }
+        });
+      }
+      dispatch(menuAddMealsToMenuSuccess());
+    } catch (error) {
+      dispatch(menuAddMealsToMenuFailed(error));
+    }
+  };
+};

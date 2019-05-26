@@ -113,7 +113,7 @@ class MenuController {
     if (mealIndex < 0) {
       updatedMenuMeals.push(safeMeal);
     } else {
-      updatedMenuMeals[mealIndex].quantity += Number(quantity);
+      updatedMenuMeals[mealIndex].quantity = Number(quantity);
     }
     return updatedMenuMeals;
   }

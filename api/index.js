@@ -15,6 +15,7 @@ import sequelize from './util/db';
 import swaggerDocument from './swagger.json';
 import Menu from './models/menu';
 import OrderItem from './models/orderItem';
+import Meal from './models/meals';
 
 const { CronJob } = require('cron');
 
@@ -39,6 +40,7 @@ const wipeDbTrash = async () => {
   try {
     await Menu.truncate();
     await OrderItem.truncate();
+    await Meal.update({ quantity: null });
     logger.log('info:', 'Wiped DB Trash');
   } catch (err) {
     logger.error('error', 'DB JOB:', err);

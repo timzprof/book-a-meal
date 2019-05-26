@@ -11,10 +11,12 @@ import * as actions from '../../../store/action/index';
 import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
 
 class CatererHome extends Component {
+  
   componentDidMount() {
     this.props.onFetchCatererMenu();
     this.props.onSetAuthRedirect();
   }
+
   render() {
     let menu = <MealList type="menuMeals" meals={this.props.menuMeals} />;
     if (this.props.loading) {
@@ -45,9 +47,12 @@ class CatererHome extends Component {
 }
 
 const mapStateToProps = state => {
+  let menuMeals = [];
+  const meals = state.menu.catererMenu.meals;
+  if(meals) menuMeals = JSON.parse(meals);
   return {
     loading: state.menu.loading,
-    menuMeals: state.menu.catererMenu,
+    menuMeals,
     catererAuthenticated: state.auth.catererAuthenticated
   };
 };

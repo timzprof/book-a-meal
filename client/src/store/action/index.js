@@ -10,7 +10,13 @@ export {
   catererAuthCheckState
 } from './auth';
 
-export { hideQuantityModal, handleQuantity, menuFetchMenus, menuFetchSingleMenu } from './menu';
+export {
+  hideQuantityModal,
+  handleQuantity,
+  menuFetchMenus,
+  menuFetchSingleMenu,
+  menuAddMealsToMenu
+} from './menu';
 
 export {
   orderAddToOrders,

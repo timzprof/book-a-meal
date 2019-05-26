@@ -81,6 +81,26 @@ const menuFetchSingleMenuFailed = (state, action) => {
   });
 };
 
+const menuAddMealsToMenuStart = (state, action) => {
+  return updateObject(state, {
+    loading: true
+  });
+};
+
+const menuAddMealsToMenuSuccess = (state, action) => {
+  return updateObject(state, {
+    loading: false
+  });
+};
+
+const menuAddMealsToMenuFailed = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    error: action.error.response ? action.error.response : action.error,
+    errorMessage: action.error.response ? action.error.response.data.message : action.error.message
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.MENU_HANDLE_QUANTITY:
@@ -99,6 +119,12 @@ const reducer = (state = initialState, action) => {
       return menuFetchSingleMenuSuccess(state, action);
     case actionTypes.MENU_FETCH_SINGLE_MENU_FAILED:
       return menuFetchSingleMenuFailed(state, action);
+    case actionTypes.MENU_ADD_MEALS_TO_MENU_START:
+      return menuAddMealsToMenuStart(state, action);
+    case actionTypes.MENU_ADD_MEALS_TO_MENU_SUCCESS:
+      return menuAddMealsToMenuSuccess(state, action);
+    case actionTypes.MENU_ADD_MEALS_TO_MENU_FAILED:
+      return menuAddMealsToMenuFailed(state, action);
     default:
       return state;
   }

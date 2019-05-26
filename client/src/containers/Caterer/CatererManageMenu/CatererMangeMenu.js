@@ -10,44 +10,62 @@ import * as actions from '../../../store/action/index';
 import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
 
 class CatererManageMenu extends Component {
-  componentDidMount(){
-    this.props.onFetchCatererMenu();
+  state = {
+    meals: [],
+    addingMeals: false
+  };
+
+  componentDidMount() {
+    this.props.onFetchCatererMeals();
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({ meals: props.meals });
   }
 
   increaseQuantity = mealId => {
-    this.setState(prevState => {
-      const data = { ...prevState.data };
-      const mealIndex = data.meals.findIndex(meal => meal.id === mealId);
-      data.meals[mealIndex].quantity += 1;
-      return { data };
-    });
+    const meals = [...this.state.meals];
+    const mealIndex = meals.findIndex(meal => meal.id === mealId);
+    meals[mealIndex].quantity += 1;
+    this.setState({ meals });
   };
 
   decreaseQuantity = mealId => {
-    this.setState(prevState => {
-      const data = { ...prevState.data };
-      const mealIndex = data.meals.findIndex(meal => meal.id === mealId);
-      data.meals[mealIndex].quantity -= 1;
-      return { data };
-    });
+    const meals = [...this.state.meals];
+    const mealIndex = meals.findIndex(meal => meal.id === mealId);
+    meals[mealIndex].quantity -= 1;
+    this.setState({ meals });
   };
 
-  saveMenu = () => {};
+  saveMenu = () => {
+    this.setState({ addingMeals: true });
+    const mealsData = [];
+    console.log(this.state.meals);
+    this.state.meals.forEach(meal => {
+      if (meal.quantity > 0) {
+        mealsData.push({ mealId: meal.id, quantity: meal.quantity });
+      }
+    });
+    this.props.onAddMealToMenu(mealsData);
+    this.setState({ addingMeals: false });
+    this.props.history.push('/admin/');
+  };
 
   render() {
-    let menu = (
+    let meals = (
       <MealList
-            type="manageMenu"
-            meals={this.props.menuMeals}
-            increase={this.increaseQuantity}
-            decrease={this.decreaseQuantity}
-          />
+        type="manageMenu"
+        meals={this.state.meals}
+        increase={this.increaseQuantity}
+        decrease={this.decreaseQuantity}
+        saveMenu={this.saveMenu}
+      />
     );
-    if (this.props.loading) {
-      menu = <Loading />;
+    if (this.props.loading || this.state.addingMeals) {
+      meals = <Loading />;
     }
-    if (!this.props.loading && !this.props.menuMeals) {
-      menu = <Empty text="Menu" />;
+    if (!this.props.loading && this.props.meals.length === 0) {
+      meals = <Empty text="Meal Options" />;
     }
     return (
       <React.Fragment>
@@ -56,9 +74,7 @@ class CatererManageMenu extends Component {
           authenticated={this.props.catererAuthenticated}
           caterer
         />
-        <main>
-          {menu}
-        </main>
+        <main>{meals}</main>
         <Footer />
       </React.Fragment>
     );
@@ -67,15 +83,16 @@ class CatererManageMenu extends Component {
 
 const mapStateToProps = state => {
   return {
-    loading: state.menu.loading,
-    menuMeals: state.menu.catererMenu,
-    catererAuthenticated: state.auth.catererAuthenticated
+    loading: state.meal.loading,
+    catererAuthenticated: state.auth.catererAuthenticated,
+    meals: state.meal.meals
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchCatererMenu: () => dispatch(actions.menuFetchSingleMenu())
+    onFetchCatererMeals: () => dispatch(actions.mealFetchMeals()),
+    onAddMealToMenu: data => dispatch(actions.menuAddMealsToMenu(data))
   };
 };
 
