@@ -40,7 +40,6 @@ class CatererManageMenu extends Component {
   saveMenu = () => {
     this.setState({ addingMeals: true });
     const mealsData = [];
-    console.log(this.state.meals);
     this.state.meals.forEach(meal => {
       if (meal.quantity > 0) {
         mealsData.push({ mealId: meal.id, quantity: meal.quantity });

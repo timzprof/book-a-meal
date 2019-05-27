@@ -56,6 +56,26 @@ const mealAddMealFailed = (state, action) => {
   });
 };
 
+const mealUpdateMealStart = (state, action) => {
+  return updateObject(state, {
+    loading: true
+  });
+};
+
+const mealUpdateMealSuccess = (state, action) => {
+  return updateObject(state, {
+    loading: false
+  });
+};
+
+const mealUpdateMealFailed = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    error: action.error.response ? action.error.response : action.error,
+    errorMessage: action.error.response ? action.error.response.data.message : action.error.message
+  });
+};
+
 const mealDeleteMealStart = (state, action) => {
   return updateObject(state, {
     loading: true
@@ -98,6 +118,12 @@ const reducer = (state = initialState, action) => {
       return mealDeleteMealSuccess(state, action);
     case actionTypes.MEAL_DELETE_MEAL_FAILED:
       return mealDeleteMealFailed(state, action);
+    case actionTypes.MEAL_UPDATE_MEAL_START:
+      return mealUpdateMealStart(state, action);
+    case actionTypes.MEAL_UPDATE_MEAL_SUCCESS:
+      return mealUpdateMealSuccess(state, action);
+    case actionTypes.MEAL_UPDATE_MEAL_FAILED:
+      return mealUpdateMealFailed(state, action);
     default:
       return state;
   }

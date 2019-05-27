@@ -66,12 +66,12 @@ class MenuController {
           mealId
         });
       } else {
-        menuMeals = await MenuController.updateMeals(menu[0], safeMeal, mealId, quantity);
+        menuMeals = await MenuController.updateMeals(menu[0], safeMeal, mealId);
         await MenuController.updateMenu({ menuMeals, today, mealId, catererId: req.caterer.id });
       }
       return res.status(200).json({
         status: 'success',
-        message: 'Meal Added to Menu',
+        message: 'Menu Updated',
         data: menuMeals
       });
     } catch (err) {
@@ -106,14 +106,14 @@ class MenuController {
     }
   }
 
-  static async updateMeals(menu, safeMeal, mealId, quantity) {
+  static async updateMeals(menu, safeMeal, mealId) {
     const { meals } = menu.dataValues;
     const updatedMenuMeals = JSON.parse(meals);
     const mealIndex = updatedMenuMeals.findIndex(menuMeal => menuMeal.id === Number(mealId));
     if (mealIndex < 0) {
       updatedMenuMeals.push(safeMeal);
     } else {
-      updatedMenuMeals[mealIndex].quantity = Number(quantity);
+      updatedMenuMeals[mealIndex] = { ...safeMeal };
     }
     return updatedMenuMeals;
   }

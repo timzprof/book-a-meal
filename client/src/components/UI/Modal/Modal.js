@@ -18,7 +18,8 @@ class Modal extends Component {
   render() {
     const titles = {
       quantity: 'Order',
-      checkout: 'Checkout'
+      checkout: 'Checkout',
+      meal: 'Meal Option'
     };
     let jsx = null;
     const modalClasses = [...this.state.modal];
@@ -42,7 +43,9 @@ class Modal extends Component {
               classes={classes}
               type={this.props.type}
               closeModal={this.props.close}
-              meal={this.props.meal !== null ? this.props.meal : false}
+              meal={this.props.meal ? this.props.meal : false}
+              edittingMeal={this.props.edittingMeal ? this.props.edittingMeal : false}
+              editMeal={this.props.editMeal}
               addMeal={this.props.addMeal}
               addMealToOrders={this.props.orderMeal}
             />

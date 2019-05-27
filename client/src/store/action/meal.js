@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes';
 import client from '../../shared/axios-client';
 import { toast } from '../../shared/toast';
-import { setResCode } from './index';
+import { setResCode, menuAddMealsToMenu } from './index';
 
 export const mealFetchMealsStart = () => {
   return {
@@ -113,6 +113,50 @@ export const mealDeleteMeal = mealId => {
     } catch (error) {
       toast('error', 'Failed to Delete Meal Option');
       dispatch(mealDeleteMealFailed(error));
+    }
+  };
+};
+
+export const mealUpdateMealStart = () => {
+  return {
+    type: actionTypes.MEAL_UPDATE_MEAL_START
+  };
+};
+
+export const mealUpdateMealSuccess = () => {
+  return {
+    type: actionTypes.MEAL_UPDATE_MEAL_SUCCESS
+  };
+};
+
+export const mealUpdateMealFailed = error => {
+  return {
+    type: actionTypes.MEAL_UPDATE_MEAL_FAILED,
+    error
+  };
+};
+
+export const mealUpdateMeal = (mealId, data) => {
+  return async (dispatch, getState) => {
+    dispatch(mealUpdateMealStart());
+    try {
+      const response = await client.put(`/meals/${mealId}`, data, {
+        headers: {
+          'X-Req': true
+        }
+      });
+      toast(response.data.status, response.data.message);
+      const { meals } = getState().meal;
+      const mealsData = [];
+      meals.forEach(meal => {
+        if (meal.quantity > 0) {
+          mealsData.push({ mealId: meal.id, quantity: meal.quantity });
+        }
+      });
+      dispatch(menuAddMealsToMenu(mealsData));
+      dispatch(mealUpdateMealSuccess());
+    } catch (error) {
+      dispatch(mealUpdateMealFailed(error));
     }
   };
 };

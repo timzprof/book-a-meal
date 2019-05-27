@@ -45,7 +45,7 @@ const meal = props => {
         <p>${props.meal.price.toFixed(2)}</p>
       </div>
       <div className={classes.Meal__btn}>
-        <button className={classes.Card__btn} onClick={props.showEditMealModal}>Edit</button>
+        <button className={classes.Card__btn} onClick={() => props.showEditMealModal(props.meal)}>Edit</button>
       </div>
       <div className={classes.Meal__btn}>
         <button className={classes.Card__btn} onClick={() => props.removeMeal(props.meal.id)}>Delete</button>

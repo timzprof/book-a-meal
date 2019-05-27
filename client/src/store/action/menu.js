@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import client from '../../shared/axios-client';
+import { toast } from '../../shared/toast';
 
 export const handleQuantity = mealId => {
   return {
@@ -109,8 +110,10 @@ export const menuAddMealsToMenu = mealsData => {
           }
         });
       }
+      toast('success', 'Menu Modified');
       dispatch(menuAddMealsToMenuSuccess());
     } catch (error) {
+      toast('error', 'Failed to Modify Menu');
       dispatch(menuAddMealsToMenuFailed(error));
     }
   };

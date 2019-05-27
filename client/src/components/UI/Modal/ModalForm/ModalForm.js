@@ -71,7 +71,7 @@ class ModalForm extends Component {
           name: 'name',
           placeholder: 'Meal Name'
         },
-        value: '',
+        value: this.props.edittingMeal ? this.props.edittingMeal.name : '',
         validation: {
           required: true
         },
@@ -86,7 +86,7 @@ class ModalForm extends Component {
           placeholder: 'Meal Price',
           min: 10
         },
-        value: '',
+        value: this.props.edittingMeal ? this.props.edittingMeal.price : '',
         validation: {
           required: true,
           isNumeric: true
@@ -104,7 +104,7 @@ class ModalForm extends Component {
         value: '',
         files: [],
         validation: {
-          required: true
+          required: !this.props.edittingMeal
         },
         valid: false,
         touched: false
@@ -154,7 +154,7 @@ class ModalForm extends Component {
     this.props.addMealToOrders(formData);
   };
 
-  addMealOption = e => {
+  handleMealForm = e => {
     e.preventDefault();
     const formData = new FormData();
     for (let formElementId in this.state.mealControls) {
@@ -167,15 +167,24 @@ class ModalForm extends Component {
           data = Number(this.state.mealControls[formElementId].value);
           break;
         case 'file':
-          data = this.state.mealControls[formElementId].files[0];
+          data = this.state.mealControls[formElementId].files[0]
+            ? this.state.mealControls[formElementId].files[0]
+            : '';
           break;
         default:
           data = this.state.mealControls[formElementId].value;
           break;
       }
       formData.append(formElementId, data);
+      if (formElementId === 'image' && data === '') {
+        formData.delete(formElementId);
+      }
     }
-    this.props.addMeal(formData);
+    if (this.props.edittingMeal) {
+      this.props.editMeal(this.props.edittingMeal.id, formData);
+    } else {
+      this.props.addMeal(formData);
+    }
   };
 
   render() {
@@ -258,7 +267,7 @@ class ModalForm extends Component {
       </form>
     ) : null;
     const mealForm = (
-      <form action="#" method="post" id="mealForm" onSubmit={this.addMealOption}>
+      <form action="#" method="post" id="mealForm" onSubmit={this.handleMealForm}>
         <div className={classes.Modal__body}>
           {mealFormElements.map(formElement => (
             <Input
@@ -277,7 +286,7 @@ class ModalForm extends Component {
           <button type="button" data-dismiss="modal" onClick={this.props.closeModal}>
             Close
           </button>
-          <button type="submit">Add</button>
+          <button type="submit">{this.props.edittingMeal ? 'Edit' : 'Add'}</button>
         </div>
       </form>
     );

@@ -45,11 +45,10 @@ class CatererHome extends Component {
     );
   }
 }
-
+ 
 const mapStateToProps = state => {
   let menuMeals = [];
-  const meals = state.menu.catererMenu.meals;
-  if(meals) menuMeals = JSON.parse(meals);
+  if(state.menu.catererMenu.meals) menuMeals = JSON.parse(state.menu.catererMenu.meals);
   return {
     loading: state.menu.loading,
     menuMeals,

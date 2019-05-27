@@ -11,6 +11,11 @@ import client from '../../../shared/axios-client';
 import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
 
 class CatererMealOptions extends Component {
+  state = {
+    mealToBeUpdated: null,
+    editingMeal: false
+  }
+
   componentDidMount() {
     this.props.onFetchMeals();
   }
@@ -22,14 +27,26 @@ class CatererMealOptions extends Component {
       this.props.onToggleModal();
       window.location.reload();
     }
-  }
+  };
+
+  handleEditMeal = (mealId,formData) => {
+    this.props.onUpdateMeal(mealId,formData);
+    // if (this.props.resCode === 'success') {
+    //   this.props.onResetResCode();
+    //   this.props.onToggleModal();
+    //   window.location.reload();
+    // }
+  };
 
   deleteMealOption = mealId => {
     this.props.onDeleteMeal(mealId);
     window.location.reload();
   };
 
-  showEditMealModal = () => {};
+  showEditMealModal = (meal) => {
+    this.setState({ mealToBeUpdated: meal });
+    this.props.onToggleModal();
+  };
 
   render() {
     let meals = (
@@ -59,6 +76,8 @@ class CatererMealOptions extends Component {
         <Modal
           type="meal"
           show={this.props.showModal}
+          editMeal={this.handleEditMeal}
+          edittingMeal={this.state.mealToBeUpdated}
           addMeal={this.handleAddToMeal}
           close={this.props.onToggleModal}
         />
@@ -84,7 +103,8 @@ const mapDispatchToProps = dispatch => {
     onToggleModal: () => dispatch(actions.toggleMealModal()),
     onAddMeal: formData => dispatch(actions.mealAddMeal(formData)),
     onResetResCode: () => dispatch(actions.resetResCode()),
-    onDeleteMeal: mealId => dispatch(actions.mealDeleteMeal(mealId))
+    onDeleteMeal: mealId => dispatch(actions.mealDeleteMeal(mealId)),
+    onUpdateMeal: (mealId, mealData) => dispatch(actions.mealUpdateMeal(mealId, mealData))
   };
 };
 

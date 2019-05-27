@@ -26,6 +26,12 @@ export {
   orderDelete
 } from './orders';
 
-export { mealFetchMeals, toggleMealModal, mealAddMeal, mealDeleteMeal } from './meal';
+export {
+  mealFetchMeals,
+  toggleMealModal,
+  mealAddMeal,
+  mealDeleteMeal,
+  mealUpdateMeal
+} from './meal';
 
 export { setResCode, resetResCode } from './global';
