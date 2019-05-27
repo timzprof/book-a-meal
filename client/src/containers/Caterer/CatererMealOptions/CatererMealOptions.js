@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import * as actions from '../../../store/action/index';
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
@@ -13,8 +14,10 @@ import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
 class CatererMealOptions extends Component {
   state = {
     mealToBeUpdated: null,
-    editingMeal: false
-  }
+    editingMeal: false,
+    redirect: false,
+    redirectPath: null
+  };
 
   componentDidMount() {
     this.props.onFetchMeals();
@@ -25,17 +28,17 @@ class CatererMealOptions extends Component {
     if (this.props.resCode === 'success') {
       this.props.onResetResCode();
       this.props.onToggleModal();
-      window.location.reload();
+      this.setState({ redirect: true, redirectPath: '/admin/meals' });
     }
   };
 
-  handleEditMeal = (mealId,formData) => {
-    this.props.onUpdateMeal(mealId,formData);
-    // if (this.props.resCode === 'success') {
-    //   this.props.onResetResCode();
-    //   this.props.onToggleModal();
-    //   window.location.reload();
-    // }
+  handleEditMeal = (mealId, formData) => {
+    this.props.onUpdateMeal(mealId, formData);
+    if (this.props.resCode === 'success') {
+      this.props.onResetResCode();
+      this.props.onToggleModal();
+      this.setState({ redirect: true, redirectPath: '/admin/' });
+    }
   };
 
   deleteMealOption = mealId => {
@@ -43,7 +46,7 @@ class CatererMealOptions extends Component {
     window.location.reload();
   };
 
-  showEditMealModal = (meal) => {
+  showEditMealModal = meal => {
     this.setState({ mealToBeUpdated: meal });
     this.props.onToggleModal();
   };
@@ -66,6 +69,7 @@ class CatererMealOptions extends Component {
     }
     return (
       <React.Fragment>
+        {this.state.redirect ? <Redirect to={this.state.redirectPath} /> : null}
         <Header
           bannerText="Your Meal Options"
           authenticated={this.props.catererAuthenticated}

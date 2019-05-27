@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import MealList from '../../../components/MealList/MealList';
@@ -12,7 +13,8 @@ import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
 class CatererManageMenu extends Component {
   state = {
     meals: [],
-    addingMeals: false
+    redirect: false,
+    redirectPath: null
   };
 
   componentDidMount() {
@@ -38,7 +40,6 @@ class CatererManageMenu extends Component {
   };
 
   saveMenu = () => {
-    this.setState({ addingMeals: true });
     const mealsData = [];
     this.state.meals.forEach(meal => {
       if (meal.quantity > 0) {
@@ -46,8 +47,7 @@ class CatererManageMenu extends Component {
       }
     });
     this.props.onAddMealToMenu(mealsData);
-    this.setState({ addingMeals: false });
-    this.props.history.push('/admin/');
+    this.setState({ redirect: true, redirectPath: '/admin/' });
   };
 
   render() {
@@ -68,6 +68,7 @@ class CatererManageMenu extends Component {
     }
     return (
       <React.Fragment>
+        {this.state.redirect ? <Redirect to={this.state.redirectPath} /> : null}
         <Header
           bannerText="Increase Food Options Quantity to add them to menu"
           authenticated={this.props.catererAuthenticated}

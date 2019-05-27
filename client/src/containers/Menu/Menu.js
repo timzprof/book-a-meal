@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import CatererMenus from '../../components/CatererMenus/CatererMenus';
@@ -11,6 +12,11 @@ import withHttpHandler from '../../hoc/withHttpHandler/withHttpHandler';
 import Empty from '../../components/UI/Empty/Empty';
 
 class Menu extends Component {
+  state = {
+    redirectPath: null,
+    redirect: false
+  };
+
   componentDidMount() {
     this.props.onFetchMenus();
   }
@@ -20,7 +26,7 @@ class Menu extends Component {
     console.log(this.props.orderResCode);
     if (this.props.resCode === 'success') {
       this.props.onResetResCode();
-      this.props.history.push('/orders');
+      this.setState({ redirect: true, redirectPath: '/orders' });
     }
   };
 
@@ -36,6 +42,7 @@ class Menu extends Component {
     }
     return (
       <React.Fragment>
+        {this.state.redirect ? <Redirect to={this.state.redirectPath} /> : null}
         <Header
           bannerText="Today's Menus"
           authenticated={this.props.userAuthenticated}

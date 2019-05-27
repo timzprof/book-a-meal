@@ -48,7 +48,14 @@ class Header extends Component {
               show={this.state.mobileToggle}
             />
           </nav>
-          {this.props.homepage ? <HomeBanner /> : <Banner text={this.props.bannerText} />}
+          {this.props.homepage ? (
+            <HomeBanner
+              userAuthenticated={this.props.userAuthenticated}
+              catererAuthenticated={this.props.catererAuthenticated}
+            />
+          ) : (
+            <Banner text={this.props.bannerText} />
+          )}
         </header>
       </React.Fragment>
     );
