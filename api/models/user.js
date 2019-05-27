@@ -1,6 +1,5 @@
 import Sequelize from 'sequelize';
 import sequelize from '../util/db';
-import Order from './orders';
 import OrderItem from './orderItem';
 
 const User = sequelize.define('user', {
@@ -31,7 +30,6 @@ const User = sequelize.define('user', {
   updatedAt: Sequelize.DATEONLY
 });
 
-User.hasMany(Order, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(OrderItem, { constraints: true, onDelete: 'CASCADE' });
 
 export default User;

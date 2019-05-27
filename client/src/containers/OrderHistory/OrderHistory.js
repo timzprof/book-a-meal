@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Aux from '../../hoc/auxiliary';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import OrderTable from '../../components/Table/OrderTable/OrderTable';
+import client from '../../shared/axios-client';
+import withHttpHandler from '../../hoc/withHttpHandler/withHttpHandler';
 
 class OrderHistory extends Component {
   state = {
@@ -47,15 +48,15 @@ class OrderHistory extends Component {
   };
   render() {
     return (
-      <Aux>
+      <React.Fragment>
         <Header bannerText="Your Order History" authenticated />
         <main>
           <OrderTable orders={this.state.orders} />
         </main>
         <Footer />
-      </Aux>
+      </React.Fragment>
     );
   }
 }
 
-export default OrderHistory;
+export default withHttpHandler(OrderHistory, client);

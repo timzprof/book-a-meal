@@ -39,6 +39,10 @@
   font-family: inherit;
 }
 
+.Invalid {
+  background-color: #fda49a;
+}
+
 .Page_form button[type="submit"] {
   margin-top: 20px;
   padding: 0.8rem 1rem;

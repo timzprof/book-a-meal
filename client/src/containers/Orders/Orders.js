@@ -1,72 +1,91 @@
 import React, { Component } from 'react';
-import Aux from '../../hoc/auxiliary';
+import { connect } from 'react-redux';
+import { isEqual } from 'lodash';
+import * as actions from '../../store/action/index';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import MealList from '../../components/MealList/MealList';
 import Modal from '../../components/UI/Modal/Modal';
+import Loading from '../../components/UI/Loading/Loading';
+import client from '../../shared/axios-client';
+import withHttpHandler from '../../hoc/withHttpHandler/withHttpHandler';
+import Empty from '../../components/UI/Empty/Empty';
 
 class Orders extends Component {
-  state = {
-    orderData: {
-      meals: [
-        {
-          id: 1,
-          name: 'Jollof Rice',
-          price: 500,
-          imageUrl: 'http://foodhub.ng/wp-content/uploads/2018/12/jollof-rice-cooking.jpg',
-          quantity: 1
-        },
-        {
-          id: 2,
-          name: 'Bread & Beans',
-          price: 500,
-          imageUrl:
-            'https://thumbs.dreamstime.com/b/plate-ewa-agoyin-agege-bread-nigerian-staple-meal-consisting-baked-beans-red-palm-oil-stew-sauce-90622030.jpg',
-          quantity: 1
-        }
-      ],
-      catering_service: 'Book A Meal Caterer'
-    },
-    checkingOut: false
+  componentDidMount() {
+    this.props.onFetchOrders();
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !isEqual(nextProps.orderMeals,this.props.orderMeals);
+  }
+
+  handleOrderDelete = orderItemId => {
+    this.props.onOrderDelete(orderItemId);
   };
 
-  decreaseQuantity = () => {
-    console.log('Decrease');
+  handleOrderIncrement = orderItemId => {
+    this.props.onOrderIncrement(orderItemId);
   };
-  increaseQuantity = () => {
-    console.log('Increase');
-  };
-  deleteOrder = () => {
-    console.log('Delete');
+
+  handleOrderDecrement = orderItemId => {
+    this.props.onOrderDecrement(orderItemId);
   };
 
   showCheckoutModal = () => {
     this.setState({ checkingOut: true });
-  }
+  };
 
   hideCheckoutModal = () => {
     this.setState({ checkingOut: false });
-  }
+  };
 
   render() {
+    let orders = (
+      <MealList
+        type="orders"
+        meals={this.props.orderMeals}
+        increaseQuantity={this.handleOrderIncrement}
+        decreaseQuantity={this.handleOrderDecrement}
+        deleteOrder={this.handleOrderDelete}
+        checkout={this.showCheckoutModal}
+      />
+    );
+    if (this.props.loading) {
+      orders = <Loading />;
+    }
+    if (!this.props.loading && this.props.orderMeals.length === 0) {
+      orders = <Empty text="Orders" />;
+    }
     return (
-      <Aux>
-        <Header bannerText="Your Order Summary" authenticated overlay={this.state.checkingOut} />
-        <main>
-          <MealList
-            type="orders"
-            meals={this.state.orderData.meals}
-            increaseQuantity={this.increaseQuantity}
-            decreaseQuantity={this.decreaseQuantity}
-            deleteOrder={this.deleteOrder}
-            checkout={this.showCheckoutModal}
-          />
-        </main>
+      <React.Fragment>
+        <Header bannerText="Your Order Summary" authenticated overlay={this.props.checkingOut} />
+        <main>{orders}</main>
         <Footer />
-        <Modal type="checkout" show={this.state.checkingOut} close={this.hideCheckoutModal} />
-      </Aux>
+        <Modal type="checkout" show={this.props.checkingOut} close={this.hideCheckoutModal} />
+      </React.Fragment>
     );
   }
 }
 
-export default Orders;
+const mapStateToProps = state => {
+  return {
+    orderMeals: state.orders.userOrderMeals,
+    checkingOut: state.orders.checkingOut,
+    loading: state.orders.loading
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onFetchOrders: () => dispatch(actions.orderFetchUserOrders()),
+    onOrderIncrement: orderItemId => dispatch(actions.orderIncrement(orderItemId)),
+    onOrderDecrement: orderItemId => dispatch(actions.orderDecrement(orderItemId)),
+    onOrderDelete: orderItemId => dispatch(actions.orderDelete(orderItemId))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withHttpHandler(Orders, client));

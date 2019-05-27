@@ -1,0 +1,40 @@
+.Empty {
+  width: 100vw;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+.Empty img {
+  width: 70%;
+  height: 60%;
+}
+
+.EmptyText {
+  width: 100%;
+  margin-top: -50px;
+}
+
+
+.EmptyText {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Tablet */
+@media only screen and (min-width: 768px) and (max-width: 1000px) {
+  .EmptyText {
+    font-size: 1.8rem;
+  }
+}
+
+/* Mobile - M & S*/
+@media only screen and (max-width: 380px) {
+  .EmptyText {
+    font-size: 1.5rem;
+  }
+}

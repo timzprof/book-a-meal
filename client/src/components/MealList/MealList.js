@@ -8,43 +8,49 @@ const mealList = props => {
     return <Meal key={meal.id} meal={meal} {...props} />;
   });
   const sectionClasses = ['page-section'];
-  if (props.type === 'orders') {
-    sectionClasses.push(classes.Cart__container);
-  }
-  return (
-    <section className={sectionClasses.join(' ')}>
-      {props.type === 'menuMeals' ? (
+  let topBtn = null;
+  let bottomBtn = null;
+  switch (props.type) {
+    case 'orders':
+      sectionClasses.push(classes.Cart__container);
+      bottomBtn = (
+        <button className={classes.Right__Btn__lg} onClick={props.checkout}>
+          Make Order
+        </button>
+      );
+      break;
+    case 'manageMenu':
+      bottomBtn = (
+        <button className={['Btn', classes.Right__Btn__lg].join(' ')} onClick={props.saveMenu}>
+          Save
+        </button>
+      );
+      break;
+    case 'menuMeals':
+      topBtn = (
         <Link to="/admin/menu" className={['Btn', classes.Right__Btn__lg].join(' ')}>
           Manage Menu
         </Link>
-      ) : null}
-      {props.type === 'mealOptions' ? (
-        <button
+      );
+      break;
+    case 'mealOptions':
+      topBtn = (
+         <button
           className={['Btn', classes.Right__Btn__lg].join(' ')}
-          id="add-meal-option"
-          data-toggle="modal"
-          data-target="#mealOptionModal"
+          onClick={props.toggleMealModal}
         >
           Add Meal Option
         </button>
-      ) : null}
+      );
+      break;
+    default:
+      break;
+  }
+  return (
+    <section className={sectionClasses.join(' ')}>
+      {topBtn}
       <div className={classes.Menu__food}>{meals}</div>
-      {props.orders ? (
-        <button
-          className={classes.Right__Btn__lg}
-          id="makeOrder"
-          data-toggle="modal"
-          data-target="#checkoutModal"
-          onClick={props.checkout}
-        >
-          Make Order
-        </button>
-      ) : null}
-      {props.type === 'manageMenu' ? (
-        <button className={['Btn', classes.Right__Btn__lg].join(' ')} id="save-menu" onClick={props.saveMenu}>
-          Save
-        </button>
-      ) : null}
+      {bottomBtn}
     </section>
   );
 };

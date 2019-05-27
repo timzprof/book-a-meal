@@ -21,11 +21,11 @@ const meal = props => {
         <p>{props.meal.name}</p>
         <p>${props.meal.price.toFixed(2)}</p>
         <p>
-          <button className={classes.Tiny__btn} onClick={props.decreaseQuantity}>-</button> {props.meal.quantity} <button className={classes.Tiny__btn} onClick={props.increaseQuantity}>+</button>
+          <button className={classes.Tiny__btn} onClick={() => props.decreaseQuantity(props.meal.orderId)}>-</button> {props.meal.quantity} <button className={classes.Tiny__btn} onClick={() => props.increaseQuantity(props.meal.orderId)}>+</button>
         </p>
       </div>
       <div className={classes.Meal__btn}>
-        <button className={classes.Card__btn} onClick={props.deleteOrder}>Delete</button>
+        <button className={classes.Card__btn} onClick={() => props.deleteOrder(props.meal.orderId)}>Delete</button>
       </div>
     </div>
   );
@@ -45,10 +45,10 @@ const meal = props => {
         <p>${props.meal.price.toFixed(2)}</p>
       </div>
       <div className={classes.Meal__btn}>
-        <button className={classes.Card__btn} onClick={props.showEditMealModal}>Edit</button>
+        <button className={classes.Card__btn} onClick={() => props.showEditMealModal(props.meal)}>Edit</button>
       </div>
       <div className={classes.Meal__btn}>
-        <button className={classes.Card__btn} onClick={props.removeMealFromMenu}>Delete</button>
+        <button className={classes.Card__btn} onClick={() => props.removeMeal(props.meal.id)}>Delete</button>
       </div>
     </div>
   );
@@ -70,11 +70,13 @@ const meal = props => {
     mealOptions,
     manageMenu,
   };
+  const { REACT_APP_ROOT: ROOT } = process.env;
+  const imgUrl = `${ROOT}${props.meal.imageUrl}`; 
   return (
     <article className={classes.Menu__food__item}>
       {props.meal.quantity > 0 && props.type === 'manageMenu' ? <div className="ribbon ribbon-top-left"><span>Selected</span></div> : null}
       <div className={classes.Menu__food__item__img}>
-        <img src={props.meal.imageUrl} alt="Meal" />
+        <img src={imgUrl} alt="Meal" />
       </div>
       { mealTypes[props.type] }
     </article>

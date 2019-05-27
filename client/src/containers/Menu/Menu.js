@@ -1,65 +1,98 @@
 import React, { Component } from 'react';
-import Aux from '../../hoc/auxiliary';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import CatererMenus from '../../components/CatererMenus/CatererMenus';
 import Modal from '../../components/UI/Modal/Modal';
+import Loading from '../../components/UI/Loading/Loading';
+import * as actions from '../../store/action/index';
+import client from '../../shared/axios-client';
+import withHttpHandler from '../../hoc/withHttpHandler/withHttpHandler';
+import Empty from '../../components/UI/Empty/Empty';
 
 class Menu extends Component {
   state = {
-    catererData: [
-      {
-        meals: [
-          {
-            id: 1,
-            name: 'Jollof Rice',
-            price: 500,
-            imageUrl: 'http://foodhub.ng/wp-content/uploads/2018/12/jollof-rice-cooking.jpg',
-            quantity: 5
-          },
-          {
-            id: 2,
-            name: 'Bread & Beans',
-            price: 500,
-            imageUrl:'https://thumbs.dreamstime.com/b/plate-ewa-agoyin-agege-bread-nigerian-staple-meal-consisting-baked-beans-red-palm-oil-stew-sauce-90622030.jpg',
-            quantity: 5
-          }
-        ],
-        catering_service: 'Book A Meal Caterer'
-      }
-    ],
-    beingOrdered: null
+    redirectPath: null,
+    redirect: false
   };
 
-  handleQuantity = mealId => {
-    const menus = [...this.state.catererData];
-    menus.forEach(menu => {
-      const mealIndex = menu.meals.findIndex(meal => meal.id === mealId);
-      this.setState({ beingOrdered: menu.meals[mealIndex] });
-    });
-  };
-
-  hideQuantityModal = () => {
-    this.setState({ beingOrdered: null });
+  componentDidMount() {
+    this.props.onFetchMenus();
   }
 
+  addMealToOrders = orderData => {
+    this.props.onAddToOrders(orderData);
+    console.log(this.props.orderResCode);
+    if (this.props.resCode === 'success') {
+      this.props.onResetResCode();
+      this.setState({ redirect: true, redirectPath: '/orders' });
+    }
+  };
+
   render() {
+    let mealList = (
+      <CatererMenus catererData={this.props.menus} handleQuantity={this.props.onHandleQuantity} />
+    );
+    if (this.props.loading) {
+      mealList = <Loading />;
+    }
+    if (!this.props.loading && this.props.menus.length === 0) {
+      mealList = <Empty text="Menu" />;
+    }
     return (
-      <Aux>
-        <Header bannerText="Today's Menus" authenticated overlay={this.state.beingOrdered} />
-        <main>
-          <CatererMenus catererData={this.state.catererData} handleQuantity={this.handleQuantity} />
-        </main>
+      <React.Fragment>
+        {this.state.redirect ? <Redirect to={this.state.redirectPath} /> : null}
+        <Header
+          bannerText="Today's Menus"
+          authenticated={this.props.userAuthenticated}
+          overlay={this.props.beingOrdered}
+        />
+        <main>{mealList}</main>
         <Modal
-          meal={this.state.beingOrdered}
+          meal={this.props.beingOrdered}
           type="quantity"
-          show={this.state.beingOrdered !== null}
-          close={this.hideQuantityModal}
+          show={this.props.beingOrdered !== null}
+          close={this.props.onHideQuantityModal}
+          orderMeal={this.addMealToOrders}
         />
         <Footer />
-      </Aux>
+      </React.Fragment>
     );
   }
 }
 
-export default Menu;
+const mapStateToProps = state => {
+  const menus = [];
+  state.menu.menus.forEach(menu => {
+    menus.push({
+      id: menu.id,
+      catererId: menu.catererId,
+      catering_service: menu.caterer.catering_service,
+      meals: JSON.parse(menu.meals)
+    });
+  });
+  return {
+    userAuthenticated: state.auth.userAuthenticated,
+    beingOrdered: state.menu.beingOrdered,
+    token: state.auth.token,
+    loading: state.menu.loading,
+    menus,
+    resCode: state.global.lastReq
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onHandleQuantity: mealId => dispatch(actions.handleQuantity(mealId)),
+    onHideQuantityModal: () => dispatch(actions.hideQuantityModal()),
+    onFetchMenus: () => dispatch(actions.menuFetchMenus()),
+    onAddToOrders: order => dispatch(actions.orderAddToOrders(order)),
+    onResetResCode: () => dispatch(actions.resetResCode())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withHttpHandler(Menu, client));

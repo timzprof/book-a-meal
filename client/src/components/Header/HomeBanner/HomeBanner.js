@@ -4,6 +4,12 @@ import classes from './HomeBanner.module.css';
 
 const homeBanner = props => {
   const textClasses = [classes.Banner__text, classes.Home__Banner__text].join(' ');
+  let menuLink = '/login';
+  if (props.userAuthenticated) {
+    menuLink = '/menu';
+  } else if (props.catererAuthenticated) {
+    menuLink = '/admin/';
+  }
   return (
     <main>
       <section className={classes.Banner}>
@@ -13,7 +19,7 @@ const homeBanner = props => {
         <p className={textClasses}>
           Always with the <span className="Red">Quality</span> you deserve ”
         </p>
-        <Link to="/menu" className={['Btn', classes.Banner__button].join(' ')}>
+        <Link to={menuLink} className={['Btn', classes.Banner__button].join(' ')}>
           View Today's Menu
         </Link>
       </section>
