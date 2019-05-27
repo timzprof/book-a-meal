@@ -28,9 +28,12 @@ The following tools will be needed to run this application successfully:
 ## Installation
 **On your Local Machine**
 - Pull the [develop](https://github.com/timzprof/book-a-meal) branch off this repository
+- Create a PostgreSQL Database for the App
+- Create a `.env` file and modify the Database Url and Add a Jwt_secret
 - Run `npm install` to install all dependencies
 - Run `npm run dev` to start the app (development)
 - Access endpoints on **localhost:7000**
+- To Access API Docs navigate to **localhost:7000/api-docs**
 - Cd into the `client` folder , this contains the React App for this project
 - Run `npm install` to install all dependencies
 - Cd out of the `client` folder and run `npm run client` to start the React App Dev Server
