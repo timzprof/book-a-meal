@@ -23,7 +23,8 @@ export {
   orderFetchUserOrders,
   orderDecrement,
   orderIncrement,
-  orderDelete
+  orderDelete,
+  orderFetchOrders
 } from './orders';
 
 export {

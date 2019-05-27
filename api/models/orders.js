@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 import sequelize from '../util/db';
+import User from './user';
 
 const Order = sequelize.define('order', {
   id: {
@@ -35,5 +36,7 @@ const Order = sequelize.define('order', {
   createdAt: Sequelize.DATEONLY,
   updatedAt: Sequelize.DATEONLY
 });
+
+Order.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 
 export default Order;

@@ -23,7 +23,7 @@ const tableRow = (props) => {
           </ul>
         </li>
         <li className={props.classes.Table__row__list__item}>{props.order.date}</li>
-        <li className={props.classes.Table__row__list__item}>${props.order.price.toFixed(2)}</li>
+        <li className={props.classes.Table__row__list__item}>${props.order.total.toFixed(2)}</li>
       </ul>
     </div>
   );  

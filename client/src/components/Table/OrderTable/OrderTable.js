@@ -7,7 +7,7 @@ import TableFoot from '../TableFoot/TableFoot';
 const orderTable = props => {
   const headItems = ['#ID', 'Caterer', 'Order Summary', 'Order Date', 'Order Total'];
   const total = props.orders.reduce((acc, order) => {
-    return acc + order.price;
+    return acc + order.total;
   },0);
   const footItems = ['Total', {total}];
   if(props.todaysOrders) headItems.splice(3,1);

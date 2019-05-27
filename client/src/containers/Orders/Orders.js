@@ -70,7 +70,7 @@ class Orders extends Component {
 
 const mapStateToProps = state => {
   return {
-    orderMeals: state.orders.orderMeals,
+    orderMeals: state.orders.userOrderMeals,
     checkingOut: state.orders.checkingOut,
     loading: state.orders.loading
   };

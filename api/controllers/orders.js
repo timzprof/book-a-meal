@@ -2,6 +2,7 @@ import Order from '../models/orders';
 import OrderItem from '../models/orderItem';
 import Meal from '../models/meals';
 import Menu from '../models/menu';
+import User from '../models/user';
 
 class OrderController {
   static async addToOrders(req, res) {
@@ -33,7 +34,15 @@ class OrderController {
 
   static async getOrders(req, res) {
     try {
-      const orders = await Order.findAll({ where: { catererId: req.caterer.id } });
+      const orders = await Order.findAll({
+        where: { catererId: req.caterer.id },
+        include: [
+          {
+            model: User,
+            attributes: ['name']
+          }
+        ]
+      });
       return res.status(200).json({
         status: 'success',
         message: 'Orders Retrieved',

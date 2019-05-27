@@ -166,3 +166,35 @@ export const orderDelete = orderItemId => {
     }
   };
 };
+
+export const orderFetchOrdersStart = () => {
+  return {
+    type: actionTypes.ORDER_FETCH_ORDERS_START
+  };
+};
+
+export const orderFetchOrdersSuccess = resData => {
+  return {
+    type: actionTypes.ORDER_FETCH_ORDERS_SUCCESS,
+    data: resData
+  };
+};
+
+export const orderFetchOrdersFailed = error => {
+  return {
+    type: actionTypes.ORDER_FETCH_ORDERS_FAILED,
+    error
+  };
+};
+
+export const orderFetchOrders = () => {
+  return async dispatch => {
+    dispatch(orderFetchOrdersStart());
+    try {
+      const response = await client.get('/orders', { headers: { 'X-Req': true } });
+      dispatch(orderFetchOrdersSuccess(response.data.data));
+    } catch (error) {
+      dispatch(orderFetchOrdersFailed(error));
+    }
+  };
+};

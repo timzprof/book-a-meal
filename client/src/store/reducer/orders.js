@@ -2,7 +2,8 @@ import * as actionTypes from '../action/actionTypes';
 import { updateObject } from '../../shared/utility';
 
 const initialState = {
-  orderMeals: [],
+  catererOrders: [],
+  userOrderMeals: [],
   ordersTotal: 0,
   loading: false,
   error: null,
@@ -39,12 +40,33 @@ const orderFetchUserOrdersStart = (state, action) => {
 const orderFetchUserOrdersSuccess = (state, action) => {
   return updateObject(state, {
     loading: false,
-    orderMeals: action.data.meals,
+    userOrderMeals: action.data.meals,
     ordersTotal: action.data.total
   });
 };
 
 const orderFetchUserOrdersFailed = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    error: action.error,
+    errorMessage: action.error.response ? action.error.response.data : action.error.message
+  });
+};
+
+const orderFetchOrdersStart = (state, action) => {
+  return updateObject(state, {
+    loading: true
+  });
+};
+
+const orderFetchOrdersSuccess = (state, action) => {
+  return updateObject(state, {
+    loading: false,
+    catererOrders: action.data
+  });
+};
+
+const orderFetchOrdersFailed = (state, action) => {
   return updateObject(state, {
     loading: false,
     error: action.error,
@@ -96,19 +118,19 @@ const orderDeleteStart = (state, action) => {
   return updateObject(state, {
     loading: true
   });
-}
+};
 
 const orderDeleteSuccess = (state, action) => {
   return updateObject(state, {
     loading: false
   });
-}
+};
 
 const orderDeleteFailed = (state, action) => {
   return updateObject(state, {
     loading: false
   });
-}
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -124,6 +146,12 @@ const reducer = (state = initialState, action) => {
       return orderFetchUserOrdersSuccess(state, action);
     case actionTypes.ORDER_FETCH_USER_ORDERS_FAILED:
       return orderFetchUserOrdersFailed(state, action);
+    case actionTypes.ORDER_FETCH_ORDERS_START:
+      return orderFetchOrdersStart(state, action);
+    case actionTypes.ORDER_FETCH_ORDERS_SUCCESS:
+      return orderFetchOrdersSuccess(state, action);
+    case actionTypes.ORDER_FETCH_ORDERS_FAILED:
+      return orderFetchOrdersFailed(state, action);
     case actionTypes.ORDER_INCREMENT_START:
       return orderIncrementStart(state, action);
     case actionTypes.ORDER_INCREMENT_SUCCESS:
