@@ -11,7 +11,6 @@ import * as actions from '../../../store/action/index';
 import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
 
 class CatererHome extends Component {
-  
   componentDidMount() {
     this.props.onFetchCatererMenu();
     this.props.onSetAuthRedirect();
@@ -22,7 +21,7 @@ class CatererHome extends Component {
     if (this.props.loading) {
       menu = <Loading />;
     }
-    if (!this.props.loading && !this.props.menuMeals) {
+    if (!this.props.loading && this.props.menuMeals.length === 0) {
       menu = (
         <section className="page-section">
           <Link to="/admin/menu" className={['Btn', 'Right__Btn__lg'].join(' ')}>
@@ -45,10 +44,12 @@ class CatererHome extends Component {
     );
   }
 }
- 
+
 const mapStateToProps = state => {
   let menuMeals = [];
-  if(state.menu.catererMenu.meals) menuMeals = JSON.parse(state.menu.catererMenu.meals);
+  if (state.menu.catererMenu.meals) {
+    menuMeals = JSON.parse(state.menu.catererMenu.meals);
+  }
   return {
     loading: state.menu.loading,
     menuMeals,

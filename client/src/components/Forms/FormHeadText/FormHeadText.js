@@ -1,4 +1,5 @@
 import React from 'react';
+import { isEqual } from 'lodash';
 
 const formHeadText = props => (
   <h3>
@@ -7,4 +8,8 @@ const formHeadText = props => (
   </h3>
 );
 
-export default formHeadText;
+const areEqual = (prevProps, nextProps) => {
+  return isEqual(prevProps,nextProps);
+}
+
+export default React.memo(formHeadText, areEqual);

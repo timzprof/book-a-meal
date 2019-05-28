@@ -3,7 +3,7 @@ import { updateObject } from '../../shared/utility';
 
 const initialState = {
   menus: [],
-  catererMenu: [],
+  catererMenu: {},
   beingOrdered: null,
   loading: false,
   error: null,
@@ -69,7 +69,7 @@ const menuFetchSingleMenuStart = (state, action) => {
 const menuFetchSingleMenuSuccess = (state, action) => {
   return updateObject(state, {
     loading: false,
-    catererMenu: action.data
+    catererMenu: { ...action.data }
   });
 };
 
