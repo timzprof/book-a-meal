@@ -2,8 +2,12 @@
 node_modules
 /.env
 /build
+
 # Coverage files
 .nyc_output
 lcov.info
 .coveralls.yml
 
+#Logs
+/error.log
+/combined.log

@@ -4,6 +4,9 @@ import classes from '../CatererMenus/CatererMenu/Menu.module.css';
 import Meal from './Meal/Meal';
 
 const mealList = props => {
+  const roles = {
+    meals: 'meallist'
+  };
   const meals = props.meals.map(meal => {
     return <Meal key={meal.id} meal={meal} {...props} />;
   });
@@ -47,7 +50,7 @@ const mealList = props => {
       break;
   }
   return (
-    <section className={sectionClasses.join(' ')}>
+    <section className={sectionClasses.join(' ')} role={roles.meals}>
       {topBtn}
       <div className={classes.Menu__food}>{meals}</div>
       {bottomBtn}
