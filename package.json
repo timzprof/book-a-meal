@@ -50,7 +50,7 @@
     "morgan": "1.9.1",
     "pg": "^7.8.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^5.6.0",
+    "sequelize": "^5.15.1",
     "swagger-ui-express": "^4.0.2",
     "trim-request": "^1.0.6",
     "winston": "^3.2.1"
