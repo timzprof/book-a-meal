@@ -1,15 +1,14 @@
 import { Router } from 'express';
 import trimRequest from 'trim-request';
 import UserMiddleware from './middleware/user';
-import CatererMiddleware from './middleware/caterer';
 import MealMiddleware from './middleware/meals';
 import OrderMiddleware from './middleware/order';
 import AuthController from './controllers/auth';
 import MealController from './controllers/meals';
-import MenuController from './controllers/menu';
 import OrderController from './controllers/orders';
-import UserController from './controllers/user';
-import CatererController from './controllers/caterer';
+import CateringServiceController from './controllers/catering_service';
+
+const {verifyUser, verifyAdmin} = AuthController;
 
 const router = Router();
 
@@ -17,36 +16,23 @@ router.post(
   '/auth/signup',
   trimRequest.body,
   UserMiddleware.validateRegister,
-  UserController.registerUser
+  AuthController.register
 );
 
 router.post(
   '/auth/login',
   trimRequest.body,
   UserMiddleware.validateLogin,
-  UserController.loginUser
+  AuthController.login
 );
 
-router.post(
-  '/auth/caterer/signup',
-  trimRequest.body,
-  CatererMiddleware.validateRegister,
-  CatererController.registerCaterer
-);
+router.get('/meals', verifyUser, verifyAdmin, MealController.getMealOptions);
 
 router.post(
-  '/auth/caterer/login',
+  '/meals',
   trimRequest.body,
-  CatererMiddleware.validateLogin,
-  CatererController.loginCaterer
-);
-
-router.get('/meals/', AuthController.verifyAdmin, MealController.getMealOptions);
-
-router.post(
-  '/meals/',
-  trimRequest.body,
-  AuthController.verifyAdmin,
+  verifyUser,
+  verifyAdmin,
   MealMiddleware.validateAddMeal,
   MealController.addMealOption
 );
@@ -54,33 +40,35 @@ router.post(
 router.put(
   '/meals/:id',
   trimRequest.body,
-  AuthController.verifyAdmin,
+  verifyUser,
+  verifyAdmin,
   MealMiddleware.validateUpdateMeal,
   MealController.updateMealOption
 );
 
-router.delete('/meals/:id', AuthController.verifyAdmin, MealController.deleteMealOption);
+router.delete('/meals/:id', verifyUser, verifyAdmin, MealController.deleteMealOption);
 
-router.get('/menu/', AuthController.verifyUser, MenuController.getMenus);
+router.get('/menu', verifyUser, CateringServiceController.getCatererMenus);
 
-router.get('/menu/caterer', AuthController.verifyAdmin, MenuController.getSingleMenu);
+router.get('/menu/caterer', verifyUser, verifyAdmin, CateringServiceController.getSingleMenu);
 
 router.post(
-  '/menu/',
+  '/menu',
   trimRequest.body,
-  AuthController.verifyAdmin,
+  verifyUser,
+  verifyAdmin,
   MealMiddleware.validateAddMealToMenu,
-  MenuController.addMealToMenu
+  CateringServiceController.addMealToMenu
 );
 
-router.get('/orders', AuthController.verifyAdmin, OrderController.getOrders);
+router.get('/orders', verifyUser, verifyAdmin, OrderController.getOrders);
 
-router.get('/orders/user', AuthController.verifyUser, OrderController.getOrderItems);
+router.get('/orders/user', verifyUser, OrderController.getOrderItems);
 
 router.post(
   '/orders',
   trimRequest.body,
-  AuthController.verifyUser,
+  verifyUser,
   OrderMiddleware.validateAddToOrder,
   OrderController.addToOrders
 );
@@ -88,7 +76,7 @@ router.post(
 router.put(
   '/orders/:orderId',
   trimRequest.body,
-  AuthController.verifyUser,
+  verifyUser,
   OrderMiddleware.validateModifyOrder,
   OrderController.modifyOrder
 );
@@ -96,7 +84,7 @@ router.put(
 router.post(
   '/orders/checkout',
   trimRequest.body,
-  AuthController.verifyUser,
+  verifyUser,
   OrderMiddleware.validateOrdeCheckout,
   OrderController.checkoutOrders
 );

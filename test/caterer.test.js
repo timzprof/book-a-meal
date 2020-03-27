@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHTTP from 'chai-http';
 import app from '../api/index';
-import Caterer from '../api/models/caterer';
+import User from '../api/models/user';
 
 const { assert, expect, use } = chai;
 
@@ -20,15 +20,16 @@ beforeEach(done => {
 });
 describe('Caterer Auth Endpoints', () => {
   context('Signup', () => {
-    it('POST /auth/caterer/signup - Caterer SignUp Validation Test', done => {
+    it('POST /auth/signup - Caterer SignUp Validation Test', done => {
       chai
         .request(app)
-        .post(`${API_PREFIX}/auth/caterer/signup`)
+        .post(`${API_PREFIX}/auth/signup`)
         .send({
           name: 'Roger Test',
-          email: 'roger@test.com',
+          email: 'helen@test.com',
           phone: '08028372825',
-          catering_service: 'Book A Meal'
+          catering_service: 'Book A Meal',
+          type: 'caterer'
         })
         .then(res => {
           expect(res).to.have.status(400);
@@ -36,53 +37,56 @@ describe('Caterer Auth Endpoints', () => {
           assert.equal(res.body.type, 'validation');
           done();
         })
-        .catch(err => console.log('POST /auth/caterer/signup', err.message));
+        .catch(err => console.log('POST /auth/signup', err.message));
     });
-    it('POST /auth/caterer/signup - Caterer Can Sign Up', done => {
+    it('POST /auth/signup - Caterer Can Sign Up', done => {
       chai
         .request(app)
-        .post(`${API_PREFIX}/auth/caterer/signup`)
+        .post(`${API_PREFIX}/auth/signup`)
         .send({
           name: 'Roger Test',
-          email: 'roger@test.com',
+          email: 'helen@test.com',
           phone: '08028372825',
           catering_service: 'Book A Meal',
-          password: 'password'
+          password: 'password',
+          type: 'caterer'
         })
         .then(res => {
           expect(res).to.have.status(201);
           assert.equal(res.body.status, 'success');
           done();
         })
-        .catch(err => console.log('POST /auth/caterer/signup', err.message));
+        .catch(err => console.log('POST /auth/signup', err.message));
     });
-    it("POST /auth/caterer/signup - Caterer Can't signup again with the same email", done => {
+    it("POST /auth/signup - Caterer Can't signup again with the same email", done => {
       chai
         .request(app)
-        .post(`${API_PREFIX}/auth/caterer/signup`)
+        .post(`${API_PREFIX}/auth/signup`)
         .send({
           name: 'Roger Test',
-          email: 'roger@test.com',
+          email: 'helen@test.com',
           phone: '08028372825',
           catering_service: 'Book A Meal',
-          password: 'password'
+          password: 'password',
+          type: 'caterer'
         })
         .then(res => {
           expect(res).to.have.status(500);
           assert.equal(res.body.status, 'error');
           done();
         })
-        .catch(err => console.log('POST /auth/caterer/signup', err.message));
+        .catch(err => console.log('POST /auth/signup', err.message));
     });
   });
 
   context('Login', () => {
-    it('POST /auth/caterer/login - Caterer Login Validation Test(Required)', done => {
+    it('POST /auth/login - Caterer Login Validation Test(Required)', done => {
       chai
         .request(app)
-        .post(`${API_PREFIX}/auth/caterer/login`)
+        .post(`${API_PREFIX}/auth/login`)
         .send({
-          email: 'roger@test.com'
+          email: 'helen@test.com',
+          type: 'caterer'
         })
         .then(res => {
           expect(res).to.have.status(400);
@@ -90,12 +94,12 @@ describe('Caterer Auth Endpoints', () => {
           assert.equal(res.body.type, 'validation');
           done();
         })
-        .catch(err => console.log('POST /auth/caterer/login', err.message));
+        .catch(err => console.log('POST /auth/login', err.message));
     });
-    it('POST /auth/caterer/login - Caterer Cannot Login without being registered', done => {
+    it('POST /auth/login - Caterer Cannot Login without being registered', done => {
       chai
         .request(app)
-        .post(`${API_PREFIX}/auth/caterer/login`)
+        .post(`${API_PREFIX}/auth/login`)
         .send({
           email: 'thesis@science.com',
           password: 'password'
@@ -105,14 +109,14 @@ describe('Caterer Auth Endpoints', () => {
           assert.equal(res.body.status, 'error');
           done();
         })
-        .catch(err => console.log('POST /auth/caterer/login', err.message));
+        .catch(err => console.log('POST /auth/login', err.message));
     });
-    it('POST /auth/caterer/login - Caterer Can Login', done => {
+    it('POST /auth/login - Caterer Can Login', done => {
       chai
         .request(app)
-        .post(`${API_PREFIX}/auth/caterer/login`)
+        .post(`${API_PREFIX}/auth/login`)
         .send({
-          email: 'roger@test.com',
+          email: 'helen@test.com',
           password: 'password'
         })
         .then(res => {
@@ -120,14 +124,14 @@ describe('Caterer Auth Endpoints', () => {
           assert.equal(res.body.status, 'success');
           done();
         })
-        .catch(err => console.log('POST /auth/caterer/login', err.message));
+        .catch(err => console.log('POST /auth/login', err.message));
     });
-    it("POST /auth/caterer/login - Caterer Can't login with incorrect password", done => {
+    it("POST /auth/login - Caterer Can't login with incorrect password", done => {
       chai
         .request(app)
-        .post(`${API_PREFIX}/auth/caterer/login`)
+        .post(`${API_PREFIX}/auth/login`)
         .send({
-          email: 'roger@test.com',
+          email: 'helen@test.com',
           password: 'password111'
         })
         .then(res => {
@@ -135,13 +139,13 @@ describe('Caterer Auth Endpoints', () => {
           assert.equal(res.body.status, 'error');
           done();
         })
-        .catch(err => console.log('POST /auth/caterer/login', err.message));
+        .catch(err => console.log('POST /auth/login', err.message));
     });
   });
 });
 
 after(done => {
-  Caterer.destroy({ where: { email: 'roger@test.com' } }).then(() => {
+  User.destroy({ where: { email: 'helen@test.com' } }).then(() => {
     done();
   });
 });

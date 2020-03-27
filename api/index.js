@@ -9,13 +9,11 @@ import helmet from 'helmet';
 import compression from 'compression';
 import { config } from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
+
 import { logger } from './util/logger';
 import Routes from './routes';
-import sequelize from './util/db';
+import db from './util/db';
 import swaggerDocument from './swagger.json';
-import Menu from './models/menu';
-import OrderItem from './models/orderItem';
-import Meal from './models/meals';
 
 const { CronJob } = require('cron');
 
@@ -36,16 +34,16 @@ app.use(express.static(path.resolve('client')));
 app.use(express.static(path.resolve('client/build')));
 app.use(express.static(path.resolve('api/images')));
 
-const wipeDbTrash = async () => {
-  try {
-    await Menu.truncate();
-    await OrderItem.truncate();
-    await Meal.update({ quantity: null });
-    logger.log('info:', 'Wiped DB Trash');
-  } catch (err) {
-    logger.error('error', 'DB JOB:', err);
-  }
-};
+// const wipeDbTrash = async () => {
+//   try {
+//     await Menu.truncate();
+//     await OrderItem.truncate();
+//     await Meal.update({ quantity: null });
+//     logger.log('info:', 'Wiped DB Trash');
+//   } catch (err) {
+//     logger.error('error', 'DB JOB:', err);
+//   }
+// };
 
 const ORIGIN = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '*';
 
@@ -72,14 +70,14 @@ app.get('*', (req, res) => {
 });
 
 // Connect and Migrate Database
-sequelize
+db
   .sync()
   .then(() => {
     logger.log('info', 'DB Connection has been established');
     app.listen(PORT, null, null, () => {
       app.emit('dbConnected');
-      const job = new CronJob('0 0 * * *', wipeDbTrash);
-      job.start();
+      // const job = new CronJob('0 0 * * *', wipeDbTrash);
+      // job.start();
     });
   })
   .catch(err => {

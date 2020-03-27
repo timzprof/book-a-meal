@@ -13,7 +13,9 @@ class UserMiddleware {
           .required(),
         password: Joi.string()
           .min(7)
-          .required()
+          .required(),
+        type: Joi.string().required(),
+        catering_service: Joi.string()
       };
       await Joi.validate(req.body, schema);
       next();

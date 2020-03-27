@@ -21,8 +21,9 @@ describe('User Auth Endpoints', () => {
         .post(`${API_PREFIX}/auth/signup`)
         .send({
           name: 'Roger Test',
-          email: 'roger@test.com',
-          phone: '08028372825'
+          email: 'reggie@test.com',
+          phone: '08028372825',
+          type: 'user'
         })
         .then(res => {
           expect(res).to.have.status(400);
@@ -40,7 +41,8 @@ describe('User Auth Endpoints', () => {
           name: 'Roger Test',
           email: 'roger',
           phone: '08028372825',
-          password: 'pass'
+          password: 'pass',
+          type: 'user'
         })
         .then(res => {
           expect(res).to.have.status(400);
@@ -56,9 +58,10 @@ describe('User Auth Endpoints', () => {
         .post(`${API_PREFIX}/auth/signup`)
         .send({
           name: 'Roger Test',
-          email: 'roger@test.com',
+          email: 'reggie@test.com',
           phone: '08028372825',
-          password: 'password'
+          password: 'password',
+          type: 'user'
         })
         .then(res => {
           expect(res).to.have.status(201);
@@ -73,9 +76,10 @@ describe('User Auth Endpoints', () => {
         .post(`${API_PREFIX}/auth/signup`)
         .send({
           name: 'Roger Test',
-          email: 'roger@test.com',
+          email: 'reggie@test.com',
           phone: '08028372825',
-          password: 'password'
+          password: 'password',
+          type: 'user'
         })
         .then(res => {
           expect(res).to.have.status(500);
@@ -92,7 +96,7 @@ describe('User Auth Endpoints', () => {
         .request(app)
         .post(`${API_PREFIX}/auth/login`)
         .send({
-          email: 'roger@test.com'
+          email: 'reggie@test.com'
         })
         .then(res => {
           expect(res).to.have.status(400);
@@ -138,7 +142,7 @@ describe('User Auth Endpoints', () => {
         .request(app)
         .post(`${API_PREFIX}/auth/login`)
         .send({
-          email: 'roger@test.com',
+          email: 'reggie@test.com',
           password: 'password'
         })
         .then(res => {
@@ -153,7 +157,7 @@ describe('User Auth Endpoints', () => {
         .request(app)
         .post(`${API_PREFIX}/auth/login`)
         .send({
-          email: 'roger@test.com',
+          email: 'reggie@test.com',
           password: 'password111'
         })
         .then(res => {
@@ -167,7 +171,7 @@ describe('User Auth Endpoints', () => {
 });
 
 after(done => {
-  User.destroy({ where: { email: 'roger@test.com' } }).then(() => {
+  User.destroy({ where: { email: 'reggie@test.com' } }).then(() => {
     done();
   });
 });

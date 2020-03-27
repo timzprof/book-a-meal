@@ -18,10 +18,6 @@
       "description": "API Endpoints for users in the system"
     },
     {
-      "name": "Caterers",
-      "description": "API Endpoints for Caterers in the system"
-    },
-    {
       "name": "Meals",
       "description": "API Endpoints for Caterer Meals in the system"
     },
@@ -133,102 +129,6 @@
           },
           "200": {
             "description": "User Logged In"
-          }
-        }
-      }
-    },
-    "/api/v1/auth/caterer/signup": {
-      "post": {
-        "tags": [
-          "Caterers"
-        ],
-        "description": "Register a New Caterer in the system",
-        "requestBody": {
-          "description": "Input Data Format",
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "Name of Caterer"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "Email of Caterer"
-                  },
-                  "phone": {
-                    "type": "number",
-                    "description": "Phone Number of Caterer"
-                  },
-                  "catering_service": {
-                    "type": "string",
-                    "description": "Name of Catering service"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "Password of Caterer"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "400": {
-            "description": "Caterer Registration Validation Error"
-          },
-          "500": {
-            "description": "Caterer Already Registred"
-          },
-          "201": {
-            "description": "New Caterer is registered"
-          }
-        }
-      }
-    },
-    "/api/v1/auth/caterer/login": {
-      "post": {
-        "tags": [
-          "Caterers"
-        ],
-        "description": "Log In a Registered Caterer",
-        "requestBody": {
-          "description": "Input Data Format",
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "Email of Registered Caterer"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "Password of Registered Caterer"
-                  }
-                },
-                "type": "object"
-              }
-            }
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "400": {
-            "description": "Caterer Login Validation Error"
-          },
-          "500": {
-            "description": "Caterer Does Not Exist"
-          },
-          "200": {
-            "description": "Caterer Logged In"
           }
         }
       }

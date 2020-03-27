@@ -11,3 +11,5 @@ lcov.info
 #Logs
 /error.log
 /combined.log
+
+.vscode

@@ -10,7 +10,7 @@ class MealController {
         name,
         price,
         imageUrl: image.name,
-        catererId: req.caterer.id
+        catererId: req.user.id
       });
       await image.mv(`./api/images/${image.name}`);
       return res.status(201).json({
@@ -27,7 +27,7 @@ class MealController {
   }
 
   static async getMealOptions(req, res) {
-    const meals = await Meal.findAll({ where: { catererId: req.caterer.id } });
+    const meals = await Meal.findAll({ where: { catererId: req.user.id } });
     return res.status(200).json({
       status: 'success',
       message: 'Meals Retrieved',
@@ -41,11 +41,14 @@ class MealController {
       if (!meal) {
         throw new Error(`Meal With ID ${req.params.id} does not exist`);
       }
+
       const mealUpdate = {
-        name: req.body.name !== '' ? req.body.name : meal.name,
-        price: req.body.price !== '' ? req.body.price : meal.price
+        name: req.body.name || meal.name,
+        price: req.body.price || meal.price,
+        imageUrl: meal.imageUrl
       };
-      if (req.files !== null) {
+
+      if (req.files) {
         const { image } = req.files;
         const imageUrl = `${image.name}`;
         fs.unlink(`./api/images/${meal.imageUrl}`, err => {
@@ -53,9 +56,8 @@ class MealController {
         });
         mealUpdate.imageUrl = imageUrl;
         await image.mv(`./api/images/${imageUrl}`);
-      } else {
-        mealUpdate.imageUrl = meal.imageUrl;
       }
+
       const { name, price, imageUrl } = mealUpdate;
       await Meal.update({ name, price, imageUrl }, { where: { id: req.params.id } });
       return res.status(200).json({

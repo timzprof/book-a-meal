@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
-import sequelize from '../util/db';
+import db from '../util/db';
 
-const Meal = sequelize.define('meal', {
+const Meal = db.define('meal', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -24,8 +24,10 @@ const Meal = sequelize.define('meal', {
     type: Sequelize.STRING,
     allowNull: false
   },
-  createdAt: Sequelize.DATEONLY,
-  updatedAt: Sequelize.DATEONLY
+  catererId: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  }
 });
 
 export default Meal;

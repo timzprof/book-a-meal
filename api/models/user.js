@@ -1,8 +1,9 @@
 import Sequelize from 'sequelize';
-import sequelize from '../util/db';
+import db from '../util/db';
 import OrderItem from './orderItem';
+import Meal from './meals';
 
-const User = sequelize.define('user', {
+const User = db.define('user', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -12,6 +13,11 @@ const User = sequelize.define('user', {
   name: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  type: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    default: 'user'
   },
   email: {
     type: Sequelize.STRING,
@@ -25,9 +31,7 @@ const User = sequelize.define('user', {
   password: {
     type: Sequelize.STRING,
     allowNull: false
-  },
-  createdAt: Sequelize.DATEONLY,
-  updatedAt: Sequelize.DATEONLY
+  }
 });
 
 User.hasMany(OrderItem, { constraints: true, onDelete: 'CASCADE' });

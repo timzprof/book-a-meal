@@ -1,8 +1,8 @@
 import Order from '../models/orders';
 import OrderItem from '../models/orderItem';
 import Meal from '../models/meals';
-import Menu from '../models/menu';
 import User from '../models/user';
+import CateringService from '../models/catering_service';
 
 class OrderController {
   static async addToOrders(req, res) {
@@ -16,6 +16,10 @@ class OrderController {
           message: 'Order Already exists'
         };
       } else {
+        const meal = await Meal.findOne({ where: { id: mealId } });
+        if (quantity > meal.quantity) {
+          throw new Error('Quantity requested is higher than available');
+        }
         const newOrderItem = await OrderItem.create({ mealId, quantity, userId: req.user.id });
         response.body = {
           status: 'success',
@@ -35,11 +39,11 @@ class OrderController {
   static async getOrders(req, res) {
     try {
       const orders = await Order.findAll({
-        where: { catererId: req.caterer.id },
+        where: { catererId: req.user.id },
         include: [
           {
             model: User,
-            attributes: ['name']
+            attributes: ['id', 'name', 'email', 'phone']
           }
         ]
       });
@@ -95,27 +99,39 @@ class OrderController {
         where: { id: orderId, userId: req.user.id },
         include: [Meal]
       });
-      if (action === 'increase') {
-        orderItem.quantity += 1;
-        if (orderItem.quantity > orderItem.meal.quantity) {
-          throw new Error(
-            `Only ${orderItem.meal.quantity} servings of ${orderItem.meal.name} is available`
-          );
-        }
-        await OrderItem.update({ quantity: orderItem.quantity }, { where: { id: orderItem.id } });
-      } else if (action === 'decrease') {
-        orderItem.quantity -= 1;
-        if (orderItem.quantity === 0) {
-          await OrderItem.destroy({ where: { id: orderItem.id } });
-        } else {
+
+      switch (action) {
+        case 'increase':
+          orderItem.quantity += 1;
+          if (orderItem.quantity > orderItem.meal.quantity) {
+            throw new Error(
+              `Only ${orderItem.meal.quantity} servings of ${orderItem.meal.name} is available`
+            );
+          }
           await OrderItem.update({ quantity: orderItem.quantity }, { where: { id: orderItem.id } });
-        }
-      } else if (action === 'delete') {
-        await OrderItem.destroy({ where: { id: orderItem.id } });
+          break;
+        case 'decrease':
+          orderItem.quantity -= 1;
+          if (orderItem.quantity === 0) {
+            await OrderItem.destroy({ where: { id: orderItem.id } });
+          } else {
+            await OrderItem.update(
+              { quantity: orderItem.quantity },
+              { where: { id: orderItem.id } }
+            );
+          }
+          break;
+        case 'delete':
+          await OrderItem.destroy({ where: { id: orderItem.id } });
+          break;
+        default:
+          break;
       }
+      const updatedOrderItem = await OrderItem.findOne({ where: { id: orderItem.id } });
       return res.status(200).json({
         status: 'success',
-        message: 'Order Updated'
+        message: 'Order Updated',
+        data: updatedOrderItem ? { ...updatedOrderItem.dataValues } : {}
       });
     } catch (err) {
       return res.status(500).json({
@@ -159,35 +175,28 @@ class OrderController {
 
   static async reduceQuantity(meals) {
     try {
-      const meal = meals[0];
-      Meal.findOne({ where: { id: meal.id } })
-        .then(dbMeal => {
-          return dbMeal.update(
-            { quantity: dbMeal.quantity - meal.quantity },
-            { where: { id: meal.id } }
-          );
-        })
-        .then(() => {
-          return Menu.findOne({ where: { catererId: meal.catererId } });
-        })
-        .then(menu => {
-          const menuMeals = JSON.parse(menu.meals);
-          const updatedMenuMeals = menuMeals.map(menuMeal => {
-            const updatedMenuMeal = { ...menuMeal };
-            if (menuMeal.id === meal.id) {
-              updatedMenuMeal.quantity -= meal.quantity;
-            }
-            return updatedMenuMeal;
-          });
-          return menu.update(
-            { meals: JSON.stringify(updatedMenuMeals) },
-            { where: { id: menu.id } }
-          );
-        })
-        .then(() => {
-          meals.shift();
-          return meals.length !== 0 ? OrderController.reduceQuantity(meals) : true;
+      for await (const meal of meals) {
+        const dbMeal = await Meal.findOne({ where: { id: meal.id } });
+        const newQuantity = dbMeal.quantity - meal.quantity;
+        await dbMeal.update({ quantity: newQuantity });
+
+        let updatedMenu = [];
+        const cateringService = await CateringService.findOne({
+          where: { catererId: meal.catererId }
         });
+
+        updatedMenu = cateringService.menu.map(jsonMeal => {
+          const menuMeal = JSON.parse(jsonMeal);
+          if (meal.id === menuMeal.id) {
+            menuMeal.quantity -= meal.quantity;
+          }
+          return JSON.stringify(meal);
+        });
+
+        await cateringService.update({
+          menu: updatedMenu
+        });
+      }
     } catch (err) {
       throw new Error(err.message);
     }
@@ -195,7 +204,7 @@ class OrderController {
 
   static async createOrders(caterers, meals, billingAddress, userId) {
     try {
-      caterers.forEach(async caterer => {
+      for await (const caterer of caterers) {
         let catererTotal = 0;
         const catererMeals = meals.filter(meal => meal.catererId === caterer);
         catererMeals.forEach(catererMeal => {
@@ -209,7 +218,7 @@ class OrderController {
           userId,
           delivery_status: 0
         });
-      });
+      }
     } catch (err) {
       throw new Error(err.message);
     }

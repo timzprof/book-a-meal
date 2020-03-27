@@ -1,8 +1,8 @@
 import Sequelize from 'sequelize';
-import sequelize from '../util/db';
+import db from '../util/db';
 import User from './user';
 
-const Order = sequelize.define('order', {
+const Order = db.define('order', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -28,13 +28,7 @@ const Order = sequelize.define('order', {
   catererId: {
     type: Sequelize.INTEGER,
     allowNull: false
-  },
-  userId: {
-    type: Sequelize.INTEGER,
-    allowNull: false
-  },
-  createdAt: Sequelize.DATEONLY,
-  updatedAt: Sequelize.DATEONLY
+  }
 });
 
 Order.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });

@@ -5,7 +5,6 @@ import chaiHTTP from 'chai-http';
 import jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
 import app from '../api/index';
-import Caterer from '../api/models/caterer';
 import User from '../api/models/user';
 import Meal from '../api/models/meals';
 
@@ -40,7 +39,8 @@ const userPayload = {
   name: 'Billy Newton',
   email: 'em@user.com',
   phone: '07075748392',
-  password: 'billions'
+  password: 'billions',
+  type: 'user'
 };
 
 const catererPayload = {
@@ -48,7 +48,8 @@ const catererPayload = {
   email: 'em@gd.com',
   phone: '07075748392',
   catering_service: 'Buy Food',
-  password: 'billions'
+  password: 'billions',
+  type: 'caterer'
 };
 
 const caterer2Payload = {
@@ -56,7 +57,8 @@ const caterer2Payload = {
   email: 'deakueem@gdyeyw.com',
   phone: '07075748392',
   catering_service: 'Buy Food',
-  password: 'billions'
+  password: 'billions',
+  type: 'caterer'
 };
 
 const caterer3Payload = {
@@ -64,39 +66,36 @@ const caterer3Payload = {
   email: 'de@gdye.com',
   phone: '07075748392',
   catering_service: 'Buy Food',
-  password: 'billions'
+  password: 'billions',
+  type: 'caterer'
 };
 
 before(done => {
-  Caterer.create(catererPayload)
-    .then(() => {
-      return User.create(userPayload);
-    })
-    .then(() => {
-      done();
-    });
+  Promise.all([User.create(catererPayload), User.create(userPayload)]).then(() => {
+    done();
+  });
 });
 
 describe('Meals Endpoints', () => {
   context('Get all Meals (Caterer)', () => {
-    it(`GET ${API_PREFIX}/meals/ - Fetch All Meals (Unauthorized)`, done => {
+    it(`GET ${API_PREFIX}/meals - Fetch All Meals (Unauthorized)`, done => {
       chai
         .request(app)
-        .get(`${API_PREFIX}/meals/`)
+        .get(`${API_PREFIX}/meals`)
         .then(res => {
           expect(res).to.have.status(401);
           assert.equal(res.body.status, 'error');
           done();
         })
-        .catch(err => console.log('GET /meals/', err.message));
+        .catch(err => console.log('GET /meals', err.message));
     });
-    it(`GET ${API_PREFIX}/meals/ - Fetch All Meals (User Unauthorized)`, done => {
+    it(`GET ${API_PREFIX}/meals - Fetch All Meals (User Unauthorized)`, done => {
       User.findOne({ where: { email: userPayload.email } })
         .then(user => {
-          const { id, name, email, phone } = user;
+          const { id, name, email, phone, type } = user;
           const token = jwt.sign(
             {
-              user: { id, name, email, phone }
+              user: { id, name, email, phone, type }
             },
             secret,
             {
@@ -105,25 +104,24 @@ describe('Meals Endpoints', () => {
           );
           chai
             .request(app)
-            .get(`${API_PREFIX}/meals/`)
+            .get(`${API_PREFIX}/meals`)
             .set('Authorization', `Bearer ${token}`)
             .then(res => {
               expect(res).to.have.status(401);
               assert.equal(res.body.status, 'error');
               done();
             })
-            .catch(err => console.log('GET /meals/', err.message));
+            .catch(err => console.log('GET /meals', err.message));
         })
         .catch(err => console.log(err.message));
     });
-    it(`GET ${API_PREFIX}/meals/ - Fetch All Meals - (Caterer Authorized)`, done => {
-      Caterer.findOne({ where: { email: catererPayload.email } })
+    it(`GET ${API_PREFIX}/meals - Fetch All Meals - (Caterer Authorized)`, done => {
+      User.findOne({ where: { email: catererPayload.email } })
         .then(caterer => {
-          const { id, name, email, phone } = caterer;
+          const { id, name, email, phone, type } = caterer;
           const token = jwt.sign(
             {
-              caterer: { id, name, email, phone },
-              isCaterer: true
+              user: { id, name, email, phone, type }
             },
             secret,
             {
@@ -132,24 +130,24 @@ describe('Meals Endpoints', () => {
           );
           chai
             .request(app)
-            .get(`${API_PREFIX}/meals/`)
+            .get(`${API_PREFIX}/meals`)
             .set('Authorization', `Bearer ${token}`)
             .then(res => {
               expect(res).to.have.status(200);
               assert.equal(res.body.status, 'success');
               done();
             })
-            .catch(err => console.log('GET /meals/', err.message));
+            .catch(err => console.log('GET /meals', err.message));
         })
         .catch(err => console.log(err.message));
     });
   });
 
   context('Add Meal Option (Caterer)', () => {
-    it(`POST ${API_PREFIX}/meals/ - Add Meal Option (Unauthorized)`, done => {
+    it(`POST ${API_PREFIX}/meals - Add Meal Option (Unauthorized)`, done => {
       chai
         .request(app)
-        .post(`${API_PREFIX}/meals/`)
+        .post(`${API_PREFIX}/meals`)
         .send({
           name: 'Test Meal',
           price: '500'
@@ -159,20 +157,20 @@ describe('Meals Endpoints', () => {
           assert.equal(res.body.status, 'error');
           done();
         })
-        .catch(err => console.log('POST /meals/', err.message));
+        .catch(err => console.log('POST /meals', err.message));
     });
-    it(`POST ${API_PREFIX}/meals/ - Add Meal Option - (Validation Test)`, done => {
-      Caterer.findOne({ where: { email: catererPayload.email } })
+    it(`POST ${API_PREFIX}/meals - Add Meal Option - (Validation Test)`, done => {
+      User.findOne({ where: { email: catererPayload.email } })
         .then(caterer => {
           const token = jwt.sign(
             {
-              caterer: {
+              user: {
                 id: caterer.id,
                 name: caterer.name,
                 email: caterer.email,
-                phone: caterer.phone
-              },
-              isCaterer: true
+                phone: caterer.phone,
+                type: 'caterer'
+              }
             },
             secret,
             {
@@ -181,7 +179,7 @@ describe('Meals Endpoints', () => {
           );
           chai
             .request(app)
-            .post(`${API_PREFIX}/meals/`)
+            .post(`${API_PREFIX}/meals`)
             .set('Authorization', `Bearer ${token}`)
             .send({
               name: 'Test Meal',
@@ -192,22 +190,22 @@ describe('Meals Endpoints', () => {
               assert.equal(res.body.status, 'error');
               done();
             })
-            .catch(err => console.log('POST /meals/', err.message));
+            .catch(err => console.log('POST /meals', err.message));
         })
         .catch(err => console.log(err.message));
     });
-    it(`POST ${API_PREFIX}/meals/ - Add Meal Option - (Caterer Can Add Meal Option)`, done => {
-      Caterer.findOne({ where: { email: catererPayload.email } })
+    it(`POST ${API_PREFIX}/meals - Add Meal Option - (Caterer Can Add Meal Option)`, done => {
+      User.findOne({ where: { email: catererPayload.email } })
         .then(caterer => {
           const token = jwt.sign(
             {
-              caterer: {
+              user: {
                 id: caterer.id,
                 name: caterer.name,
                 email: caterer.email,
-                phone: caterer.phone
-              },
-              isCaterer: true
+                phone: caterer.phone,
+                type: 'caterer'
+              }
             },
             secret,
             {
@@ -216,7 +214,7 @@ describe('Meals Endpoints', () => {
           );
           chai
             .request(app)
-            .post(`${API_PREFIX}/meals/`)
+            .post(`${API_PREFIX}/meals`)
             .set('Authorization', `Bearer ${token}`)
             .field('name', 'Test Meal')
             .field('price', '500')
@@ -226,7 +224,7 @@ describe('Meals Endpoints', () => {
               assert.equal(res.body.status, 'success');
               done();
             })
-            .catch(err => console.log('POST /meals/', err.message));
+            .catch(err => console.log('POST /meals', err.message));
         })
         .catch(err => console.log(err.message));
     });
@@ -235,7 +233,7 @@ describe('Meals Endpoints', () => {
   context('Modify Meal Option (Caterer)', () => {
     duplicateImage()
       .then(() => {
-        Caterer.create(caterer2Payload).then(caterer => {
+        User.create(caterer2Payload).then(caterer => {
           return Meal.create({
             name: 'Fake Meal',
             price: 1000,
@@ -258,17 +256,17 @@ describe('Meals Endpoints', () => {
                 .catch(err => console.log('PUT /meals/:mealId', err.message));
             });
             it(`PUT ${API_PREFIX}/meals/:mealId - Modify Meal Option - (Validation Test)`, done => {
-              Caterer.findOne({ where: { email: caterer2Payload.email } })
+              User.findOne({ where: { email: caterer2Payload.email } })
                 .then(caterer => {
                   const token = jwt.sign(
                     {
-                      caterer: {
+                      user: {
                         id: caterer.id,
                         name: caterer.name,
                         email: caterer.email,
-                        phone: caterer.phone
-                      },
-                      isCaterer: true
+                        phone: caterer.phone,
+                        type: 'caterer'
+                      }
                     },
                     secret,
                     {
@@ -292,17 +290,17 @@ describe('Meals Endpoints', () => {
                 .catch(err => console.log(err.message));
             });
             it(`PUT ${API_PREFIX}/meals/:mealId - Modify Meal Option - (Caterer Can Modify Meal Option)`, done => {
-              Caterer.findOne({ where: { email: caterer2Payload.email } })
+              User.findOne({ where: { email: caterer2Payload.email } })
                 .then(caterer => {
                   const token = jwt.sign(
                     {
-                      caterer: {
+                      user: {
                         id: caterer.id,
                         name: caterer.name,
                         email: caterer.email,
-                        phone: caterer.phone
-                      },
-                      isCaterer: true
+                        phone: caterer.phone,
+                        type: 'caterer'
+                      }
                     },
                     secret,
                     {
@@ -326,7 +324,7 @@ describe('Meals Endpoints', () => {
                         done();
                       });
                     })
-                    .catch(err => console.log('POST /meals/', err.message));
+                    .catch(err => console.log('PUT /meals/:mealId', err.message));
                 })
                 .catch(err => console.log(err.message));
             });
@@ -339,7 +337,7 @@ describe('Meals Endpoints', () => {
   context('Delete Meal Option (Caterer)', () => {
     duplicateImage('fake2.png')
       .then(() => {
-        Caterer.create(caterer3Payload)
+        User.create(caterer3Payload)
           .then(caterer => {
             return Meal.create({
               name: 'Fake Meal',
@@ -361,13 +359,12 @@ describe('Meals Endpoints', () => {
                 .catch(err => console.log('DELETE /meals/:mealId', err.message));
             });
             it(`DELETE ${API_PREFIX}/meals/:mealId - Delete Meal - (Caterer Authorized - Meal does not exist)`, done => {
-              Caterer.findOne({ where: { email: caterer3Payload.email } })
+              User.findOne({ where: { email: caterer3Payload.email } })
                 .then(caterer => {
-                  const { id, name, email, phone } = caterer;
+                  const { id, name, email, phone, type } = caterer;
                   const token = jwt.sign(
                     {
-                      caterer: { id, name, email, phone },
-                      isCaterer: true
+                      user: { id, name, email, phone, type }
                     },
                     secret,
                     {
@@ -388,13 +385,12 @@ describe('Meals Endpoints', () => {
                 .catch(err => console.log(err.message));
             });
             it(`DELETE ${API_PREFIX}/meals/:mealId - Delete Meal - (Caterer Authorized)`, done => {
-              Caterer.findOne({ where: { email: caterer3Payload.email } })
+              User.findOne({ where: { email: caterer3Payload.email } })
                 .then(caterer => {
-                  const { id, name, email, phone } = caterer;
+                  const { id, name, email, phone, type } = caterer;
                   const token = jwt.sign(
                     {
-                      caterer: { id, name, email, phone },
-                      isCaterer: true
+                      user: { id, name, email, phone, type }
                     },
                     secret,
                     {
@@ -421,13 +417,12 @@ describe('Meals Endpoints', () => {
 });
 
 after(done => {
-  Caterer.destroy({ where: { email: catererPayload.email } })
-    .then(async () => {
-      await Caterer.destroy({ where: { email: caterer3Payload.email } });
-      await Caterer.destroy({ where: { email: caterer2Payload.email } });
-      return User.destroy({ where: { email: userPayload.email } });
-    })
-    .then(() => {
-      done();
-    });
+  Promise.all([
+    User.destroy({ where: { email: caterer3Payload.email } }),
+    User.destroy({ where: { email: caterer2Payload.email } }),
+    User.destroy({ where: { email: userPayload.email } }),
+    User.destroy({ where: { email: catererPayload.email } })
+  ]).then(() => {
+    done();
+  });
 });
