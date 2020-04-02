@@ -63,7 +63,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use('/api/v1', Routes);
+app.use('/api/v2', Routes);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve('client/build', 'index.html'));
