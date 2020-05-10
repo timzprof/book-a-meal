@@ -1,3 +1,4 @@
+import debug from 'debug';
 import { format, createLogger, transports } from 'winston';
 
 const { timestamp, label, prettyPrint, colorize, combine, json, splat, simple } = format;
