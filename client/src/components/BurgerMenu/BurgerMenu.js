@@ -1,16 +1,18 @@
 import React from 'react';
+import isEqual from 'lodash/isEqual';
+
 import classes from './BurgerMenu.module.css';
 
-const burgerMenu = (props) => {
-  const burgerStyles = [classes.Burger, classes.BurgerSlip, props.mobileMenuClass];
-  if (props.show) {
+const BurgerMenu = ({ mobileMenuClass, show, toggle }) => {
+  const burgerStyles = [classes.Burger, classes.BurgerSlip, mobileMenuClass];
+  if (show) {
     burgerStyles.push(classes.Open);
   }
   return (
-    <div className={burgerStyles.join(' ')} onClick={props.toggle}>
+    <div className={burgerStyles.join(' ')} onClick={toggle}>
       <div className={classes.BurgerLines}></div>
     </div>
   );
 }
 
-export default burgerMenu;
+export default React.memo(BurgerMenu, isEqual);

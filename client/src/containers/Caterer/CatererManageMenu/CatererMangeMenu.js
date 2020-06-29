@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import MealList from '../../../components/MealList/MealList';
 import Loading from '../../../components/UI/Loading/Loading';
-import Empty from '../../../components/UI/Empty/Empty';
-import client from '../../../shared/axios-client';
-import * as actions from '../../../store/action/index';
-import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
+
+import { mealFetchMeals, menuAddMealsToMenu } from '../../../redux/action';
 
 class CatererManageMenu extends Component {
   state = {
-    meals: [],
-    redirect: false,
-    redirectPath: null
+    meals: []
   };
 
   componentDidMount() {
@@ -46,37 +43,34 @@ class CatererManageMenu extends Component {
         mealsData.push({ mealId: meal.id, quantity: meal.quantity });
       }
     });
-    this.props.onAddMealToMenu(mealsData);
-    this.setState({ redirect: true, redirectPath: '/admin/' });
+    this.props
+      .onAddMealToMenu(mealsData)
+      .then(() => {
+        this.props.history.push('/caterer');
+      })
+      .catch(error => console.log(error));
   };
 
   render() {
-    let meals = (
-      <MealList
-        type="manageMenu"
-        meals={this.state.meals}
-        increase={this.increaseQuantity}
-        decrease={this.decreaseQuantity}
-        saveMenu={this.saveMenu}
-      />
-    );
-    if (this.props.loading || this.state.addingMeals) {
-      meals = <Loading />;
-    }
-    if (!this.props.loading && this.props.meals.length === 0) {
-      meals = <Empty text="Meal Options" />;
-    }
+    const { loading } = this.props;
     return (
-      <React.Fragment>
-        {this.state.redirect ? <Redirect to={this.state.redirectPath} /> : null}
-        <Header
-          bannerText="Increase Food Options Quantity to add them to menu"
-          authenticated={this.props.catererAuthenticated}
-          caterer
-        />
-        <main>{meals}</main>
+      <>
+        <Header bannerText="Increase Food Options Quantity to add them to menu" />
+        <main>
+          {loading ? (
+            <Loading />
+          ) : (
+            <MealList
+              type="manageMenu"
+              meals={this.state.meals}
+              increase={this.increaseQuantity}
+              decrease={this.decreaseQuantity}
+              saveMenu={this.saveMenu}
+            />
+          )}
+        </main>
         <Footer />
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -84,19 +78,15 @@ class CatererManageMenu extends Component {
 const mapStateToProps = state => {
   return {
     loading: state.meal.loading,
-    catererAuthenticated: state.auth.catererAuthenticated,
     meals: state.meal.meals
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchCatererMeals: () => dispatch(actions.mealFetchMeals()),
-    onAddMealToMenu: data => dispatch(actions.menuAddMealsToMenu(data))
+    onFetchCatererMeals: () => dispatch(mealFetchMeals()),
+    onAddMealToMenu: data => dispatch(menuAddMealsToMenu(data))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withHttpHandler(CatererManageMenu, client));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CatererManageMenu));

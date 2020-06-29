@@ -1,23 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { isEqual } from 'lodash';
-import * as actions from '../../store/action/index';
+
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import MealList from '../../components/MealList/MealList';
 import Modal from '../../components/UI/Modal/Modal';
 import Loading from '../../components/UI/Loading/Loading';
-import client from '../../shared/axios-client';
-import withHttpHandler from '../../hoc/withHttpHandler/withHttpHandler';
-import Empty from '../../components/UI/Empty/Empty';
+
+import { orderUpdate, orderFetchUserOrders, orderDelete, orderCheckout } from '../../redux/action';
 
 class Orders extends Component {
+  state = {
+    checkingOut: false
+  };
   componentDidMount() {
     this.props.onFetchOrders();
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return !isEqual(nextProps.orderMeals,this.props.orderMeals);
   }
 
   handleOrderDelete = orderItemId => {
@@ -25,11 +22,11 @@ class Orders extends Component {
   };
 
   handleOrderIncrement = orderItemId => {
-    this.props.onOrderIncrement(orderItemId);
+    this.props.onOrderUpdate(orderItemId, 'increase');
   };
 
   handleOrderDecrement = orderItemId => {
-    this.props.onOrderDecrement(orderItemId);
+    this.props.onOrderUpdate(orderItemId, 'decrease');
   };
 
   showCheckoutModal = () => {
@@ -41,29 +38,33 @@ class Orders extends Component {
   };
 
   render() {
-    let orders = (
-      <MealList
-        type="orders"
-        meals={this.props.orderMeals}
-        increaseQuantity={this.handleOrderIncrement}
-        decreaseQuantity={this.handleOrderDecrement}
-        deleteOrder={this.handleOrderDelete}
-        checkout={this.showCheckoutModal}
-      />
-    );
-    if (this.props.loading) {
-      orders = <Loading />;
-    }
-    if (!this.props.loading && this.props.orderMeals.length === 0) {
-      orders = <Empty text="Orders" />;
-    }
+    const { loading, onOrderCheckout } = this.props;
+    const { checkingOut } = this.state;
     return (
-      <React.Fragment>
-        <Header bannerText="Your Order Summary" authenticated overlay={this.props.checkingOut} />
-        <main>{orders}</main>
+      <>
+        <Header bannerText="Your Order Summary" overlay={checkingOut} />
+        <main>
+          {loading ? (
+            <Loading />
+          ) : (
+            <MealList
+              type="orders"
+              meals={this.props.orderMeals}
+              increaseQuantity={this.handleOrderIncrement}
+              decreaseQuantity={this.handleOrderDecrement}
+              deleteOrder={this.handleOrderDelete}
+              checkout={this.showCheckoutModal}
+            />
+          )}
+        </main>
         <Footer />
-        <Modal type="checkout" show={this.props.checkingOut} close={this.hideCheckoutModal} />
-      </React.Fragment>
+        <Modal
+          type="checkout"
+          show={checkingOut}
+          checkout={onOrderCheckout}
+          close={this.hideCheckoutModal}
+        />
+      </>
     );
   }
 }
@@ -71,21 +72,17 @@ class Orders extends Component {
 const mapStateToProps = state => {
   return {
     orderMeals: state.orders.userOrderMeals,
-    checkingOut: state.orders.checkingOut,
     loading: state.orders.loading
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchOrders: () => dispatch(actions.orderFetchUserOrders()),
-    onOrderIncrement: orderItemId => dispatch(actions.orderIncrement(orderItemId)),
-    onOrderDecrement: orderItemId => dispatch(actions.orderDecrement(orderItemId)),
-    onOrderDelete: orderItemId => dispatch(actions.orderDelete(orderItemId))
+    onFetchOrders: () => dispatch(orderFetchUserOrders()),
+    onOrderUpdate: (orderItemId, action) => dispatch(orderUpdate(orderItemId, action)),
+    onOrderDelete: orderItemId => dispatch(orderDelete(orderItemId)),
+    onOrderCheckout: data => dispatch(orderCheckout(data))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withHttpHandler(Orders, client));
+export default connect(mapStateToProps, mapDispatchToProps)(Orders);

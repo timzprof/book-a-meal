@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../../store/action/index';
+
 import Header from '../../../components/Header/Header';
 import Footer from '../../../components/Footer/Footer';
 import OrderTable from '../../../components/Table/OrderTable/OrderTable';
 import Loading from '../../../components/UI/Loading/Loading';
 import Empty from '../../../components/UI/Empty/Empty';
-import client from '../../../shared/axios-client';
-import withHttpHandler from '../../../hoc/withHttpHandler/withHttpHandler';
+
+import {orderFetchOrders} from '../../../redux/action';
 
 class CatererTodaysOrders extends Component {
   componentDidMount() {
@@ -58,11 +58,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchOrders: () => dispatch(actions.orderFetchOrders())
+    onFetchOrders: () => dispatch(orderFetchOrders())
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withHttpHandler(CatererTodaysOrders, client));
+)(CatererTodaysOrders);

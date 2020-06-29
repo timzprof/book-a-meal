@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import React, { PureComponent } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+
 import classes from '../../../components/Forms/Form.module.css';
 import FormWrapper from '../../../components/Forms/FormWrapper/FormWrapper';
 import FormHeadText from '../../../components/Forms/FormHeadText/FormHeadText';
 import Loading from '../../../components/UI/Loading/Loading';
 import Input from '../../../components/Forms/Input/Input';
 import { updateObject, checkValidity } from '../../../shared/utility';
-import * as actions from '../../../store/action/index';
+import { signUp } from '../../../redux/action';
 
-class CatererRegister extends Component {
+class CatererRegister extends PureComponent {
   state = {
     controls: {
       name: {
@@ -110,7 +111,10 @@ class CatererRegister extends Component {
     for (let formElementId in this.state.controls) {
       formData[formElementId] = this.state.controls[formElementId].value;
     }
-    this.props.onCatererSignup(formData);
+    this.props
+      .onCatererSignup({...formData, type: 'caterer'})
+      .then(() => this.props.history.push('/caterer'))
+      .catch(error => console.log(error));
   };
 
   inputChangeHandler = (e, inputId) => {
@@ -132,12 +136,6 @@ class CatererRegister extends Component {
     this.setState({ controls: form, formIsValid });
   };
 
-  componentDidMount() {
-    if (!this.props.loading) {
-      this.props.onSetAuthRedirect('/admin/');
-    }
-  }
-
   render() {
     const formElements = Object.keys(this.state.controls).map(key => {
       return {
@@ -145,13 +143,10 @@ class CatererRegister extends Component {
         config: this.state.controls[key]
       };
     });
-    let authRedirect = null;
 
-    if (this.props.catererAuthenticated) {
-      authRedirect = <Redirect to={this.props.authRedirectPath} />;
-    }
-
-    let form = (
+    return this.props.loading ? (
+      <Loading />
+    ) : (
       <FormWrapper>
         <form
           action="#"
@@ -175,7 +170,7 @@ class CatererRegister extends Component {
           ))}
           <button type="submit">Register</button>
           <p className={classes.Page_link}>
-            Already Have an Account? <Link to="/admin/login">Login</Link>
+            Already Have an Account? <Link to="/login">Login</Link>
           </p>
           <p className={classes.Page_link}>
             Back to Home? <Link to="/">Click Here</Link>
@@ -183,33 +178,19 @@ class CatererRegister extends Component {
         </form>
       </FormWrapper>
     );
-    if (this.props.loading) {
-      form = <Loading />;
-    }
-    return (
-      <React.Fragment>
-        {authRedirect}
-        {form}
-      </React.Fragment>
-    );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    loading: state.auth.loading,
-    catererAuthenticated: state.auth.catererAuthenticated
+    loading: state.auth.loading
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onCatererSignup: formData => dispatch(actions.catererSignUp(formData)),
-    onSetAuthRedirect: path => dispatch(actions.setAuthRedirect(path))
+    onCatererSignup: formData => dispatch(signUp(formData))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CatererRegister);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CatererRegister));

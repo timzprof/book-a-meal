@@ -1,10 +1,9 @@
-import React, { Suspense, lazy, Component } from 'react';
+import React, { Suspense, lazy, PureComponent } from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Home from './containers/Home/Home';
 import Loading from './components/UI/Loading/Loading';
-import * as actions from './store/action/index';
 import './iziToast.min.css';
 
 const UserLogin = lazy(() => import('./containers/UserLogin/UserLogin'));
@@ -14,9 +13,7 @@ const OrderHistory = lazy(() => import('./containers/OrderHistory/OrderHistory')
 const Orders = lazy(() => import('./containers/Orders/Orders'));
 const UserLogout = lazy(() => import('./containers/UserLogout/UserLogout'));
 const CatererHome = lazy(() => import('./containers/Caterer/CatererHome/CatererHome'));
-const CatererLogin = lazy(() => import('./containers/Caterer/CatererLogin/CatererLogin'));
 const CatererRegister = lazy(() => import('./containers/Caterer/CatererRegister/CatererRegister'));
-const CatererLogout = lazy(() => import('./containers/Caterer/CatererLogout/CatererLogout'));
 const CatererMealOptions = lazy(() =>
   import('./containers/Caterer/CatererMealOptions/CatererMealOptions')
 );
@@ -31,87 +28,69 @@ const CatererManageMenu = lazy(() =>
 );
 const NotFound = lazy(() => import('./components/UI/NotFound/Notfound'));
 
-class App extends Component {
-  state = {
-    loginType: 'user'
-  };
-  componentWillMount() {
-    if (window.location.pathname.includes('admin')) {
-      this.setState({ loginType: 'caterer' });
-    }
-  }
-  componentDidMount() {
-    this.autoLogin();
-  }
+const ProtectedRoute = ({ condition, component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props => (condition ? <Component {...props} /> : <Redirect to="/login" />)}
+  />
+);
 
-  autoLogin = () => {
-    if (this.state.loginType === 'user' && !this.props.userAuthenticated) {
-      this.props.onTryAutoLogin();
-    } else if (this.state.loginType === 'caterer' && !this.props.catererAuthenticated) {
-      this.props.onCatererAutoLogin();
-    } else {
-      return null;
-    }
-  };
+class App extends PureComponent {
   render() {
-    const ProtectedUserRoute = ({ component: Component, ...rest }) => (
-      <Route
-        {...rest}
-        render={props =>
-          this.props.userAuthenticated ? (
-            <Suspense fallback={<Loading />}>
-              <Component {...props} />
-            </Suspense>
-          ) : (
-            <Redirect to="/login" />
-          )
-        }
-      />
-    );
-
-    const ProtectedCatererRoute = ({ component: Component, ...rest }) => (
-      <Route
-        {...rest}
-        render={props =>
-          this.props.catererAuthenticated ? (
-            <Suspense fallback={<Loading />}>
-              <Component {...props} />
-            </Suspense>
-          ) : (
-            <Redirect to="/admin/login" />
-          )
-        }
-      />
-    );
-
-    const LazyRoute = ({ component: Component, ...rest }) => (
-      <Route
-        {...rest}
-        render={props => (
-          <Suspense fallback={<Loading />}>
-            <Component {...props} />
-          </Suspense>
-        )}
-      />
-    );
+    const { isAuthenticated, user } = this.props;
     return (
       <Switch>
         <Route exact path="/" component={Home} />
-        <LazyRoute path="/login" component={UserLogin} />
-        <LazyRoute path="/register" component={UserRegister} />
-        <ProtectedUserRoute path="/menu" component={Menu} />
-        <ProtectedUserRoute path="/order-history" component={OrderHistory} />
-        <ProtectedUserRoute path="/orders" component={Orders} />
-        <LazyRoute path="/logout" component={UserLogout} />
-        <ProtectedCatererRoute exact path="/admin/" component={CatererHome} />
-        <LazyRoute path="/admin/login" component={CatererLogin} />
-        <LazyRoute path="/admin/register" component={CatererRegister} />
-        <ProtectedCatererRoute path="/admin/meals" component={CatererMealOptions} />
-        <ProtectedCatererRoute path="/admin/order-history" component={CatererOrderHistory} />
-        <ProtectedCatererRoute path="/admin/todays-orders" component={CatererTodaysOrders} />
-        <ProtectedCatererRoute path="/admin/menu" component={CatererManageMenu} />
-        <LazyRoute path="/admin/logout" component={CatererLogout} />
-        <LazyRoute component={NotFound} />
+        <Suspense fallback={<Loading />}>
+          <Route exact path="/login" component={UserLogin} />
+          <Route exact path="/register" component={UserRegister} />
+          <Route exact path="/caterer/register" component={CatererRegister} />
+          <Route exact path="/logout" component={UserLogout} />
+          <ProtectedRoute
+            exact
+            condition={isAuthenticated && user.type === 'user'}
+            path="/menu"
+            component={Menu}
+          />
+          <ProtectedRoute
+            condition={isAuthenticated && user.type === 'user'}
+            path="/order-history"
+            component={OrderHistory}
+          />
+          <ProtectedRoute
+            condition={isAuthenticated && user.type === 'user'}
+            path="/orders"
+            component={Orders}
+          />
+
+          <ProtectedRoute
+            condition={isAuthenticated && user.type === 'caterer'}
+            exact
+            path="/caterer"
+            component={CatererHome}
+          />
+          <ProtectedRoute
+            condition={isAuthenticated && user.type === 'caterer'}
+            path="/caterer/meals"
+            component={CatererMealOptions}
+          />
+          <ProtectedRoute
+            condition={isAuthenticated && user.type === 'caterer'}
+            path="/caterer/order-history"
+            component={CatererOrderHistory}
+          />
+          <ProtectedRoute
+            condition={isAuthenticated && user.type === 'caterer'}
+            path="/caterer/todays-orders"
+            component={CatererTodaysOrders}
+          />
+          <ProtectedRoute
+            condition={isAuthenticated && user.type === 'caterer'}
+            path="/caterer/menu"
+            component={CatererManageMenu}
+          />
+        </Suspense>
+        <Route component={NotFound} />
       </Switch>
     );
   }
@@ -119,21 +98,9 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    userAuthenticated: state.auth.userAuthenticated,
-    catererAuthenticated: state.auth.catererAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onTryAutoLogin: () => dispatch(actions.userAuthCheckState()),
-    onCatererAutoLogin: () => dispatch(actions.catererAuthCheckState())
-  };
-};
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(App)
-);
+export default connect(mapStateToProps)(withRouter(App));

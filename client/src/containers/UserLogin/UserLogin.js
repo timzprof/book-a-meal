@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+
 import classes from '../../components/Forms/Form.module.css';
 import FormWrapper from '../../components/Forms/FormWrapper/FormWrapper';
 import FormHeadText from '../../components/Forms/FormHeadText/FormHeadText';
 import Loading from '../../components/UI/Loading/Loading';
 import Input from '../../components/Forms/Input/Input';
 import { updateObject, checkValidity } from '../../shared/utility';
-import * as actions from '../../store/action/index';
+import { signIn, setAuthRedirect } from '../../redux/action';
 
 class UserLogin extends Component {
   state = {
@@ -45,13 +46,17 @@ class UserLogin extends Component {
     },
     formIsValid: false
   };
+
   handleUserLogin = e => {
     e.preventDefault();
     const formData = {};
     for (let formElementId in this.state.controls) {
       formData[formElementId] = this.state.controls[formElementId].value;
     }
-    this.props.onUserSignIn(formData);
+    this.props
+      .onUserSignIn(formData)
+      .then(() => this.props.history.push('/menu'))
+      .catch(error => console.log(error));
   };
 
   inputChangeHandler = (e, inputId) => {
@@ -73,12 +78,6 @@ class UserLogin extends Component {
     this.setState({ controls: form, formIsValid });
   };
 
-  componentDidMount() {
-    if (!this.props.loading) {
-      this.props.onSetAuthRedirect('/menu');
-    }
-  }
-
   render() {
     const formElements = Object.keys(this.state.controls).map(key => {
       return {
@@ -86,12 +85,9 @@ class UserLogin extends Component {
         config: this.state.controls[key]
       };
     });
-    let authRedirect = null;
-
-    if (this.props.userAuthenticated) {
-      authRedirect = <Redirect to={this.props.authRedirectPath} />;
-    }
-    let form = (
+    return this.props.loading ? (
+      <Loading />
+    ) : (
       <FormWrapper>
         <form
           action="#"
@@ -123,35 +119,22 @@ class UserLogin extends Component {
         </form>
       </FormWrapper>
     );
-
-    if (this.props.loading) {
-      form = <Loading />;
-    }
-    return (
-      <React.Fragment>
-        {authRedirect}
-        {form}
-      </React.Fragment>
-    );
   }
 }
 
 const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
-    userAuthenticated: state.auth.userAuthenticated,
+    userAuthenticated: state.auth.isAuthenticated,
     authRedirectPath: state.auth.authRedirectPath
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onUserSignIn: data => dispatch(actions.userSignIn(data)),
-    onSetAuthRedirect: path => dispatch(actions.setAuthRedirect(path))
+    onUserSignIn: data => dispatch(signIn(data)),
+    onSetAuthRedirect: path => dispatch(setAuthRedirect(path))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserLogin);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(UserLogin));

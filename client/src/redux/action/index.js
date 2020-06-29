@@ -1,13 +1,8 @@
 export {
-  userSignIn,
-  userSignUp,
+  signIn,
+  signUp,
   setAuthRedirect,
-  userAuthCheckState,
-  logout,
-  clogout,
-  catererSignIn,
-  catererSignUp,
-  catererAuthCheckState
+  logout
 } from './auth';
 
 export {
@@ -21,10 +16,10 @@ export {
 export {
   orderAddToOrders,
   orderFetchUserOrders,
-  orderDecrement,
-  orderIncrement,
+  orderUpdate,
   orderDelete,
-  orderFetchOrders
+  orderFetchOrders,
+  orderCheckout
 } from './orders';
 
 export {
@@ -34,5 +29,3 @@ export {
   mealDeleteMeal,
   mealUpdateMeal
 } from './meal';
-
-export { setResCode, resetResCode } from './global';

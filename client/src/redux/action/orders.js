@@ -1,21 +1,20 @@
 import * as actionTypes from './actionTypes';
 import client from '../../shared/axios-client';
 import { toast } from '../../shared/toast';
-import { setResCode } from './index';
 
-export const orderAddToOrdersStart = () => {
+const orderAddToOrdersStart = () => {
   return {
     type: actionTypes.ORDER_ADD_TO_ORDERS_START
   };
 };
 
-export const orderAddToOrdersSuccess = () => {
+const orderAddToOrdersSuccess = () => {
   return {
     type: actionTypes.ORDER_ADD_TO_ORDERS_SUCCESS
   };
 };
 
-export const orderAddToOrdersFailed = error => {
+const orderAddToOrdersFailed = error => {
   return {
     type: actionTypes.ORDER_ADD_TO_ORDERS_FAILED,
     error
@@ -28,7 +27,6 @@ export const orderAddToOrders = order => {
     try {
       const response = await client.post('/orders', order);
       toast(response.data.status, response.data.message);
-      dispatch(setResCode(response.data.status));
       dispatch(orderAddToOrdersSuccess());
     } catch (error) {
       toast('error', 'Failed to Add Meal to Orders');
@@ -37,20 +35,20 @@ export const orderAddToOrders = order => {
   };
 };
 
-export const orderFetchUserOrdersStart = () => {
+const orderFetchUserOrdersStart = () => {
   return {
     type: actionTypes.ORDER_FETCH_USER_ORDERS_START
   };
 };
 
-export const orderFetchUserOrdersSuccess = resData => {
+const orderFetchUserOrdersSuccess = resData => {
   return {
     type: actionTypes.ORDER_FETCH_USER_ORDERS_SUCCESS,
-    data: resData
+    payload: resData
   };
 };
 
-export const orderFetchUserOrdersFailed = error => {
+const orderFetchUserOrdersFailed = error => {
   return {
     type: actionTypes.ORDER_FETCH_USER_ORDERS_FAILED,
     error
@@ -69,83 +67,54 @@ export const orderFetchUserOrders = () => {
   };
 };
 
-export const orderIncrementStart = () => {
+const orderUpdateStart = () => {
   return {
-    type: actionTypes.ORDER_INCREMENT_START
+    type: actionTypes.ORDER_UPDATE_START
   };
 };
 
-export const orderIncrementSuccess = () => {
+const orderUpdateSuccess = () => {
   return {
-    type: actionTypes.ORDER_INCREMENT_SUCCESS
+    type: actionTypes.ORDER_UPDATE_SUCCESS
   };
 };
 
-export const orderIncrementFailed = error => {
+const orderUpdateFailed = error => {
   return {
-    type: actionTypes.ORDER_INCREMENT_FAILED,
+    type: actionTypes.ORDER_UPDATE_FAILED,
     error
   };
 };
 
-export const orderIncrement = orderItemId => {
+export const orderUpdate = (orderItemId, action) => {
   return async dispatch => {
-    dispatch(orderIncrementStart());
+    dispatch(orderUpdateStart());
     try {
-      await client.put(`/orders/${orderItemId}`, { action: 'increase' });
+      const response = await client.put(`/orders/${orderItemId}`, { action });
+      if (response.data.status === 'warning') {
+        toast(response.data.status, response.data.message);
+      }
       dispatch(orderFetchUserOrders());
-      dispatch(orderIncrementSuccess());
+      dispatch(orderUpdateSuccess());
     } catch (error) {
-      dispatch(orderIncrementFailed(error));
+      dispatch(orderUpdateFailed(error));
     }
   };
 };
 
-export const orderDecrementStart = () => {
-  return {
-    type: actionTypes.ORDER_DECREMENT_START
-  };
-};
-
-export const orderDecrementSuccess = () => {
-  return {
-    type: actionTypes.ORDER_DECREMENT_SUCCESS
-  };
-};
-
-export const orderDecrementFailed = error => {
-  return {
-    type: actionTypes.ORDER_DECREMENT_FAILED,
-    error
-  };
-};
-
-export const orderDecrement = orderItemId => {
-  return async dispatch => {
-    dispatch(orderDecrementStart());
-    try {
-      await client.put(`/orders/${orderItemId}`, { action: 'decrease' });
-      dispatch(orderFetchUserOrders());
-      dispatch(orderDecrementSuccess());
-    } catch (error) {
-      dispatch(orderDecrementFailed(error));
-    }
-  };
-};
-
-export const orderDeleteStart = () => {
+const orderDeleteStart = () => {
   return {
     type: actionTypes.ORDER_DELETE_START
   };
 };
 
-export const orderDeleteSuccess = () => {
+const orderDeleteSuccess = () => {
   return {
     type: actionTypes.ORDER_DELETE_SUCCESS
   };
 };
 
-export const orderDeleteFailed = error => {
+const orderDeleteFailed = error => {
   return {
     type: actionTypes.ORDER_DELETE_FAILED,
     error
@@ -167,20 +136,20 @@ export const orderDelete = orderItemId => {
   };
 };
 
-export const orderFetchOrdersStart = () => {
+const orderFetchOrdersStart = () => {
   return {
     type: actionTypes.ORDER_FETCH_ORDERS_START
   };
 };
 
-export const orderFetchOrdersSuccess = resData => {
+const orderFetchOrdersSuccess = resData => {
   return {
     type: actionTypes.ORDER_FETCH_ORDERS_SUCCESS,
-    data: resData
+    payload: resData
   };
 };
 
-export const orderFetchOrdersFailed = error => {
+const orderFetchOrdersFailed = error => {
   return {
     type: actionTypes.ORDER_FETCH_ORDERS_FAILED,
     error
@@ -191,10 +160,50 @@ export const orderFetchOrders = () => {
   return async dispatch => {
     dispatch(orderFetchOrdersStart());
     try {
-      const response = await client.get('/orders', { headers: { 'X-Req': true } });
+      const response = await client.get('/orders');
       dispatch(orderFetchOrdersSuccess(response.data.data));
     } catch (error) {
       dispatch(orderFetchOrdersFailed(error));
     }
+  };
+};
+
+const orderCheckoutStart = () => {
+  return {
+    type: actionTypes.ORDER_CHECKOUT_START
+  };
+};
+
+const orderCheckoutSuccess = () => {
+  return {
+    type: actionTypes.ORDER_CHECKOUT_SUCCESS
+  };
+};
+
+const orderCheckoutFailed = error => {
+  return {
+    type: actionTypes.ORDER_CHECKOUT_FAILED,
+    error
+  };
+};
+
+export const orderCheckout = ({ billingAddress, city }) => {
+  return dispatch => {
+    return new Promise(async (resolve, reject) => {
+      dispatch(orderCheckoutStart());
+      try {
+        const response = await client.post(`/orders/checkout`, {
+          billingAddress: `${billingAddress}, ${city}`
+        });
+        toast(response.data.status, response.data.message);
+        dispatch(orderFetchUserOrders());
+        dispatch(orderCheckoutSuccess());
+        resolve();
+      } catch (error) {
+        toast('error', 'Failed to Checkout Order');
+        dispatch(orderCheckoutFailed(error));
+        reject();
+      }
+    });
   };
 };

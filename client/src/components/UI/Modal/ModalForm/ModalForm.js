@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {withRouter} from 'react-router-dom';
+
 import { updateObject, checkValidity } from '../../../../shared/utility';
 import Input from '../../../Forms/Input/Input';
 
@@ -142,6 +144,21 @@ class ModalForm extends Component {
     this.setState({ [controls]: form, formIsValid });
   };
 
+  handleCheckout = e => {
+    e.preventDefault();
+    const formData = {};
+    for (let formElementId in this.state.checkoutControls) {
+      formData[formElementId] = this.state.checkoutControls[formElementId].value;
+      if (this.state.checkoutControls[formElementId].elementConfig.type === 'number') {
+        formData[formElementId] = Number(this.state.checkoutControls[formElementId].value);
+      }
+    }
+    this.props
+      .checkout(formData)
+      .then(() => this.props.history.push('/menu'))
+      .catch(error => console.log(error));
+  };
+
   addToOrders = e => {
     e.preventDefault();
     const formData = {};
@@ -208,7 +225,7 @@ class ModalForm extends Component {
     });
     const { classes } = this.props;
     const checkoutForm = (
-      <form action="#" method="post" id="checkoutForm">
+      <form action="#" method="post" id="checkoutForm" onSubmit={this.handleCheckout}>
         <div className={classes.Modal__body}>
           {checkoutFormElements.map(formElement => (
             <Input
@@ -232,7 +249,7 @@ class ModalForm extends Component {
       </form>
     );
     const { REACT_APP_ROOT: ROOT } = process.env;
-    const imgUrl = this.props.meal ? `${ROOT}${this.props.meal.imageUrl}` : null;
+    const imgUrl = this.props.meal ? `${ROOT}/${this.props.meal.imageUrl}` : null;
     const quantityForm = this.props.meal ? (
       <form method="post" id="addToOrders" onSubmit={this.addToOrders}>
         <div className={classes.Modal__body}>
@@ -299,4 +316,4 @@ class ModalForm extends Component {
   }
 }
 
-export default ModalForm;
+export default withRouter(ModalForm);

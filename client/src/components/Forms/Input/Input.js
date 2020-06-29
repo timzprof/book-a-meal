@@ -1,7 +1,9 @@
 import React from "react";
+import isEqual from 'lodash/isEqual';
+
 import classes from "../Form.module.css";
 
-const input = props => {
+const Input = props => {
     let inputElement = null;
     const inputClasses = [classes.Form_field];
     if(props.invalid && props.shouldValidate && props.touched) {
@@ -57,4 +59,4 @@ const input = props => {
 };
 
 
-export default input;
+export default React.memo(Input, isEqual);

@@ -1,15 +1,13 @@
 import React from 'react';
-import { isEqual } from 'lodash';
 
-const formHeadText = props => (
+const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+
+const formHeadText = ({ user, type }) => (
   <h3>
-    <span className="Red">B</span>ook <span className="Red">A</span> Mea<span className="Red">l</span> {props.user.charAt(0).toUpperCase() + props.user.slice(1)}{' '}
-    <span className="Red">{props.type.charAt(0).toUpperCase() + props.type.slice(1)}</span>
+    <span className="Red">B</span>ook <span className="Red">A</span> Mea
+    <span className="Red">l</span> <span>{type === 'register' ? capitalize(user) : ''}</span>{' '}
+    <span className="Red">{capitalize(type)}</span>
   </h3>
 );
 
-const areEqual = (prevProps, nextProps) => {
-  return isEqual(prevProps,nextProps);
-}
-
-export default React.memo(formHeadText, areEqual);
+export default React.memo(formHeadText);

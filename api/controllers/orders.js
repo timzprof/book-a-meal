@@ -104,9 +104,12 @@ class OrderController {
         case 'increase':
           orderItem.quantity += 1;
           if (orderItem.quantity > orderItem.meal.quantity) {
-            throw new Error(
-              `Only ${orderItem.meal.quantity} servings of ${orderItem.meal.name} is available`
-            );
+            return res.status(200).json({
+              status: 'warning',
+              message: `Only ${orderItem.meal.quantity} serving${
+                orderItem.meal.quantity > 1 ? 's' : ''
+              } of ${orderItem.meal.name} ${orderItem.meal.quantity > 1 ? 'are' : 'is'} available`
+            });
           }
           await OrderItem.update({ quantity: orderItem.quantity }, { where: { id: orderItem.id } });
           break;

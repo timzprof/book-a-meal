@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+
 import classes from './Header.module.css';
 import Logo from '../Logo/Logo';
 import BurgerMenu from '../BurgerMenu/BurgerMenu';
@@ -8,7 +9,7 @@ import Overlay from '../UI/Overlay/Overlay';
 import HomeBanner from './HomeBanner/HomeBanner';
 import Banner from './Banner/Banner';
 
-class Header extends Component {
+class Header extends PureComponent {
   state = {
     mobileToggle: false
   };
@@ -21,17 +22,19 @@ class Header extends Component {
   };
   render() {
     const show = this.state.mobileToggle ? '' : 'Hide';
-    const extraStyles = this.props.homepage ? classes.HomeHeader : '';
-    const auth = this.props.caterer
-      ? this.props.catererAuthenticated
-      : this.props.userAuthenticated;
+    const { homepage, bannerText, user, isAuthenticated } = this.props;
+    const extraStyles = homepage ? classes.HomeHeader : '';
     return (
-      <React.Fragment>
+      <>
         <Overlay show={this.state.mobileToggle || this.props.overlay} />
         <header className={[classes.Header, extraStyles].join(' ')}>
           <nav className={classes.MainNav}>
             <Logo />
-            <NavList caterer={this.props.caterer} classes={classes} authenticated={auth} />
+            <NavList
+              user={user}
+              classes={classes}
+              authenticated={isAuthenticated}
+            />
             <BurgerMenu
               show={this.state.mobileToggle}
               mobileMenuClass={classes.MobileMenu}
@@ -41,31 +44,31 @@ class Header extends Component {
           <nav className={[classes.MobileNav, show].join(' ')}>
             <Logo mobile />
             <NavList
-              caterer={this.props.caterer}
+              user={user}
               mobile
               classes={classes}
-              authenticated={auth}
+              authenticated={isAuthenticated}
               show={this.state.mobileToggle}
             />
           </nav>
-          {this.props.homepage ? (
+          {homepage ? (
             <HomeBanner
-              userAuthenticated={this.props.userAuthenticated}
-              catererAuthenticated={this.props.catererAuthenticated}
+              isAuthenticated={isAuthenticated}
+              user={user}
             />
           ) : (
-            <Banner text={this.props.bannerText} />
+            <Banner text={bannerText} />
           )}
         </header>
-      </React.Fragment>
+      </>
     );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    userAuthenticated: state.auth.userAuthenticated,
-    catererAuthenticated: state.auth.catererAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
   };
 };
 

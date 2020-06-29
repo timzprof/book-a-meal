@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const navListItem = (props) => {
+const NavListItem = (props) => {
+  const { styles, href, content } = props;
   return (
-    <li className={props.styles}>
-      <Link to={props.href}>{props.content}</Link>
+    <li className={styles}>
+      <Link to={href}>{content}</Link>
     </li>
   );
 }
 
-export default navListItem;
+export default React.memo(NavListItem);

@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import isEqual from 'lodash/isEqual';
+
 import classes from './HomeBanner.module.css';
 
-const homeBanner = props => {
+const HomeBanner = ({ isAuthenticated, user }) => {
   const textClasses = [classes.Banner__text, classes.Home__Banner__text].join(' ');
   let menuLink = '/login';
-  if (props.userAuthenticated) {
+  if (isAuthenticated && user.type === 'user') {
     menuLink = '/menu';
-  } else if (props.catererAuthenticated) {
-    menuLink = '/admin/';
+  } else if (isAuthenticated && user.type === 'caterer') {
+    menuLink = '/caterer/';
   }
   return (
     <main>
@@ -27,4 +29,4 @@ const homeBanner = props => {
   );
 };
 
-export default homeBanner;
+export default React.memo(HomeBanner, isEqual);

@@ -13,7 +13,7 @@ const meal = props => {
     <div className={classes.Menu__food__item__details} role={roles.details}>
       <div className={classes.Meal__info}>
         <p role={roles.name}>{props.meal.name}</p>
-        <p role={roles.price}>${props.meal.price.toFixed(2)}</p>
+        <p role={roles.price}>₦{props.meal.price.toFixed(2)}</p>
       </div>
       <div>
         <button className={classes.Card__btn} onClick={() => props.order(props.meal.id)}>
@@ -26,7 +26,7 @@ const meal = props => {
     <div className={classes.Menu__food__item__details} role={roles.details}>
       <div className={classes.Meal__info}>
         <p role={roles.name}>{props.meal.name}</p>
-        <p role={roles.price}>${props.meal.price.toFixed(2)}</p>
+        <p role={roles.price}>₦{props.meal.price.toFixed(2)}</p>
         <p>
           <button
             className={classes.Tiny__btn}
@@ -54,7 +54,7 @@ const meal = props => {
     <div className={classes.Menu__food__item__details} role={roles.details}>
       <div className={classes.Meal__info}>
         <p role={roles.name}>{props.meal.name}</p>
-        <p role={roles.price}>${props.meal.price.toFixed(2)}</p>
+        <p role={roles.price}>₦{props.meal.price.toFixed(2)}</p>
         <p role={roles.quantity}>Quantity: {props.meal.quantity}</p>
       </div>
     </div>
@@ -63,7 +63,7 @@ const meal = props => {
     <div className={classes.Menu__food__item__details} role={roles.details}>
       <div className={classes.Meal__info}>
         <p role={roles.name}>{props.meal.name}</p>
-        <p role={roles.price}>${props.meal.price.toFixed(2)}</p>
+        <p role={roles.price}>₦{props.meal.price.toFixed(2)}</p>
       </div>
       <div className={classes.Meal__btn}>
         <button className={classes.Card__btn} onClick={() => props.showEditMealModal(props.meal)}>
@@ -81,7 +81,7 @@ const meal = props => {
     <div className={classes.Menu__food__item__details} role={roles.details}>
       <div className={classes.Meal__info}>
         <p role={roles.name}>{props.meal.name}</p>
-        <p role={roles.price}>${props.meal.price.toFixed(2)}</p>
+        <p role={roles.price}>₦{props.meal.price.toFixed(2)}</p>
         <p>
           <button className={classes.Tiny__btn} onClick={() => props.decrease(props.meal.id)}>
             -
@@ -102,7 +102,6 @@ const meal = props => {
     manageMenu
   };
   const { REACT_APP_ROOT: ROOT } = process.env;
-  const imgUrl = `${ROOT}${props.meal.imageUrl}`;
   return (
     <article className={classes.Menu__food__item} role={roles.meal}>
       {props.meal.quantity > 0 && props.type === 'manageMenu' ? (
@@ -111,7 +110,7 @@ const meal = props => {
         </div>
       ) : null}
       <div className={classes.Menu__food__item__img}>
-        <img src={imgUrl} alt="Meal" />
+        <img src={`${ROOT}/${props.meal.imageUrl}`} alt="Meal" />
       </div>
       {mealTypes[props.type]}
     </article>

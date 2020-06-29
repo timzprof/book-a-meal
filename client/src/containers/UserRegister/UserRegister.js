@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import React, { PureComponent } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+
 import classes from '../../components/Forms/Form.module.css';
 import FormWrapper from '../../components/Forms/FormWrapper/FormWrapper';
 import FormHeadText from '../../components/Forms/FormHeadText/FormHeadText';
 import Loading from '../../components/UI/Loading/Loading';
 import Input from '../../components/Forms/Input/Input';
 import { updateObject, checkValidity } from '../../shared/utility';
-import * as actions from '../../store/action/index';
+import { signUp } from '../../redux/action';
 
-class UserRegister extends Component {
+class UserRegister extends PureComponent {
   state = {
     controls: {
       name: {
@@ -96,7 +97,7 @@ class UserRegister extends Component {
     for (let formElementId in this.state.controls) {
       formData[formElementId] = this.state.controls[formElementId].value;
     }
-    this.props.onUserSignUp(formData);
+    this.props.onUserSignUp({...formData, type: 'user'});
   };
 
   inputChangeHandler = (e, inputId) => {
@@ -118,26 +119,19 @@ class UserRegister extends Component {
     this.setState({ controls: form, formIsValid });
   };
 
-  componentDidMount() {
-    if (!this.props.loading) {
-      this.props.onSetAuthRedirect('/menu');
-    }
-  }
-
   render() {
+    const { loading } = this.props;
+
     const formElements = Object.keys(this.state.controls).map(key => {
       return {
         id: key,
         config: this.state.controls[key]
       };
     });
-    let authRedirect = null;
 
-    if (this.props.userAuthenticated) {
-      authRedirect = <Redirect to={this.props.authRedirectPath} />;
-    }
-
-    let form = (
+    return loading ? (
+      <Loading />
+    ) : (
       <FormWrapper>
         <form
           onSubmit={this.handleUserRegister}
@@ -169,35 +163,19 @@ class UserRegister extends Component {
         </form>
       </FormWrapper>
     );
-
-    if (this.props.loading) {
-      form = <Loading />;
-    }
-    return (
-      <React.Fragment>
-        {authRedirect}
-        {form}
-      </React.Fragment>
-    );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    loading: state.auth.loading,
-    userAuthenticated: state.auth.userAuthenticated,
-    authRedirectPath: state.auth.authRedirectPath
+    loading: state.auth.loading
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onUserSignUp: data => dispatch(actions.userSignUp(data)),
-    onSetAuthRedirect: path => dispatch(actions.setAuthRedirect(path))
+    onUserSignUp: data => dispatch(signUp(data))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserRegister);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(UserRegister));
