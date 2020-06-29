@@ -53,11 +53,11 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', ORIGIN);
   res.header(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Req'
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
   res.header(
     'Access-Control-Request-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Req'
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
   next();
 });
