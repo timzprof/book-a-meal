@@ -97,7 +97,8 @@ class UserRegister extends PureComponent {
     for (let formElementId in this.state.controls) {
       formData[formElementId] = this.state.controls[formElementId].value;
     }
-    this.props.onUserSignUp({...formData, type: 'user'});
+    this.props.onUserSignUp({...formData, type: 'user'}).then(() => this.props.history.push('/menu'))
+    .catch(error => console.log(error));;
   };
 
   inputChangeHandler = (e, inputId) => {
