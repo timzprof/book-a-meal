@@ -9,19 +9,18 @@ import helmet from 'helmet';
 import compression from 'compression';
 import { config } from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
-
-import { logger } from './util/logger';
-import Routes from './routes';
 import db from './util/db';
+// import { logger } from './util/logger';
+import Routes from './routes';
 import swaggerDocument from './swagger.json';
 
-const { CronJob } = require('cron');
+// const { CronJob } = require('cron');
 
 config();
 
 const app = express();
 
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 7010;
 
 app.use(helmet());
 app.use(compression());
@@ -70,18 +69,17 @@ app.get('*', (req, res) => {
 });
 
 // Connect and Migrate Database
-db
-  .sync()
+db.authenticate()
   .then(() => {
-    logger.log('info', 'DB Connection has been established');
+    console.log('Connection has been established successfully.');
     app.listen(PORT, null, null, () => {
       app.emit('dbConnected');
       // const job = new CronJob('0 0 * * *', wipeDbTrash);
       // job.start();
     });
   })
-  .catch(err => {
-    logger.error('error', 'DB CONN:', err);
+  .catch(error => {
+    console.error('Unable to connect to the database:', error);
   });
 
 export default app;
