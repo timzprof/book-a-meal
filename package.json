@@ -41,7 +41,7 @@
     "debug": "^4.1.1",
     "dotenv": "^6.2.0",
     "esm": "^3.2.25",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-favicon": "2.0.1",
     "express-fileupload": "^1.1.6",
     "helmet": "^3.22.0",
